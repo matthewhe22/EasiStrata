@@ -41,8 +41,29 @@ vercel env pull .env.development.local
 
 ## 4. Create the schema and superuser
 
-Run from any machine that has Python 3.12 (Neon is publicly reachable, so this
-works from anywhere — no firewall whitelist needed). Use the SAME `DATABASE_URL`.
+### Option 1 — no local tools needed (bootstrap from Vercel)
+
+Set these env vars in Vercel **in addition** to those in step 2, then redeploy
+and load the site once:
+
+| Variable | Value |
+|---|---|
+| `RUN_DB_INIT` | `True` |
+| `DJANGO_SUPERUSER_USERNAME` | `matthew.he@tocs.co` |
+| `DJANGO_SUPERUSER_EMAIL` | `matthew.he@tocs.co` |
+| `DJANGO_SUPERUSER_PASSWORD` | your password |
+
+On the next deploy the app runs `migrate` and creates/updates the superuser from
+inside the Vercel runtime (which can reach Neon). Check the Vercel runtime logs
+for `RUN_DB_INIT completed`.
+
+**Then remove `RUN_DB_INIT` and the three `DJANGO_SUPERUSER_*` vars and redeploy**
+so credentials don't linger and migrations don't run on every cold start.
+
+### Option 2 — from any machine with Python 3.12
+
+Neon is publicly reachable, so this works from anywhere (no firewall whitelist).
+Use the SAME `DATABASE_URL`.
 
 ```bash
 pip install -r requirements.txt
