@@ -104,9 +104,11 @@ def _env(name, default=''):
     return os.environ.get(name, default).strip()
 
 
-# Prefer a single DATABASE_URL when provided (the format Railway / PlanetScale /
-# most managed MySQL hosts hand you, e.g.
-# mysql://user:pass@host:3306/dbname). Fall back to the discrete DB_* vars.
+# Prefer a single DATABASE_URL when provided (the format most managed databases
+# hand you). dj-database-url infers the engine from the URL scheme:
+#   postgres://...  -> django.db.backends.postgresql  (Vercel Postgres / Neon)
+#   mysql://...     -> django.db.backends.mysql
+# Fall back to the discrete DB_* vars (MySQL) when DATABASE_URL is not set.
 DATABASE_URL = _env('DATABASE_URL')
 if DATABASE_URL:
     import dj_database_url
@@ -117,7 +119,6 @@ if DATABASE_URL:
             ssl_require=_env('DB_SSL_REQUIRE', 'False') == 'True',
         ),
     }
-    DATABASES['default']['ENGINE'] = 'django.db.backends.mysql'
 else:
     DATABASES = {
         'default': {
