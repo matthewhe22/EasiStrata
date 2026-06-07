@@ -99,214 +99,147 @@ Regards,</textarea>
 
 
 
-    {# ===== Page header ===== #}
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <div>
-            <h1 class="h3 mb-0 text-gray-800">Billing</h1>
-            <p class="mb-0 text-muted small">Manage owners corporation levies, payments and reminders.</p>
-        </div>
-        <div class="d-flex mt-3 mt-sm-0">
-            <a name="New " class="btn btn-primary btn-sm shadow-sm" href="{% url 'finance:billing_create' %}">
-                <i class="fas fa-plus fa-sm text-white-50"></i> New
-            </a>
-            <div class="btn-group ml-2" role="group" aria-label="Billing actions">
-                <input name="resend" class="btn btn-outline-primary btn-sm" type="button" value="Resend" id="resend">
-                <input id="btn_remind" name="btn_remind" class="btn btn-outline-warning btn-sm" type="button"
-                       value="Remind">
-            </div>
-        </div>
-    </div>
-
-    {# ===== Filters card ===== #}
-    <div class="card shadow mb-4">
-        <a href="#filterCollapse" class="d-block card-header py-3 collapsed" data-toggle="collapse"
-           role="button" aria-expanded="false" aria-controls="filterCollapse">
-            <h6 class="m-0 font-weight-bold text-primary">
-                <i class="fas fa-filter fa-sm"></i> Filters
-            </h6>
-        </a>
-        <div class="collapse" id="filterCollapse">
-            <form method="get">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="form-group col-sm-6 col-md-3">
-                            {{ filter.form.property.label_tag }}
-                            {% render_field filter.form.property class="form-control" %}
-                        </div>
-                        <div class="form-group col-sm-6 col-md-3">
-                            {{ filter.form.oc_ref.label_tag }}
-                            {% render_field filter.form.oc_ref class="form-control" %}
-                        </div>
-                        <div class="form-group col-sm-6 col-md-3">
-                            {{ filter.form.billing_num.label_tag }}
-                            {% render_field filter.form.billing_num class="form-control" %}
-                        </div>
-                        <div class="form-group col-sm-6 col-md-3">
-                            {{ filter.form.agent.label_tag }}
-                            {% render_field filter.form.agent class="form-control" %}
-                        </div>
-                        <div class="form-group col-sm-6 col-md-3">
-                            {{ filter.form.unit.label_tag }}
-                            {% render_field filter.form.unit class="form-control" %}
-                        </div>
-                        <div class="form-group col-sm-6 col-md-3">
-                            {{ filter.form.date_gt.label_tag }}
-                            {% render_field filter.form.date_gt class="form-control" %}
-                        </div>
-                        <div class="form-group col-sm-6 col-md-3">
-                            {{ filter.form.date_lt.label_tag }}
-                            {% render_field filter.form.date_lt class="form-control" %}
-                        </div>
-                        <div class="form-group col-sm-6 col-md-3">
-                            {{ filter.form.status.label_tag }}
-                            {% render_field filter.form.status class="form-control" %}
-                        </div>
-                        <div class="form-group col-sm-6 col-md-3">
-                            {{ filter.form.special.label_tag }}
-                            {% render_field filter.form.special class="form-control" %}
-                        </div>
+    <div class="form-group">
+        <form method="get">
+            <div class="well">
+                <h4 style="margin-top: 0">Filter</h4>
+                <div class="row">
+                    <div class="form-group col-sm-4 col-md-2">
+                        {{ filter.form.property.label_tag }}
+                        {% render_field filter.form.property class="form-control" %}
                     </div>
+                    <div class="form-group col-sm-4 col-md-2">
+                        {{ filter.form.oc_ref.label_tag }}
+                        {% render_field filter.form.oc_ref class="form-control" %}
+                    </div>
+                    <div class="form-group col-sm-4 col-md-2">
+                        {{ filter.form.billing_num.label_tag }}
+                        {% render_field filter.form.billing_num class="form-control" %}
+                    </div>
+                    <div class="form-group col-sm-4 col-md-2">
+                        {{ filter.form.agent.label_tag }}
+                        {% render_field filter.form.agent class="form-control" %}
+                    </div>
+                    <div class="form-group col-sm-4 col-md-2">
+                        {{ filter.form.unit.label_tag }}
+                        {% render_field filter.form.unit class="form-control" %}
+                    </div>
+                    <div class="form-group col-sm-4 col-md-2">
+                        {{ filter.form.date_gt.label_tag }}
+                        {% render_field filter.form.date_gt class="form-control" %}
+                    </div>
+                    <div class="form-group col-sm-4 col-md-2">
+                        {{ filter.form.date_lt.label_tag }}
+                        {% render_field filter.form.date_lt class="form-control" %}
+                    </div>
+
+                    <div class="form-group col-sm-3 col-md-1">
+                        {{ filter.form.status.label_tag }}
+                        {% render_field filter.form.status class="form-control" %}
+                    </div>
+                    <div class="form-group col-sm-3 col-md-1">
+                        {{ filter.form.special.label_tag }}
+                        {% render_field filter.form.special class="form-control" %}
+                    </div>
+
                 </div>
-                <div class="card-footer d-flex justify-content-end">
-                    <a href="{% url 'finance:billing_list' %}" class="btn btn-link text-secondary mr-2">Clear</a>
-                    <button class="btn btn-primary" type="submit">
-                        <i class="fas fa-search fa-sm"></i> Search
-                    </button>
-                </div>
-            </form>
-        </div>
+
+
+                <button class="btn btn-secondary" type="submit">Search</button>
+            </div>
+        </form>
     </div>
 
-    {# ===== Results card ===== #}
     <form action="{% url 'finance:billing_delete' %}" class="form-check" method="POST" id="bill_form">
         {% csrf_token %}
 
-        <div class="card shadow mb-4">
-            <div class="card-header py-3 d-flex align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">
-                    Results
-                    {% if page_obj %}
-                        <span class="badge badge-secondary ml-1">{{ page_obj.paginator.count }}</span>
-                    {% else %}
-                        <span class="badge badge-secondary ml-1">{{ object_list|length }}</span>
-                    {% endif %}
-                </h6>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover table-bordered" width="100%" cellspacing="0">
-                        <thead>
-                        <tr class="text-uppercase text-muted small">
-                            <th></th>
-                            <th>Billing No.</th>
-                            <th>Property Name</th>
-                            <th>Unit No.</th>
-                            <th>Lot No.</th>
-                            <th>Billing Amount</th>
-                            <th>Collected Amount</th>
-                            <th>Period From</th>
-                            <th>Period To</th>
-                            <th>Due Date</th>
-                            <th>Billing Date</th>
-                            <th>Payment Status</th>
-                            <th>Sent Status</th>
-                            <th>Special Levy</th>
-                            <th>Agent Name</th>
-                            <th>Attachment</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for item in object_list %}
-                            <tr>
-                                <td><input class="form-check-input" name='chkgroup' type="checkbox" value="{{ item.pk }}"></td>
-                                <td scope="row"><a href="/finance/billing/update/{{ item.pk }}">{{ item.billing_num }}</a></td>
-                                <td>{{ item.get_property_name }}</td>
-                                <td>{{ item.lot_ref }}</td>
-                                <td>{{ item.lot_ref.lot }}</td>
-                                <td>{{ item.billing_amount }}</td>
-                                <td>{{ item.collected_amount }}</td>
-                                <td>{{ item.billing_from }}</td>
-                                <td>{{ item.billing_to }}</td>
-                                <td>{{ item.due_date }}</td>
-                                <td>{{ item.billing_date }}</td>
-                                <td>
-                                    {% if item.status == 'paid' %}
-                                        <span class="badge badge-success">{{ item.status }}</span>
-                                    {% elif item.status == 'unpaid' %}
-                                        <span class="badge badge-warning">{{ item.status }}</span>
-                                    {% else %}
-                                        <span class="badge badge-secondary">{{ item.status }}</span>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {% if item.mail_status == 'sent' %}
-                                        <span class="badge badge-success">{{ item.mail_status }}</span>
-                                    {% elif item.mail_status %}
-                                        <span class="badge badge-secondary">{{ item.mail_status }}</span>
-                                    {% else %}
-                                        <span class="badge badge-warning">pending</span>
-                                    {% endif %}
-                                </td>
-                                <td>{{ item.special_flag }}</td>
-                                <td>{{ item.get_agent }}</td>
-                                <td>
-                                    {% if item.attachment %}
-                                        <a href="{{ item.attachment.url }}"><i class="fas fa-download fa-sm"></i> Download</a>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    <div class="btn-group" role="group" aria-label="Row actions">
-                                        <a href="/finance/billing/pdf/{{ item.pk }}">
-                                            <button class="btn-sm btn btn-secondary" type="button">Billing</button>
-                                        </a>
-                                        <a href="/finance/billing/pdflatest/{{ item.pk }}">
-                                            <button class="btn-sm btn btn-secondary" type="button">Latest Billing</button>
-                                        </a>
-                                        {% if item.is_valid %}
-                                            <button class="btn-sm btn btn-warning cancel" type="button" value="{{ item.pk }}">cancel</button>
-                                        {% endif %}
-                                    </div>
-                                </td>
-                            </tr>
-                        {% empty %}
-                            <tr>
-                                <td colspan="17" class="text-center text-muted py-5">
-                                    <i class="fas fa-file-invoice-dollar fa-2x mb-3 d-block"></i>
-                                    No billings found &mdash; adjust filters or
-                                    <a href="{% url 'finance:billing_create' %}">create a new billing</a>.
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-
-                {% if is_paginated %}
-                    <nav aria-label="Billing pagination" class="mt-3">
-                        <ul class="pagination justify-content-end mb-0">
-                            {% if page_obj.has_previous %}
-                                <li class="page-item">
-                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-                                </li>
-                            {% else %}
-                                <li class="page-item disabled"><span class="page-link">Previous</span></li>
-                            {% endif %}
-                            <li class="page-item disabled">
-                                <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
-                            </li>
-                            {% if page_obj.has_next %}
-                                <li class="page-item">
-                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-                                </li>
-                            {% else %}
-                                <li class="page-item disabled"><span class="page-link">Next</span></li>
-                            {% endif %}
-                        </ul>
-                    </nav>
-                {% endif %}
-            </div>
+        <div class="text-right">
+            <a name="New " class="btn btn-sm btn-primary" href="{% url 'finance:billing_create' %}">New</a>
+            <input name="resend" class="btn btn-sm btn-primary" width="10px" type="button" value="Resend" id="resend">
+            <input width="15px" id="btn_remind" name="btn_remind" class="btn btn-sm btn-warning" type="button"
+                   value="Remind">
         </div>
+
+        <hr>
+
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Billing No.</th>
+                <th>Property Name</th>
+                <th>Unit No.</th>
+                <th>Lot No.</th>
+                <th>Billing Amount</th>
+                <th>Collected Amount</th>
+                <th>Period From</th>
+                <th>Period To</th>
+                <th>Due Date</th>
+                <th>Billing Date</th>
+                <th>Payment Status</th>
+                <th>Sent Status</th>
+                <th>Special Levy</th>
+                <th>Agent Name</th>
+                <th>Attachment</th>
+                <th></th>
+
+
+            </tr>
+            </thead>
+
+            {% for item in object_list %}
+
+                <tbody>
+
+
+                <td><input class="form-check-input" name='chkgroup' type="checkbox" value="{{ item.pk }}"></td>
+
+                <td scope="row"><a href="/finance/billing/update/{{ item.pk }}">  {{ item.billing_num }}</a></td>
+                <td>{{ item.get_property_name }}</td>
+                <td>{{ item.lot_ref }}</td>
+                <td>{{ item.lot_ref.lot }}</td>
+                <td>{{ item.billing_amount }}</td>
+                <td>{{ item.collected_amount }}</td>
+                <td>{{ item.billing_from }}</td>
+                <td>{{ item.billing_to }}</td>
+                <td>{{ item.due_date }}</td>
+                <td>{{ item.billing_date }}</td>
+                <td>{{ item.status }}</td>
+                <td>{{ item.mail_status }}</td>
+                <td>{{ item.special_flag }}</td>
+                <td>{{ item.get_agent }}</td>
+                <td>{% if item.attachment %}
+                    <a href="{{ item.attachment.url }}">Download</a></td>
+                {% endif %}
+                <td>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <a href="/finance/billing/pdf/{{ item.pk }}">
+                            <button class="btn-sm btn btn-secondary" type="button"
+
+                            >Billing
+                            </button>
+                        </a>
+                        <a href="/finance/billing/pdflatest/{{ item.pk }}">
+                            <button class="btn-sm btn btn-secondary" type="button"
+
+                            >Latest Billing
+                            </button>
+                        </a>
+                        {% if item.is_valid %}
+                            <button class="btn-sm btn btn-warning cancel" type="button" value="{{ item.pk }}"
+                            >cancel
+                            </button>
+                        {% endif %}
+                    </div>
+                </td>
+
+
+            {% endfor %}
+
+
+            </tbody>
+        </table>
 
     </form>
 
