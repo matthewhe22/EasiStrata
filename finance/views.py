@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views.generic import CreateView, ListView, UpdateView
-from django_weasyprint import WeasyTemplateResponseMixin
+from my_project.weasy_compat import WeasyTemplateResponseMixin
 
 from scripts.oc_cert.oc_cert import OCCert
 from scripts.scheduling_job.mail_template import REMIND_TITLE

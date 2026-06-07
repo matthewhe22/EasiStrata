@@ -2,7 +2,7 @@ import logging
 
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
-from django_weasyprint import WeasyTemplateResponseMixin
+from my_project.weasy_compat import WeasyTemplateResponseMixin
 from my_project import settings
 from scripts.agm.budget import AgmOCBudget
 from scripts.agm.agm_notice import AGMItem

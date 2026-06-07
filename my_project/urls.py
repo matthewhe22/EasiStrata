@@ -16,7 +16,7 @@ Including another URLconf
 from base import views as base_view
 from django.contrib import admin
 from django.urls import path,include
-from django.contrib.staticfiles.urls import static
+from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from my_project import settings

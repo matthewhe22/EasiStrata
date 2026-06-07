@@ -18,6 +18,9 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'my_project', 'templates')
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 sys.path.append(os.path.join(BASE_DIR, 'static', 'python'))
 
+# Ensure the project root is importable so top-level packages like `scripts`
+# resolve regardless of how the WSGI app is launched (e.g. Vercel serverless).
+sys.path.append(BASE_DIR)
 sys.path.append(os.path.join(BASE_DIR, 'my_project'))
 sys.path.append(STATIC_DIR)
 sys.path.append(TEMPLATES_DIR)
@@ -40,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'crispy_forms',
+    'crispy_bootstrap4',
     'strata',
     'base',
     'property',
@@ -51,7 +55,12 @@ INSTALLED_APPS = [
     # 'users.apps.UsersConfig',
 ]
 
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# Django 3.2+ requires an explicit default primary key type. Keep AutoField to
+# match the existing schema and avoid generating new migrations.
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
