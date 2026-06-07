@@ -42,6 +42,10 @@ class IndexView(LoginRequiredMixin, TemplateView):
         :param kwargs:
         :return:
         """
+        # Initialise every context variable so the `finally` block can never
+        # reference an unbound name if any query above fails part-way.
+        total_property = rev = unbill = lot = lot_in_arrea = 0
+        insurance = False
         try:
             total_property = Property.objects.count()
 
@@ -548,7 +552,13 @@ def insurance_overdue():
                    "ins left join property_property pp on ins.property_ref_id = pp.id " \
                    "group by pp.name having max(ins.date_to)<='%s'"
         sql_stat = sql_stat % over_due_day
-        result = MySQLClass().get_result(sql_stat)
+        # Use the project DB connection (Postgres) directly. The legacy
+        # MySQLClass transport points at a MySQL port that does not exist on
+        # the current database and would stall/fail.
+        from django.db import connection
+        with connection.cursor() as _cur:
+            _cur.execute(sql_stat)
+            result = _cur.fetchall()
         warning_msg = ""
         if result is None or len(result) == 0:
             return 0
