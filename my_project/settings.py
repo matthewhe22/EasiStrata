@@ -155,11 +155,26 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [STATIC_DIR]
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Serve static files via WhiteNoise straight from the staticfiles finders, so a
+# `collectstatic` step is not required (Vercel's @vercel/python has no build
+# hook for it). Use the NON-manifest storage backend: the manifest variant
+# raises "Missing staticfiles manifest entry" on every {% static %} call when
+# collectstatic has not run, which would 500 every page.
 WHITENOISE_USE_FINDERS = True
+WHITENOISE_MANIFEST_STRICT = False
+STORAGES = {
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
+    },
+}
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# On serverless the project filesystem is read-only; only /tmp is writable.
+MEDIA_ROOT = os.environ.get('MEDIA_ROOT', os.path.join(BASE_DIR, 'media'))
 
 LOGIN_URL = 'base:login'
 INVOICE_TEMPLATE = 'invoice.html'
