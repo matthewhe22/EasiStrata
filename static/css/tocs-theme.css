@@ -395,3 +395,48 @@ h1, h2, h3, h4, h5, h6,
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-cobalt);
 }
+
+/* --------------------------------------------------------------------------
+   14. Merged polish — data tables, status badges, empty states
+   (folded in from the modern UI layer; uses the Task-app tokens above so it
+    stays on-brand)
+   -------------------------------------------------------------------------- */
+
+/* Status badges tuned to the Task palette (used for payment / sent status) */
+.badge {
+  font-weight: 600;
+  font-family: var(--font-family);
+  letter-spacing: 0.02em;
+  padding: 0.4em 0.65em;
+  border-radius: var(--radius);
+}
+.badge-success { background-color: var(--color-green) !important; color: #fff !important; }
+.badge-warning { background-color: var(--color-amber) !important; color: #1a1a1a !important; }
+.badge-danger  { background-color: hsl(0, 72%, 51%) !important;  color: #fff !important; }
+.badge-secondary { background-color: hsl(0, 0%, 88%) !important; color: hsl(0, 0%, 30%) !important; }
+
+/* Data tables: comfortable density, zebra striping, hover, rounded container */
+.table-responsive {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+}
+.table thead th {
+  background-color: var(--color-cobalt-tint) !important;
+  color: var(--color-cobalt) !important;
+  border-bottom: 1px solid var(--color-border) !important;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.table td, .table th { padding: 0.65rem 0.75rem; vertical-align: middle; }
+.table-hover tbody tr:hover { background-color: var(--color-cobalt-tint) !important; }
+.table-striped tbody tr:nth-of-type(odd) { background-color: hsl(42, 30%, 97%); }
+
+/* Friendly empty-state row */
+.empty-state { color: var(--color-muted); text-align: center; padding: 2.5rem 1rem; }
+.empty-state i { font-size: 2rem; color: var(--color-cobalt); opacity: 0.5; display: block; margin-bottom: 0.5rem; }
+
+/* Page header used across module pages */
+.page-header-title { font-weight: 700; color: var(--color-ink); }
+.page-header-sub { color: var(--color-muted); font-size: 0.9rem; }
