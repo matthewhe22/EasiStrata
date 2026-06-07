@@ -23,7 +23,7 @@ sys.path.append(STATIC_DIR)
 sys.path.append(TEMPLATES_DIR)
 
 # Set SECRET_KEY via environment variable in Vercel / production
-SECRET_KEY = os.environ.get('SECRET_KEY', '')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'fallback-dev-key-replace-in-vercel-env')
 
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
@@ -147,6 +147,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [STATIC_DIR]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+WHITENOISE_USE_FINDERS = True
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
