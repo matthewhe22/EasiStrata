@@ -1,89 +1,253 @@
 <!DOCTYPE html>
 <html lang="en">
-
 {% load static %}
-
-
 <head>
-
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-
-  <title> Login</title>
-
+  <title>EaziStrata &middot; Sign in</title>
   <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-
-  <!-- Custom styles for this template-->
   <link href="{% static 'css/sb-admin-2.css' %}" rel="stylesheet">
-{#<style>#}
-{#  body{#}
-{#    background-image: url("../../../static/img/building_1.jpg");#}
-{#    background-size:cover;#}
-{#  }#}
-{#</style>#}
+  <link href="{% static 'css/tocs-theme.css' %}" rel="stylesheet">
+  <style>
+    /* ── Login page layout (not in base.html, so defined inline) ── */
+    html, body { margin: 0; padding: 0; min-height: 100vh; }
+    body { background-color: var(--color-bg) !important; }
+
+    .tocs-login-shell {
+      display: grid;
+      min-height: 100vh;
+    }
+    @media (min-width: 992px) {
+      .tocs-login-shell { grid-template-columns: 1.1fr 1fr; }
+    }
+
+    /* ── Left cobalt panel ─────────────────────────────────────── */
+    .tocs-login-panel {
+      display: none;
+      position: relative;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      padding: 3rem;
+      color: #ffffff;
+      background:
+        radial-gradient(circle at 20% 20%, hsla(21, 80%, 53%, 0.18), transparent 55%),
+        radial-gradient(circle at 80% 70%, hsla(213, 44%, 22%, 0.55), transparent 60%),
+        linear-gradient(135deg, hsl(213, 50%, 14%) 0%, hsl(222, 60%, 32%) 100%);
+    }
+    @media (min-width: 992px) {
+      .tocs-login-panel { display: flex; }
+    }
+
+    /* animated dot pattern */
+    .tocs-login-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,0.28) 1.2px, transparent 1.6px),
+        radial-gradient(circle, rgba(255,255,255,0.12) 0.8px, transparent 1px);
+      background-size: 22px 22px, 11px 11px;
+      background-position: 0 0, 5px 5px;
+      animation: login-dot-drift 16s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+    @keyframes login-dot-drift {
+      0%   { background-position: 0px 0px, 5px 5px;       opacity: 0.55; }
+      50%  { background-position: 22px 11px, 16px 16px;   opacity: 0.85; }
+      100% { background-position: 0px 0px, 5px 5px;       opacity: 0.55; }
+    }
+
+    /* bottom vignette for legibility */
+    .tocs-login-panel::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 30%, rgba(30, 52, 80, 0.85) 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .tocs-panel-inner {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .tocs-brand { display: flex; align-items: center; gap: 0.75rem; }
+    .tocs-logo-img {
+      width: 44px; height: 44px;
+      object-fit: contain;
+      filter: invert(1) brightness(2);
+    }
+    .tocs-brand-name {
+      font-size: 1.125rem; font-weight: 700;
+      letter-spacing: -0.01em; color: #ffffff;
+    }
+
+    .tocs-panel-content { max-width: 30rem; }
+
+    .tocs-eyebrow {
+      font-size: 0.6875rem; font-weight: 600;
+      letter-spacing: 0.32em; text-transform: uppercase;
+      color: rgba(255,255,255,0.65); margin-bottom: 1.25rem;
+    }
+    .tocs-panel-heading {
+      font-size: 2rem; font-weight: 500;
+      line-height: 1.2; letter-spacing: -0.01em;
+      color: #ffffff; margin-bottom: 1.5rem;
+    }
+    .tocs-panel-stats {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 1rem;
+      font-size: 0.6875rem; text-transform: uppercase;
+      letter-spacing: 0.18em; color: rgba(255,255,255,0.70);
+    }
+    .tocs-panel-footer {
+      font-size: 0.6875rem; color: rgba(255,255,255,0.55);
+    }
+
+    /* ── Right cream form panel ────────────────────────────────── */
+    .tocs-login-form-section {
+      display: flex; align-items: center; justify-content: center;
+      padding: 3rem 1.5rem;
+      background-color: hsl(42, 24%, 95%);
+    }
+    @media (min-width: 576px) { .tocs-login-form-section { padding: 3rem; } }
+
+    .tocs-form-wrapper { width: 100%; max-width: 24rem; }
+    .tocs-form-header  { margin-bottom: 2rem; }
+
+    .tocs-form-eyebrow {
+      font-size: 0.625rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.3em;
+      color: var(--color-muted); margin-bottom: 0.5rem;
+    }
+    .tocs-form-title {
+      font-size: 1.75rem; font-weight: 600;
+      letter-spacing: -0.02em; color: var(--color-ink);
+      margin-bottom: 0.375rem;
+    }
+    .tocs-form-subtitle { font-size: 0.8125rem; color: var(--color-muted); margin: 0; }
+
+    .tocs-label {
+      font-size: 0.8125rem; font-weight: 600;
+      color: var(--color-ink); margin-bottom: 0.375rem;
+    }
+    .tocs-input {
+      height: 2.75rem !important; font-size: 0.9375rem;
+      padding: 0 0.875rem; background-color: #ffffff !important;
+    }
+    .tocs-btn-sign-in {
+      height: 2.75rem; font-size: 0.9375rem; margin-top: 0.5rem;
+    }
+    .tocs-form-note {
+      font-size: 0.71875rem; color: var(--color-muted);
+      margin-top: 1.5rem; margin-bottom: 0;
+    }
+  </style>
 </head>
 
-<body class="bg-login-image">
+<body>
+  <div class="tocs-login-shell">
 
-  <div class="container ">
+    <!-- LEFT: cobalt hero panel -->
+    <aside class="tocs-login-panel" aria-hidden="true">
+      <div class="tocs-panel-inner">
 
-    <!-- Outer Row -->
-    <div class="row justify-content-end">
+        <!-- Brand lockup -->
+        <div class="tocs-brand">
+          <img src="{% static 'img/TOCS.png' %}" alt="" class="tocs-logo-img" aria-hidden="true">
+          <span class="tocs-brand-name">EaziStrata</span>
+        </div>
 
-        <div class="col-xl-6 col-lg-6">
-
-            <div class="card o-hidden border-0 shadow-lg my-5">
-                <div class="card-body p-0">
-                    <!-- Nested Row within Card Body -->
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="p-5">
-                                <div class="text-center">
-                                    <h1 class="h4 text-gray-900 mb-4">EaziStrata Login Page</h1>
-                                </div>
-                                <form class="user" method="POST">
-                                    {% csrf_token %}
-                    <div class="form-group" >
-                      <input type="text" class="form-control form-control-user" name="username" placeholder="Enter Username">
-                    </div>
-                    <div class="form-group">
-                      <input type="password" class="form-control form-control-user" name="password" placeholder="Password">
-                    </div>
-                    <div class="form-group">
-                      <div class="custom-control custom-checkbox small">
-                        <input type="checkbox" class="custom-control-input" id="customCheck">
-                        <label class="custom-control-label" for="customCheck">Remember Me</label>
-                      </div>
-                    </div>
-                    {% csrf_token %}
-                    <input type='submit' class="btn btn-primary btn-user btn-block" value="Login" >
-                    <hr>
-
-                  </form>
-                  <hr>
-                  {% comment %} <div class="text-center">
-                    <a class="small" href="forgot-password.html">Forgot Password?</a>
-                  </div>
-                  <div class="text-center">
-                    <a class="small" href="register.html">Create an Account!</a> {% endcomment %}
-                  </div>
-                </div>
-              </div>
-            </div>
+        <!-- Hero headline -->
+        <div class="tocs-panel-content">
+          <p class="tocs-eyebrow">EaziStrata Workspace</p>
+          <h2 class="tocs-panel-heading">
+            One workspace for strata managers &mdash; buildings, owners, levies
+            and the work that holds it all together.
+          </h2>
+          <div class="tocs-panel-stats">
+            <span>Property Management</span>
+            <span aria-hidden="true">&middot;</span>
+            <span>Finance Management</span>
+            <span aria-hidden="true">&middot;</span>
+            <span>Strata Administration</span>
           </div>
         </div>
 
-      </div>
+        <!-- Footer -->
+        <p class="tocs-panel-footer">
+          &copy; {% now "Y" %} EaziStrata &mdash; The Owners Corporation Specialists
+        </p>
 
-    </div>
+      </div>
+    </aside>
+
+    <!-- RIGHT: cream form panel -->
+    <section class="tocs-login-form-section">
+      <div class="tocs-form-wrapper">
+
+        <div class="tocs-form-header">
+          <p class="tocs-form-eyebrow">EaziStrata Workspace &middot; Sign in</p>
+          <h1 class="tocs-form-title">Welcome back.</h1>
+          <p class="tocs-form-subtitle">Sign in to your EaziStrata account.</p>
+        </div>
+
+        <form method="POST" novalidate>
+          {% csrf_token %}
+
+          <div class="form-group">
+            <label for="id_username" class="tocs-label">Username</label>
+            <input
+              type="text"
+              class="form-control tocs-input"
+              id="id_username"
+              name="username"
+              placeholder="Enter username"
+              autocomplete="username"
+              autofocus
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="id_password" class="tocs-label">Password</label>
+            <input
+              type="password"
+              class="form-control tocs-input"
+              id="id_password"
+              name="password"
+              placeholder="Enter password"
+              autocomplete="current-password"
+            >
+          </div>
+
+          <div class="form-group">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="rememberMe" name="remember_me">
+              <label class="custom-control-label tocs-label" for="rememberMe">Remember me</label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block tocs-btn-sign-in">
+            Sign in
+          </button>
+        </form>
+
+        <p class="tocs-form-note">
+          Don&rsquo;t have an account? Contact your administrator.
+        </p>
+
+      </div>
+    </section>
 
   </div>
-
-
 </body>
-
 </html>

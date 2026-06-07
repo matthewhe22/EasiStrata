@@ -21,8 +21,7 @@
 
 
     <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Custom styles for this template-->
 
@@ -30,6 +29,7 @@
     {#    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">#}
 
     <link href="{% static 'css/sb-admin-2.css' %}" rel="stylesheet">
+    <link href="{% static 'css/tocs-theme.css' %}" rel="stylesheet">
     <link href="{% static 'css/dtsel.css' %}" rel="stylesheet">
     {#    <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css"#}
     {#          integrity="sha256-b88RdwbRJEzRx95nCuuva+hO5ExvXXnpX+78h8DjyOE=" rel="stylesheet"/>#}
@@ -67,8 +67,7 @@
         <!-- Sidebar - Brand -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
             <div class="sidebar-brand-icon">
-                {#                <i class="fas fa-laugh-wink"></i>#}
-                <img width="80px" height="48px" src="/static/img/TOCS.png">
+                <img width="80px" height="48px" src="/static/img/TOCS.png" style="filter:invert(1) brightness(2);">
             </div>
             <div class="sidebar-brand-text mx-auto">EaziStrata</div>
         </a>
@@ -151,38 +150,30 @@
             </div>
 
 
-            <!-- Nav Item - Trust Auto Menu -->
+            <!-- Nav Item - Property Management -->
             <li class="nav-item active">
                 <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTrust" aria-expanded="true"
                    aria-controls="collapsePages">
                     <i class="fas fa-fw fa-folder"></i>
                     <span>Property Management</span>
                 </a>
-
-
                 <div id="collapseTrust" class="collapse show" aria-labelledby="headingPages"
                      data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" id="item8" href="{% url 'property:property_list' %}">Property
-                            Profile</a>
-                        <a class="collapse-item" id="item9" href="{% url 'property:oc_list' %}">OC Profile</a>
+                        <a class="collapse-item" id="item8"  href="{% url 'property:property_list' %}">Property Profile</a>
+                        <a class="collapse-item" id="item9"  href="{% url 'property:oc_list' %}">OC Profile</a>
                         <a class="collapse-item" id="item10" href="{% url 'property:lot_list' %}">Lot Management</a>
                         <a class="collapse-item" id="item11" href="{% url 'property:lotoc_list' %}">Lot OC Mapping</a>
-                        <a class="collapse-item" id="item12" href="{% url 'finance:supply_list' %}">Vendor
-                            Management</a>
+                        <a class="collapse-item" id="item12" href="{% url 'finance:supply_list' %}">Vendor Management</a>
                         <a class="collapse-item" id="item13" href="{% url 'property:oc_budget_sum' %}">OC Budget</a>
                         <a class="collapse-item" id="item22" href="{% url 'base:owner_notify' %}">Owner Notification</a>
                         <a class="collapse-item" id="item24" href="{% url 'base:vendor_notify' %}">Working Order</a>
                         <a class="collapse-item" id="item27" href="{% url 'property:notify_log' %}">Notification Log</a>
-
                     </div>
                 </div>
             </li>
 
-
-            <!-- Nav Item - Pages Collapse Menu -->
-
-
+            <!-- Nav Item - Finance Management -->
             <li class="nav-item active">
                 <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseFa" aria-expanded="true"
                    aria-controls="collapsePages">
@@ -192,35 +183,28 @@
                 <div id="collapseFa" class="collapse show" aria-labelledby="headingPages"
                      data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        {#                    <h6 class="collapse-header">Functions:</h6>#}
                         <a class="collapse-item" id="item14" href="{% url 'finance:invoice_list' %}">Invoice Entry</a>
                         <a class="collapse-item" id="item15" href="{% url 'finance:coa_list' %}">Chart of Accounts</a>
                         <a class="collapse-item" id="item16" href="{% url 'finance:billing_list' %}">Levy Billing</a>
-                        <a class="collapse-item" id="item26" href="{% url 'finance:billing_special_levy' %}">Special
-                            Levy</a>
+                        <a class="collapse-item" id="item26" href="{% url 'finance:billing_special_levy' %}">Special Levy</a>
                         <a class="collapse-item" id="item17" href="{% url 'finance:gl_list' %}">Journal Entry</a>
                         <a class="collapse-item" id="item18" href="{% url 'finance:inc_list' %}">Expense Management</a>
                         <a class="collapse-item" id="item23" href="{% url 'finance:bank_list' %}">Bank Transaction</a>
-                        <a class="collapse-item" id="item25" href="{% url 'finance:gl_recon_list' %}">GL
-                            Reconciliation</a>
+                        <a class="collapse-item" id="item25" href="{% url 'finance:gl_recon_list' %}">GL Reconciliation</a>
                         <a class="collapse-item" id="item28" href="{% url 'finance:cash_list' %}">Cash Receipt</a>
-                        <a class="collapse-item" id="item29" href="{% url 'finance:client_ledger_list' %}">Client
-                            Ledger</a>
+                        <a class="collapse-item" id="item29" href="{% url 'finance:client_ledger_list' %}">Client Ledger</a>
                         <a class="collapse-item" id="item31" href="{% url 'strata:agm_list' %}">AGM</a>
-
-
                     </div>
                 </div>
             </li>
-            <!-- Nav Item - Report Menu -->
+
+            <!-- Nav Item - Report -->
             <li class="nav-item active">
                 <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseReport" aria-expanded="true"
                    aria-controls="collapsePages">
                     <i class="fas fa-fw fa-folder"></i>
                     <span>Report</span>
                 </a>
-
-
                 <div id="collapseReport" class="collapse show" aria-labelledby="headingPages"
                      data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
@@ -230,52 +214,41 @@
                 </div>
             </li>
 
-
-            <!-- Nav Item - Insurance Menu -->
+            <!-- Nav Item - Insurance -->
             <li class="nav-item active">
                 <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseInsurance"
-                   aria-expanded="true"
-                   aria-controls="collapsePages">
+                   aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-folder"></i>
                     <span>Insurance Management</span>
                 </a>
-
-
                 <div id="collapseInsurance" class="collapse show" aria-labelledby="headingPages"
                      data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" id="item21" href="{% url 'strata:insurance_list' %}">Insurance
-                            Management</a>
-
+                        <a class="collapse-item" id="item21" href="{% url 'strata:insurance_list' %}">Insurance Management</a>
                     </div>
                 </div>
             </li>
         {% endif %}
 
         <li class="nav-item active">
-            <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseInsurance" aria-expanded="true"
+            <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseOwner" aria-expanded="true"
                aria-controls="collapsePages">
-                <i class="fas fa-fw fa-folder"></i>
+                <i class="fas fa-fw fa-user"></i>
                 <span>Owner Self Service</span>
             </a>
-
-
-            <div id="collapseInsurance" class="collapse show" aria-labelledby="headingPages"
+            <div id="collapseOwner" class="collapse show" aria-labelledby="headingPages"
                  data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <a class="collapse-item" id="item32" href="{% url 'base:owner_info' %}">Owner Information</a>
                     <a class="collapse-item" id="item33" href="{% url 'strata:owner_request' %}">Owner Request</a>
-
                 </div>
-
             </div>
         </li>
-
 
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
 
-        <!-- Sidebar Toggler (Sidebar) -->
+        <!-- Sidebar Toggler -->
         <div class="text-center d-none d-md-inline">
             <button class="rounded-circle border-0" id="sidebarToggle"></button>
         </div>
@@ -297,32 +270,26 @@
                     <i class="fa fa-bars"></i>
                 </button>
 
-
                 <!-- Topbar Navbar -->
                 <ul class="navbar-nav ml-auto">
 
-                    <!-- Nav Item - Search Dropdown (Visible Only XS) TODO insert include here-->
-                    <li class="nav-item dropdown no-arrow mx-1" id="mx-1">
-
-                    </li>
+                    <li class="nav-item dropdown no-arrow mx-1" id="mx-1"></li>
 
                     <div class="topbar-divider d-none d-sm-block"></div>
 
-                    <!-- Nav Item - User Information -->
+                    <!-- User Info -->
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ request.user.username }}</span>
-                            <!-- <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60"> -->
                         </a>
                     </li>
 
-                    <!-- Nav Item - Logout -->
                     <div class="topbar-divider d-none d-sm-block"></div>
-                    <!-- <li class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100"> -->
+
+                    <!-- Logout -->
                     <li class="nav-item dropdown no-arrow">
                         {% if request.user.is_authenticated %}
-                            <!-- <a class="dropdown-item" href="{% url 'base:logout' %}" > -->
                             <a class="nav-link dropdown-toggle" href="{% url 'base:logout' %}">
                                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Logout
@@ -335,33 +302,22 @@
             </nav>
             <!-- End of Topbar -->
 
-
             <!-- Begin Page Content -->
             <div class="container-fluid">
                 {% include 'partials/_alerts.html' %}
                 {% block body_content %}
-
-
-
                 {% endblock body_content %}
 
-
-
                 {% if is_paginated %}
-
-                    <nav aria-label="Page navigation example">
+                    <nav aria-label="Page navigation">
                         <ul class="total_page" id="{{ page_obj.paginator.num_pages }}">
-                            30/page, {{ page_obj.paginator.num_pages }}pages in total, go to page<input type="text"
-
-                                                                                                        id="page_num"
-                                                                                                        class="input-sm col-1 col-sm-1 col-md-1 col-lg-1"
-                                                                                                        value="{{ page_obj.number }}">
-                            <input type="button" class="btn btn-primary btn-sm" id="go" value="GO"></ul>
-
-
+                            30/page, {{ page_obj.paginator.num_pages }} pages in total, go to page
+                            <input type="text" id="page_num"
+                                   class="input-sm col-1 col-sm-1 col-md-1 col-lg-1"
+                                   value="{{ page_obj.number }}">
+                            <input type="button" class="btn btn-primary btn-sm" id="go" value="GO">
+                        </ul>
                     </nav>
-
-
                 {% endif %}
 
             </div>
@@ -374,7 +330,7 @@
         <footer class="sticky-footer bg-white">
             <div class="container my-auto">
                 <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; Eazistrata v1.0</span>
+                    <span>Copyright &copy; EaziStrata v1.0</span>
                 </div>
             </div>
         </footer>
@@ -386,12 +342,12 @@
 </div>
 <!-- End of Page Wrapper -->
 
-<!-- Scroll to Top Button-->
+<!-- Scroll to Top Button -->
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
 </a>
 
-<!-- Logout Modal-->
+<!-- Logout Modal -->
 <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -399,28 +355,22 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-
+            <div class="modal-body">Select &ldquo;Logout&rdquo; below if you are ready to end your current session.</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="login.html">Logout</a>
+                <a class="btn btn-primary" href="{% url 'base:logout' %}">Logout</a>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Bootstrap core JavaScript-->
-
 {% block js %}
     <script src="{% static 'js/page_go.js' %}"></script>
     <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
     <script src="{% static 'js/item_selected.js' %}"></script>
-
-
-
 {% endblock %}
 
 

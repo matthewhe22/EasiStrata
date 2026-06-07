@@ -5,75 +5,83 @@
     {% include 'partials/_alerts.html' %}
     {% if insurance %}
         <div class="alert alert-warning alert-dismissible text-center" role="alert">
-            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span></button>
+            <button type="button" class="close" data-dismiss="alert">
+                <span aria-hidden="true">&times;</span>
+            </button>
             {{ insurance }}
         </div>
     {% endif %}
+
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                class="fas fa-download fa-sm text-white-50"></i> OC Certificate</a>
+        <div>
+            <p class="text-xs font-weight-bold text-primary text-uppercase mb-1"
+               style="letter-spacing:0.25em;">Workspace</p>
+            <h1 class="h3 mb-0" style="font-weight:700;letter-spacing:-0.01em;">Dashboard</h1>
+        </div>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            <i class="fas fa-download fa-sm mr-1"></i> OC Certificate
+        </a>
     </div>
 
+    <!-- Feature Navigation Cards -->
+    <div class="row mb-2">
 
-    <div class="row">
-
-
-        <div class="col-lg-3 mb-3">
-            <a href="{% url 'property:property_list' %}" class="custom-card">
-                <div class="card bg-primary text-white shadow">
-
-                    <div class="card-body">
-
-                        Property Management
-                    </div>
-
-                    <div class="col-auto">
-                        <i class="fas fa-building fa-2x text-gray-300"></i>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <a href="{% url 'property:property_list' %}" class="text-decoration-none">
+                <div class="card feature-card h-100">
+                    <div class="card-body d-flex align-items-center justify-content-between py-3 px-4">
+                        <div>
+                            <div class="feature-card-label mb-1">Module</div>
+                            <div class="h5 mb-0 font-weight-bold" style="color:var(--color-ink);">Property</div>
+                            <div class="text-muted small mt-1">Management</div>
+                        </div>
+                        <i class="fas fa-building fa-2x feature-card-icon ml-3"></i>
                     </div>
                 </div>
             </a>
         </div>
 
-        <div class="col-lg-3 mb-3">
-            <a href="{% url 'finance:oc_cert_list' %}" class="custom-card">
-                <div class="card bg-info text-white shadow">
-                    {#                <div class="card-body" href="{% url 'finance:oc_cert_list' %}>#}
-                    <div class="card-body">
-                        OC Certificate
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-file-invoice-dollar fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <div class="col-lg-3 mb-3">
-            <a href="{% url 'finance:billing_list' %}" class="custom-card">
-
-                <div class="card bg-warning text-white shadow">
-                    {#                <div class="card-body" href="{% url 'finance:billing_list' %}">#}
-                    <div class="card-body">
-                        Billing
-                    </div>
-                    <div class="col-auto align-right">
-                        <i class="fas fa-dollar-sign fa-2x"></i>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <a href="{% url 'finance:oc_cert_list' %}" class="text-decoration-none">
+                <div class="card feature-card h-100">
+                    <div class="card-body d-flex align-items-center justify-content-between py-3 px-4">
+                        <div>
+                            <div class="feature-card-label mb-1">Report</div>
+                            <div class="h5 mb-0 font-weight-bold" style="color:var(--color-ink);">OC</div>
+                            <div class="text-muted small mt-1">Certificate</div>
+                        </div>
+                        <i class="fas fa-file-invoice-dollar fa-2x feature-card-icon ml-3"></i>
                     </div>
                 </div>
             </a>
         </div>
 
-        <div class="col-lg-3 mb-3">
-            <a href="{% url 'finance:fs_list' %}" class="custom-card">
-                <div class="card bg-secondary text-white shadow">
-                    {#                <div class="card-body" href="{% url 'finance:fs_list' %}">#}
-                    <div class="card-body">
-                        Financial Report
+        <div class="col-lg-3 col-md-6 mb-4">
+            <a href="{% url 'finance:billing_list' %}" class="text-decoration-none">
+                <div class="card feature-card h-100">
+                    <div class="card-body d-flex align-items-center justify-content-between py-3 px-4">
+                        <div>
+                            <div class="feature-card-label mb-1">Finance</div>
+                            <div class="h5 mb-0 font-weight-bold" style="color:var(--color-ink);">Billing</div>
+                            <div class="text-muted small mt-1">Levy management</div>
+                        </div>
+                        <i class="fas fa-dollar-sign fa-2x feature-card-icon ml-3"></i>
                     </div>
-                    <div class="col-auto">
-                        <i class="fas fa-file-word fa-2x text-gray-300"></i>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+            <a href="{% url 'finance:fs_list' %}" class="text-decoration-none">
+                <div class="card feature-card h-100">
+                    <div class="card-body d-flex align-items-center justify-content-between py-3 px-4">
+                        <div>
+                            <div class="feature-card-label mb-1">Report</div>
+                            <div class="h5 mb-0 font-weight-bold" style="color:var(--color-ink);">Financial</div>
+                            <div class="text-muted small mt-1">Reports</div>
+                        </div>
+                        <i class="fas fa-file-word fa-2x feature-card-icon ml-3"></i>
                     </div>
                 </div>
             </a>
@@ -81,19 +89,17 @@
 
     </div>
 
-
-
-
-    <!-- Content Row -->
+    <!-- Stat Summary Cards -->
     <div class="row">
 
-        <!-- Property Card Example -->
+        <!-- Property Count -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Property Management
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Property Management
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ property }}</div>
                         </div>
@@ -105,14 +111,14 @@
             </div>
         </div>
 
-        <!-- Earnings (Monthly) Card Example -->
+        <!-- Total Revenue -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Management
-                                Revenue
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Total Management Revenue
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">${{ rev|intcomma }}</div>
                         </div>
@@ -124,13 +130,15 @@
             </div>
         </div>
 
-        <!-- Earnings (Monthly) Card Example -->
+        <!-- Unpaid Billings -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-info shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Unpaid Billings</div>
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Unpaid Billings
+                            </div>
                             <div class="row no-gutters align-items-center">
                                 <div class="col-auto">
                                     <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ unbill }}</div>
@@ -145,16 +153,18 @@
             </div>
         </div>
 
-        <!-- Pending Requests Card Example -->
+        <!-- Lots / Arrears -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-warning shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Total Lots and lots
-                                in arrears
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Total Lots &amp; Lots in Arrears
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ lot }} / {{ lot_in_arrea }}</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                {{ lot }} / {{ lot_in_arrea }}
+                            </div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -163,23 +173,20 @@
                 </div>
             </div>
         </div>
+
     </div>
 
-
-    <!-- Content Row -->
-
+    <!-- Charts Row -->
     <div class="row">
 
         <!-- Area Chart -->
         <div class="col-xl-8 col-lg-7">
             <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Management fee and Reimbursement in last 12
-                        months</h6>
-
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        Management Fee &amp; Reimbursement &mdash; Last 12 Months
+                    </h6>
                 </div>
-                <!-- Card Body -->
                 <div class="card-body">
                     <div class="chart-area">
                         <canvas id="myAreaChart"></canvas>
@@ -188,16 +195,12 @@
             </div>
         </div>
 
-
         <!-- Pie Chart -->
         <div class="col-xl-4 col-lg-5">
             <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Lot by suburb</h6>
-
+                    <h6 class="m-0 font-weight-bold text-primary">Lot by Suburb</h6>
                 </div>
-                <!-- Card Body -->
                 <div class="card-body">
                     <div class="chart-pie pt-4 pb-2">
                         <canvas id="myPieChart"></canvas>
@@ -212,14 +215,6 @@
         <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
         <script src="{% static 'js/char_bar.js' %}"></script>
         <script src="{% static 'js/chart_pie.js' %}"></script>
-
-
     {% endblock %}
 
-
-
-
 {% endblock body_content %}
-
-
-
