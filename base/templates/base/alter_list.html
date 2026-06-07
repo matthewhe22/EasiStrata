@@ -1,0 +1,62 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Message Center
+
+{% endblock title_block %}
+
+
+{% block body_content %}
+    {% include 'partials/_alerts.html' %}
+    <div class="row">
+        <h3>Message Center</h3>
+    </div>
+
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Date</th>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Status</th>
+
+
+        </tr>
+        </thead>
+
+        {% for item in alert %}
+
+            <tbody>
+
+            <tr>
+
+
+                <td>{{ item.createtime }}</td>
+                <td>{{ item.msg_subject }}</td>
+                <td>{{ item.msg_body }}</td>
+                <td>{{ item.read_status }}</td>
+                {% if item.read_status == 'unread' %}
+                    <td>
+                        <button value="{{ item.pk }}" class="btn btn-warning">Mark as read</button>
+                    </td>
+                {% endif %}
+
+            </tr>
+
+        {% endfor %}
+
+
+        </tbody>
+    </table>
+
+    {% block js %}
+        <script src="{% static 'js/alert_snooze.js' %}"></script>
+    {% endblock %}
+
+
+
+{% endblock body_content %}
+
+

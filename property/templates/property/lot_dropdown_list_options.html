@@ -1,0 +1,4 @@
+<option value selected>Please select lot No. here</option>
+{% for item in lots %}
+<option value="{{ item.id }}">{{ item.lot }}</option>
+{% endfor %}

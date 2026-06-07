@@ -1,0 +1,73 @@
+{% extends "base/base.html" %}
+
+{% block title_block %}
+    Fund
+
+{% endblock title_block %}
+
+
+{% block body_content %}
+<form action="{% url 'trust:tb_conf_delete' %}" class="form-check" method="POST">
+        {% csrf_token %}
+
+        <div class="text-right" >
+            <a name="New Client"  class="btn btn-primary" href="{% url 'trust:tb_conf_create' %}" role="button">New</a>
+            <input name="deletebutton" class="btn btn-primary" type="submit" value="Delete">
+
+
+        </div>
+
+        <hr>
+
+
+    <table class="table">
+    <thead>
+        <tr>
+            <th>  </th>
+            <th>Client</th>
+
+            <th>Account Code</th>
+            <th>Adjustment Code</th>
+            <th>COA code</th>
+            <th>Is Valid</th>
+
+
+
+
+
+        </tr>
+    </thead>
+
+
+
+
+
+    {% for tbs in tb_config %}
+
+            <tbody>
+
+               <tr>
+                        <td> <input class="form-check-input" name='chkgroup' type="checkbox" value="{{tbs.pk}}">   </td>
+                        <td scope="row"><a href="/trust/tbconf/update/{{tbs.pk}}">  {{tbs.client_ref}}</a></td>
+
+                        <td>{{tbs.acc_code}}</td>
+                        <td>{{tbs.adj_code}}</td>
+                        <td>{{tbs.COACd}}</td>
+                        <td>{{tbs.is_valid}}</td>
+
+
+
+
+                </tr>
+
+    {% endfor %}
+
+
+            </tbody>
+        </table>
+
+
+</form>
+
+
+{% endblock body_content %}

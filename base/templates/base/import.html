@@ -1,0 +1,43 @@
+{% extends "base/base.html" %}
+
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block body_content %}
+
+{% include 'partials/_alerts.html' %}
+    {% crispy form %}
+
+<hr>
+    <table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Create Time</th>
+            <th>File</th>
+            <th>Status</th>
+            <th>Error Code</th>
+            <th>Error Message</th>
+            <th>Source Reference</th>
+        </tr>
+    </thead>
+    {% for import in imports %}
+    <tbody>
+        <tr>
+                <td scope="row">{{import.pk}}</td>
+                <td>{{import.createtime|date}}</td>
+                <td>{{import.doc}}</td>
+                <td>{{import.get_status_display}}</td>
+                <td>{{import.error_code}}</td>
+                <td>{{import.error_message}}</td>
+                <td>{{import.src_ref}}</td>
+        </tr> 
+    {% endfor %}
+    </tbody>
+    </table>
+
+{% endblock body_content %}
+
+{% block js %}
+<script src="{% static 'js/get_oc.js' %}"></script>
+{% endblock %}

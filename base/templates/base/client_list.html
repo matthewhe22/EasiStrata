@@ -1,0 +1,58 @@
+{% extends "base/base.html" %}
+
+{% block title_block %}
+    Client
+    
+{% endblock title_block %}  
+
+
+{% block body_content %}
+
+<div class="text-right" >
+    <a name="New Client"  class="btn btn-primary" href="{% url 'base:client_create' %}" role="button">New Client</a>
+</div>
+
+<hr>
+
+
+    <table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>ABN</th>
+            <th>TFN</th>
+            <th>Telephone</th>
+            <th>email</th>
+            <th>Is Deleted</th>
+
+        </tr>
+    </thead>
+
+    {% for clients in client_list %}
+
+            <tbody>
+                
+               <tr>
+                        
+                        <td scope="row"><a href="/base/client/update/{{clients.pk}}">  {{clients.client_name}}</a></td>
+                        
+                        <td>{{clients.ABN}}</td>
+                        <td>{{clients.TFN}}</td>
+                        <td>{{clients.telephone}}</td>
+                        <td>{{clients.email}}</td>
+                        <td>{{clients.IsDeleted}}</td>
+
+
+                </tr> 
+               
+    {% endfor %}
+
+
+            </tbody>
+        </table>
+
+
+
+
+
+{% endblock body_content %}

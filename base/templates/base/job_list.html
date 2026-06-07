@@ -1,0 +1,61 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+
+{% block title_block %}
+   Scheduling Job List
+
+{% endblock title_block %}
+
+
+{% block body_content %}
+
+    <form action="{% url 'base:job_delete' %}" class="form-check" method="POST">
+        {% csrf_token %}
+
+        <div class="text-right">
+            <input name="deletebutton" class="btn btn-secondary" type="submit" value="Delete">
+            <button name="oc_init" class="btn btn-info" id="oc_init">Init all OC</button>
+        </div>
+
+
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Job ID</th>
+                <th>Job Name</th>
+                <th>Next run time</th>
+
+
+
+            </tr>
+            </thead>
+
+            {% for item in job %}
+
+                <tbody>
+
+                <tr>
+                    <td><input class="form-check-input" name='chkgroup' type="checkbox" value="{{ item.name }}"></td>
+
+                    <td>  {{ item.id }}</td>
+
+                    <td>{{ item.name}}</td>
+                    <td>{{ item.next_run_time }}</td>
+                </tr>
+
+            {% endfor %}
+
+
+            </tbody>
+        </table>
+
+    </form>
+
+    {% block javascript %}
+        <script src="{% static 'js/init_oc_sched.js' %}"></script>
+    {% endblock javascript %}
+
+{% endblock body_content %}
+

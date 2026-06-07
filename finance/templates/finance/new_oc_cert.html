@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+{% extends "base/base.html" %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+{% block title_block %}
+    OC Certificate
+{% endblock title_block %}
+
+
+
+
+{% block body_content %}
+
+    {#    {% include 'partials/_alerts.html' %}#}
+
+
+    <form method="POST" id="oc_form">
+        {% csrf_token %}
+
+        {% crispy form %}
+        <input id="oc_cert_id" hidden>
+
+    </form>
+    {% block javascript %}
+        <script src="{% static 'js/get_oc.js' %}"></script>
+        <script src="{% static 'js/set_property.js' %}"></script>
+        <script src="{% static 'js/oc_cert.js' %}"></script>
+    {% endblock javascript %}
+
+
+{% endblock body_content %}

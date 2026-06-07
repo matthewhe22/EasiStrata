@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+{% extends "base/base.html" %}
+{%  load staticfiles %}
+{% load crispy_forms_tags %}
+
+
+    {% block title_block %}
+        OC Maintain
+    {% endblock title_block %}
+
+
+    {% block body_content %}
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+         
+                {% crispy form %}
+
+
+            </form>
+                 
+            
+
+    {% endblock body_content %}
+

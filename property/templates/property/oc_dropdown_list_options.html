@@ -1,0 +1,4 @@
+<option value selected>Please select OC here</option>
+{% for item in oc %}
+<option value="{{ item.id }}">{{ item.title }}</option>
+{% endfor %}

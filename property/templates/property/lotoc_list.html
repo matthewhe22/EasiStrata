@@ -1,0 +1,92 @@
+{% extends "base/base.html" %}
+
+{% block title_block %}
+    Lot OC List
+
+{% endblock title_block %}
+
+
+{% block body_content %}
+
+    <div class="form-group">
+        <form method="GET">
+            <div class="row">
+                <div class="col-3">
+                    <label for="property">Property: </label>
+                    <select class="form-control" id="in_property" name="property_id" required>
+                        <option value='0' selected>Choose Property</option>
+                        {% for item in property %}
+                            <option value="{{ item.pk }}"  {% if item.pk == property_id %}
+                                    selected {% endif %}> {{ item.name }} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-3">
+                    <label for="crn">CRN: </label>
+                    <input class="form-control" id="id_crn" name="crn" {% if crn %} value="{{ crn }} {% endif %}">
+
+
+                </div>
+
+
+            </div>
+            <div class="text-right">
+                <input class="btn btn-secondary" type="submit" value="Search">
+            </div>
+        </form>
+
+    </div>
+
+    <form action="{% url 'property:lotoc_delete' %}" class="form-check" method="POST">
+        {% csrf_token %}
+
+        <div class="text-right">
+            <a name="New " class="btn btn-primary" href="{% url 'property:lotoc_create' %}" role="button">New</a>
+            <input name="deletebutton" class="btn btn-primary" type="submit" value="Delete">
+        </div>
+
+        <hr>
+
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>OC Name</th>
+                <th>Lot Name</th>
+                <th>Entitlement</th>
+                <th>Liability</th>
+                <th>CRN</th>
+
+
+            </tr>
+            </thead>
+
+            {% for item in lotoc %}
+
+                <tbody>
+
+                <tr>
+                    <td><input class="form-check-input" name='chkgroup' type="checkbox" value="{{ item.pk }}"></td>
+
+                    <td scope="row"><a href="/property/lotoc/update/{{ item.pk }}">  {{ item.oc_ref }}</a></td>
+
+                    <td>{{ item.lot_ref }}</td>
+                    <td>{{ item.entitlement }}</td>
+                    <td>{{ item.liability }}</td>
+                    <td>{{ item.CRN }}</td>
+
+
+                </tr>
+
+            {% endfor %}
+
+
+            </tbody>
+        </table>
+
+    </form>
+
+
+
+{% endblock body_content %}

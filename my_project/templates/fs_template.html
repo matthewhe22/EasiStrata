@@ -1,0 +1,349 @@
+{% load humanize %}
+{% load mathfilters %}
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Financial Report</title>
+    <meta name="description" content="Financial Report">
+</head>
+
+<body>
+{#<article id="cover">#}
+{#    <h1>Financial Report</h1>#}
+{#    <address>{{ data.plan_num }}#}
+{#        <p class="title">{{ data.property_address }}</p>#}
+{#    </address>#}
+{#    <address>{{ data.client_name }}</address>#}
+
+{#</article>#}
+<article id="competences">
+
+    <h1 id="competences-title">Financial Report</h1>
+    <h3><B>{{ data.oc_name }} {{ data.plan_num }}
+        <h5>{{ data.property_address }}</h5>
+    </B></h3>
+    <section id="table-content">
+        <h4 align="middle"><B>INCOME STATEMENT </B></h4>
+        <p align="middle">- for the period {{ data.start_date }} to {{ data.to_date }}</p>
+
+
+        <p><b>Operating Levy</b></p>
+
+        <table style="width: 710px;">
+            {#INCOME#}
+            <thead>
+            <td style="width: 40%;"><B><u>INCOME</u></B></td>
+            <td style="width: 30%;"><B>Actual</B></td>
+            <td style="width: 30%;"><B>Budget</B></td>
+            </thead>
+
+
+            {% for key,value in fs_data.Income.items %}
+                <tr>
+
+                    <td><strong>{{ key }}</strong></td>
+                    <td></td>
+                    <td></td>
+
+
+                </tr>
+
+                {% for line in value %}
+                    <tr>
+                        <td style="width: 40%;padding-left: 10px">    {{ line.acc_name }}</td>
+                        <td class="fs" style="width: 30%;">{{ line.actual_amt|mul:-1|floatformat:'2'|intcomma }}</td>
+                        <td class="fs" style="width: 30%;">{{ line.budget_amt|floatformat:'2'|intcomma }}</td>
+                    </tr>
+                {% endfor %}
+
+            {% endfor %}
+            <tr>
+                <td style="width: 40%;"><B>INCOME TOTAL</B></td>
+                <td class="fs" style="width: 30%;"><B>{{ fs_sum_actual.Income|mul:-1|floatformat:'2'|intcomma }}</B>
+                </td>
+                <td class="fs" style="width: 30%;"><B>{{ fs_sum_budget.Income|floatformat:'2'|intcomma }}</B></td>
+            </tr>
+        </table>
+
+
+        {#expense#}
+        <table style="width: 710px;">
+            <thead>
+            <td style="width: 40%;"><B><u>EXPENSE</u></B></td>
+            <td style="width: 30%;"><B>Actual</B></td>
+            <td style="width: 30%;"><B>Budget</B></td>
+            </thead>
+            {% for key,value in fs_data.Expenditure.items %}
+                <tr>
+
+                    <td><strong>{{ key }}</strong></td>
+                    <td></td>
+                    <td></td>
+
+
+                </tr>
+
+                {% for line in value %}
+                    <tr>
+                        <td style="width: 40%;padding-left: 10px">    {{ line.acc_name }}</td>
+                        <td class="fs" style="width: 30%;">{{ line.actual_amt|mul:-1|floatformat:'2'|intcomma }}</td>
+                        <td class="fs" style="width: 30%;">{{ line.budget_amt|floatformat:'2'|intcomma }}</td>
+                    </tr>
+                {% endfor %}
+
+            {% endfor %}
+            <tr></tr>
+            <tr></tr>
+            <tr>
+                <td style="width: 167px;"><B>EXPENSE TOTAL</B></td>
+                <td style="width: 87px;" class="fs">
+                    <B>{{ fs_sum_actual.Expenditure|mul:-1|floatformat:'2'|intcomma }}</B></td>
+                <td style="width: 87px;" class="fs"><B>{{ fs_sum_budget.Expenditure|floatformat:'2'|intcomma }}</B></td>
+            </tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr>
+
+                <td style="width: 167px;"><B>SURPLUS / (DEFICIT) FOR THE YEAR</B></td>
+                <td class="fs"><B>{{ fs_data.surplus_actual|floatformat:'2'|intcomma }}</B></td>
+                <td class="fs"><B>{{ fs_data.surplus_budget |floatformat:'2'|intcomma }}</B></td>
+
+            </tr>
+        </table>
+
+        <br>
+        <br>
+        <br>
+
+        <p><b>Maintenance Plan</b></p>
+
+        <table style="width: 710px;">
+
+            {#INCOME#}
+            <thead>
+            <td style="width: 40%;"><B><u>INCOME</u></B></td>
+            <td style="width: 30%;"><B>Actual</B></td>
+            <td style="width: 30%;"><B>Budget</B></td>
+            </thead>
+
+
+            {#            {% for key,value in fs_data.Income.items %}#}
+            <tr>
+
+                <td><strong>Revenue</strong></td>
+                <td></td>
+                <td></td>
+
+
+            </tr>
+
+            {% for line in data.maintain_income_items %}
+                <tr>
+                    <td style="width: 40%;padding-left: 10px">    {{ line.acc_name }}</td>
+                    <td class="fs">{{ line.actual_amt|floatformat:'2'|intcomma }}</td>
+                    <td class="fs">{{ line.budget_amt|floatformat:'2'|intcomma }}</td>
+                </tr>
+            {% endfor %}
+
+            {#            {% endfor %}#}
+            <tr>
+                <td style="width: 40%;"><B>INCOME TOTAL</B></td>
+                <td class="fs" style="width: 30%;"><B>{{ data.total_income_actual|floatformat:'2'|intcomma }}</B>
+                </td>
+                <td class="fs" style="width: 30%;"><B>{{ data.total_income_budget|floatformat:'2'|intcomma }}</B></td>
+            </tr>
+        </table>
+
+
+        <br>
+        <br>
+        {#expense#}
+        <table style="width: 710px;">
+            <thead>
+            <tr>
+                <td style="width: 40%;"><B><u>EXPENSE</u></B></td>
+                <td class="fs" style="width: 30%;"><B>Actual</B></td>
+                <td class="fs" style="width: 30%;"><B>Budget</B></td>
+            </tr>
+            </thead>
+
+
+            {% for line in data.maintain_exp_items %}
+                <tr>
+                    <td>    {{ line.acc_name }}</td>
+                    <td class="fs">{{ line.actual_amt|floatformat:'2'|intcomma }}</td>
+                    <td class="fs">{{ line.budget_amt|floatformat:'2'|intcomma }}</td>
+                </tr>
+            {% endfor %}
+
+            <tr></tr>
+            <tr></tr>
+            <tr>
+                <td style="width: 40%;"><B>EXPENSE TOTAL</B></td>
+                <td class="fs" style="width: 30%;">
+                    <B>{{ data.total_exp_actual|floatformat:'2'|intcomma }}</B></td>
+                <td class="fs" style="width: 30%;"><B>{{ data.total_exp_budget|floatformat:'2'|intcomma }}</B></td>
+            </tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr>
+
+                <td style="width: 167px;"><B>SURPLUS / (DEFICIT) FOR THE YEAR</B></td>
+                <td class="fs"><B>{{ data.maintain_actual_surplus|floatformat:'2'|intcomma }}</B></td>
+                <td class="fs"><B>{{ data.maintain_budget_surplus |floatformat:'2'|intcomma }}</B></td>
+
+            </tr>
+        </table>
+
+
+    </section>
+
+
+    <div id="table-content">
+        <h4 align="middle"><B>BALANCE SHEET </B></h4>
+        <p align="middle">As at {{ data.to_date }}</p>
+        <table style="width: 866px;">
+
+            <thead>
+            <td style="width: 40%;"><B><u>ASSETS</u></B></td>
+            <td class="fs"><B>FY{{ data.fin_year }}</B></td>
+            <td style="width: 30%;"></td>
+            </thead>
+
+
+            {% for key,value in fs_data.Assets.items %}
+                <tr>
+
+                    <td><strong>{{ key }}</strong></td>
+                    <td></td>
+                    <td></td>
+
+
+                </tr>
+
+                {% for line in value %}
+                    <tr>
+                        <td style="width: 40%;padding-left: 10px">    {{ line.acc_name }}</td>
+                        <td class="fs">{{ line.actual_amt |floatformat:'2'|intcomma }}</td>
+                        <td style="width: 30%;"></td>
+                    </tr>
+                {% endfor %}
+
+            {% endfor %}
+            <tr></tr>
+            <tr></tr>
+            <tr>
+                <td style="width: 167px;"><B>TOTAL ASSETS</B></td>
+                <td class="fs"><B>{{ fs_sum_actual.Assets|floatformat:'2'|intcomma }}</B></td>
+                <td style="width: 87px;"></td>
+            </tr>
+        </table>
+
+        {#LIABILITIES#}
+        <table style="width: 866px;">
+
+
+            <thead>
+            <td style="width: 40%;"><B><u>LIABILITIES</u></B></td>
+            <td style="width: 30%;"></td>
+            <td style="width: 30%;"></td>
+            </thead>
+
+
+            {% for key,value in fs_data.Liability.items %}
+                <tr>
+
+                    <td><strong>{{ key }}</strong></td>
+                    <td></td>
+                    <td></td>
+
+
+                </tr>
+
+                {% for line in value %}
+                    <tr>
+                        <td style="width: 40%;padding-left: 10px">    {{ line.acc_name }}</td>
+                        <td class="fs">{{ line.actual_amt|floatformat:'2'|intcomma }}</td>
+                        <td style="width: 30%;"></td>
+                    </tr>
+                {% endfor %}
+
+            {% endfor %}
+            <tr></tr>
+            <tr></tr>
+            <tr>
+                <td style="width: 167px;"><B>TOTAL LIABILITIES</B></td>
+                <td class="fs"><B>{{ fs_sum_actual.Liability|floatformat:'2'|intcomma }}</B></td>
+                <td style="width: 87px;"></td>
+            </tr>
+        </table>
+
+
+        <table style="width: 866px;">
+
+
+            <thead>
+            <td style="width: 40%;"><B><u>EQUITY</u></B></td>
+            <td style="width: 30%;"></td>
+            <td style="width: 30%;"></td>
+            </thead>
+
+
+            {% for key,value in fs_data.Equity.items %}
+
+                {% for line in value %}
+                    <tr>
+                        <td style="width: 40%;padding-left: 10px">    {{ line.acc_name }}</td>
+                        <td class="fs">{{ line.actual_amt|floatformat:'2'|intcomma }}</td>
+                        <td style="width: 30%;"></td>
+                    </tr>
+                {% endfor %}
+
+            {% endfor %}
+            <tr></tr>
+            <tr></tr>
+            <tr>
+                <td style="width: 167px;"><B>TOTAL EQUITY</B></td>
+                <td class="fs"><B>{{ fs_data.end_bal|floatformat:'2'|intcomma }}</B></td>
+                <td style="width: 87px;"></td>
+            </tr>
+        </table>
+
+    </div>
+
+
+    <div id="table-content">
+
+
+        <table style="width: 866px;">
+            <tbody>
+            <tr>
+                <td style="width: 40%;"><B><u>CASH FUNDS RESERVE</u></B></td>
+                <td style="width: 30%;"><B></B></td>
+            </tr>
+            <tr>
+                <td style="width: 40%;">&nbsp;Opening Balance</td>
+                <td class="fs">{{ data.open_bal|floatformat:'2'|intcomma }}</td>
+                <td style="width: 30%;"></td>
+            </tr>
+
+            <tr>
+                <td style="width: 167px;">&nbsp;Current Year Earning</td>
+                <td class="fs">{{ fs_data.surplus_actual|floatformat:'2'|intcomma }}</td>
+            </tr>
+            <tr>
+                <td style="width: 167px;">&nbsp;Ending Balance</td>
+                <td class="fs">{{ fs_data.end_bal|floatformat:'2'|intcomma }}</td>
+            </tr>
+
+
+            </tbody>
+        </table>
+    </div>
+</article>
+</body>
+</html>

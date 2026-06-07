@@ -1,0 +1,586 @@
+{% extends "base/base.html" %}
+{% load humanize %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Owner Info
+
+{% endblock title_block %}
+
+
+{% block body_content %}
+
+
+
+    <hr>
+
+    <div class="container-lg">
+        <!-- Tabs navs -->
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active nav-item"><a class="nav-link" href="#home">Owner Info</a></li>
+            <li class="nav-item"><a class="nav-link" href="#property">Property</a></li>
+            <li class="nav-item"><a class="nav-link" href="#ledger">Owner Ledger</a></li>
+            <li class="nav-item"><a class="nav-link" href="#levy">Levy History</a></li>
+            <li class="nav-item"><a class="nav-link" href="#AGM">AGM</a></li>
+            <li class="nav-item"><a class="nav-link" href="#insurance">Insurance</a></li>
+            <li class="nav-item"><a class="nav-link" href="#fs">Financial Statement</a></li>
+            {% if lot.is_committee %}
+                <li class="nav-item"><a class="nav-link" href="#invoice">Invoice Summary</a></li>
+                <li class="nav-item"><a class="nav-link" href="#arrear">Total Levy in arrear</a></li>
+            {% endif %}
+
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="home">
+
+                <div class="row" style="padding-top: 30px">
+                    <div class="col-lg-5">
+                        <dl class="dl-horizontal">
+
+                            <dt>Lot No.:</dt>
+                            <dd>{{ lot.lot }}</dd>
+                            <dt>Levy Address:</dt>
+                            <dd>{{ lot.billing_adr }}</dd>
+                            <dt>Owner Name1:</dt>
+                            <dd> {{ lot.owner_name1 }}</dd>
+                            <dt>Owner Name2:</dt>
+                            <dd> {{ lot.owner_name2 }}</dd>
+                            <dt>Agent Name:</dt>
+                            <dd> {{ lot.agent_name }}</dd>
+                            <dt>Agent Email:</dt>
+                            <dd> {{ lot.agent_email }}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-lg-7" id="cluster_info">
+                        <dl class="dl-horizontal">
+
+                            <dt>Unit No.:</dt>
+                            <dd>{{ lot }}</dd>
+                            <dt>Phone:</dt>
+                            <dd>{{ lot.phone }}</dd>
+                            <dt>Email1:</dt>
+                            <dd> {{ lot.email1 }}</dd>
+                            <dt>Email2:</dt>
+                            <dd>
+                                {{ lot.email2 }}
+                            </dd>
+                            <dt>Agent Contacts:</dt>
+                            <dd>
+                                {{ lot.agent_contact }}
+                            </dd>
+                            <dt>Overdue Amount:</dt>
+                            <dd>{{ overdue|intcomma }}</dd>
+                        </dl>
+                    </div>
+                </div>
+
+            </div>
+            <div class="tab-pane" id=ledger>
+                <table class="table">
+                    <thead>
+                    <tr>
+
+                        <th>Transaction Date</th>
+                        <th>OC</th>
+                        <th>Debit Amount</th>
+                        <th>Credit Amount</th>
+
+                        <th>Balance</th>
+                        <th>Reference</th>
+                        <th>Description</th>
+
+                    </tr>
+                    </thead>
+
+                    {% for item in ledgers %}
+
+                        <tbody>
+
+                        <tr>
+
+                            <td>{{ item.trans_date }}</td>
+                            <td>{{ item.oc_ref.title }}</td>
+                            <td>{{ item.debit_amt|intcomma }}</td>
+                            <td>{{ item.credit_amt|intcomma }}</td>
+                            <td>{{ item.balance|intcomma }}</td>
+                            <td>{{ item.reference }}</td>
+                            <td>{{ item.get_desc }}</td>
+
+
+                        </tr>
+
+                    {% endfor %}
+
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane" id="levy">
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Billing No.</th>
+                        <th>OC</th>
+                        <th>Unit No.</th>
+                        <th>Lot No.</th>
+                        {#                        <th>Billing Amount</th>#}
+                        {#                        <th>Collected Amount</th>#}
+                        <th>Period From</th>
+                        <th>Period To</th>
+                        <th>Due Date</th>
+                        <th>Billing Date</th>
+                        <th>Payment Status</th>
+                        <th>Agent Name</th>
+                        <th>Attachment</th>
+
+
+                    </tr>
+                    </thead>
+
+                    {% for item in billings %}
+
+                        <tbody>
+
+
+
+                        <td>  {{ item.billing_num }}</td>
+                        <td>{{ item.oc_ref.title }}</td>
+                        <td>{{ item.lot_ref }}</td>
+                        <td>{{ item.lot_ref.lot }}</td>
+                        {#                        <td>{{ item.billing_amount|intcomma }}</td>#}
+                        {#                        <td>{{ item.collected_amount|intcomma }}</td>#}
+                        <td>{{ item.billing_from }}</td>
+                        <td>{{ item.billing_to }}</td>
+                        <td>{{ item.due_date }}</td>
+                        <td>{{ item.billing_date }}</td>
+                        <td>{{ item.status }}</td>
+
+                        <td>{{ item.get_agent }}</td>
+                        <td>{% if item.attachment %}
+                            <a href="{{ item.attachment.url }}">Download</a></td>
+                        {% endif %}
+
+
+
+
+
+                    {% endfor %}
+
+
+                    </tbody>
+                </table>
+
+
+            </div>
+            <div class="tab-pane" id="AGM">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>OC</th>
+                        <th>Meeting Date</th>
+                        <th>Financial Year</th>
+                        <th>Meeting Minutes</th>
+                        {#                        <th>Meeting invite</th>#}
+                        {#                        <th>Actions</th>#}
+
+
+                    </tr>
+                    </thead>
+
+                    {% for item in agms %}
+
+                        <tbody>
+
+                        <tr>
+
+                            <td>{{ item.property_ref }}</td>
+
+                            <td>{{ item.oc_ref }}</td>
+                            <td>{{ item.meeting_datetime }}</td>
+                            <td>{{ item.fyear }}</td>
+
+                            <td>{% if item.meeting_minutes %}
+
+                                <a href="{{ item.meeting_minutes.url }}" download> Meeting Minutes</a>
+
+                            {% endif %}
+
+
+                        </tr>
+
+                    {% endfor %}
+
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane" id="insurance">
+                <table class="table">
+                    <thead>
+                    <tr>
+
+                        <th>Policy No.</th>
+                        <th>Date From</th>
+                        <th>Date To</th>
+                        <th>Property</th>
+                        <th>Insurance Comp</th>
+                        <th>Premium Amount</th>
+                        <th>Est. Commission</th>
+                        <th>Currency of certification</th>
+
+
+                    </tr>
+                    </thead>
+
+                    {% for item in insurances %}
+
+                        <tbody>
+
+                        <tr>
+
+
+                            <td>  {{ item.policy_num }}
+                            </td>
+
+                            <td>{{ item.date_from }}</td>
+                            <td>{{ item.date_to }}</td>
+                            <td>{{ item.property_ref }}</td>
+                            <td>{{ item.company_name }}</td>
+                            <td>{{ item.premium_amt|intcomma }}</td>
+
+                            <td>{{ item.est_commission }}</td>
+                            <td>{% if item.currency_cert %}
+
+                                <a href="{{ item.currency_cert.url }}" download> Download</a></td>
+                            {% endif %}
+                            </td>
+
+
+                        </tr>
+
+                    {% endfor %}
+
+
+                    </tbody>
+                </table>
+            </div>
+
+
+            <div class="tab-pane" id="property">
+
+                <div class="tab-pane active" id="home">
+
+                    <div class="row" style="padding-top: 30px">
+                        <div class="col-lg-5">
+                            <dl class="dl-horizontal">
+
+                                <dt>Property Address.:</dt>
+                                <dd>{{ property.street }}</dd>
+                                <dt>Lots No.:</dt>
+                                <dd>{{ property.lots_num|intcomma }}</dd>
+                                <dt>Total Entitlement:</dt>
+                                <dd> {{ property.total_lot_entitle|intcomma }}</dd>
+                                <dt>Plan No.:</dt>
+                                <dd> {{ property.plan_num }}</dd>
+                                <dt>State:</dt>
+                                <dd> {{ property.state }}</dd>
+                                <dt>ABN:</dt>
+                                <dd> {{ property.ABN }}</dd>
+                            </dl>
+                        </div>
+                        <div class="col-lg-7" id="cluster_info">
+                            <dl class="dl-horizontal">
+
+                                <dt>Building Name.:</dt>
+                                <dd>{{ property.name }}</dd>
+                                <dt>Total Liability:</dt>
+                                <dd>{{ property.total_lot_liability|intcomma }}</dd>
+                                <dt>Post Code:</dt>
+                                <dd> {{ property.post_code }}</dd>
+                                <dt>Suburb:</dt>
+                                <dd>
+                                    {{ property.suburb }}
+                                </dd>
+
+                            </dl>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="tab-pane" id="fs">
+
+
+                <div class="text-right">
+                    <button class="btn btn-primary" id="new_fs" role="button">New</button>
+                </div>
+
+                <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Create Financial Statement</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="fs_form">
+                                    <div class="form-group">
+                                        <label for="oc_ref" class="col-form-label">OC:</label>
+                                        <select name="oc_ref" class="select form-control" required="" id="id_oc_ref">
+
+
+                                            <option value="" selected="">---------</option>
+                                            {% for item in oc_list %}
+                                                <option value="{{ item.id }}">{{ item }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fyear" class="col-form-label">Financial Year:</label>
+                                        <input type="number" class="form-control" name="fyear" value="{{ fyear }}"
+                                               required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="balance" class="col-form-label">Start Date:</label>
+                                        <input type="date" class="form-control" name="start_date">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="end_date" class="col-form-label">End Date:</label>
+                                        <input type="date" class="form-control" name="end_date" required>
+                                    </div>
+
+                                    <input name="property_id" value="{{ property.id }}" hidden>
+
+
+                                </form>
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" id="fs_save">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>OC</th>
+                        <th>Financial Year</th>
+                        <th>To Date</th>
+                        <th>Attachment</th>
+                        <th>Action</th>
+
+                    </tr>
+                    </thead>
+
+                    {% for item in fs %}
+
+                        <tbody>
+
+                        <tr>
+
+                            <td>  {{ item.property_ref }}</td>
+
+                            <td>{{ item.oc_ref }}</td>
+                            <td>{{ item.fin_year }}</td>
+                            <td>{{ item.to_date }}</td>
+                            <td><a name="FS" class="btn btn-secondary" href="/finance/fs/pdf/{{ item.pk }}"
+                                   role="button">Download FS</a></td>
+                            <td>
+                                <a href="#"><span class="fa-trash" id="del-{{ item.id }}">Delete</span></a>
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+
+
+                    </tbody>
+                </table>
+
+            </div>
+
+
+
+
+
+            {% if lot.is_committee %}
+
+                <div class="tab-pane" id="invoice">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Invoice Date</th>
+                            <th>Invoice No.</th>
+                            <th>Property Name</th>
+
+                            <th>Supplier</th>
+                            <th>Due Date</th>
+                            <th>Total Amount</th>
+                            <th>Amount Paid</th>
+
+                            <th>Expense Type</th>
+
+                            <th>Payment Status</th>
+                            <th>Invoice Status</th>
+                            <th>Invoice Attachment</th>
+
+
+                        </tr>
+                        </thead>
+
+                        {% for item in all_invoices %}
+
+                            <tbody>
+                            <td>{{ item.pk }}
+                            </td>
+                            <td> {{ item.inv_date }}
+                            </td>
+                            <td>{{ item.inv_num }}</td>
+                            <td>{{ item.get_property_name }}</td>
+                            <td>{{ item.supplier_ref }}</td>
+                            <td>{{ item.due_date }}</td>
+                            <td>{{ item.get_total }}</td>
+                            <td>{{ item.amount_paid }}</td>
+                            <td>{{ item.exp_ref }}</td>
+                            <td>{{ item.payment_status }}</td>
+                            <td>{{ item.get_status_display }}</td>
+                            <td>{% if item.attachment %}
+
+                                <a href="{{ item.attachment.url }}" download> Download</a></td>
+                            {% endif %}
+                            <td>
+
+
+
+
+
+                        {% endfor %}
+
+
+                        </tbody>
+                    </table>
+
+
+                </div>
+
+
+                <div class="tab-pane" id="arrear">
+                    <div class="row" style="padding-top: 30px">
+                        <div class="col-lg-5">
+                            <dl class="dl-horizontal">
+
+                                <dt>TOTAL AMOUNT IN ARREAR.:</dt>
+                                <dd style="color: red">{{ arrear_amount|intcomma }}</dd>
+
+                            </dl>
+                        </div>
+                        <div class="col-lg-7" id="cluster_info">
+                            <dl class="dl-horizontal">
+
+                                <dt>TOTAL LOTS IN ARREAR:</dt>
+                                <dd style="color: red">{{ arrear_lot|intcomma }}</dd>
+
+                            </dl>
+                        </div>
+                    </div>
+
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Billing No.</th>
+                            <th>OC</th>
+                            <th>Unit No.</th>
+                            <th>Lot No.</th>
+                            <th>Billing Amount</th>
+                            <th>Collected Amount</th>
+                            <th>Period From</th>
+                            <th>Period To</th>
+                            <th>Due Date</th>
+                            <th>Billing Date</th>
+                            <th>Payment Status</th>
+                            <th>Agent Name</th>
+                            <th>Attachment</th>
+
+
+                        </tr>
+                        </thead>
+
+                        {% for item in arrear_billings %}
+
+                            <tbody>
+
+
+
+                            <td>  {{ item.billing_num }}</td>
+                            <td>{{ item.oc_ref.title }}</td>
+                            <td>{{ item.lot_ref }}</td>
+                            <td>{{ item.lot_ref.lot }}</td>
+                            <td>{{ item.billing_amount|intcomma }}</td>
+                            <td>{{ item.collected_amount|intcomma }}</td>
+                            <td>{{ item.billing_from }}</td>
+                            <td>{{ item.billing_to }}</td>
+                            <td>{{ item.due_date }}</td>
+                            <td>{{ item.billing_date }}</td>
+                            <td>{{ item.status }}</td>
+
+                            <td>{{ item.get_agent }}</td>
+                            <td>{% if item.attachment %}
+                                <a href="{{ item.attachment.url }}">Download</a></td>
+                            {% endif %}
+
+
+
+
+
+
+
+                        {% endfor %}
+
+
+                        </tbody>
+                    </table>
+
+
+                </div>
+            {% endif %}
+
+        </div>
+
+        <!-- Tabs content -->
+
+
+    </div>
+
+
+
+
+
+{% endblock body_content %}
+
+{% block js %}
+    <script src="{% static 'js/owner.js' %}"></script>
+
+
+    <script>
+        $(function () {
+            $('#myTab a:first').tab('show');
+        })
+        $('#myTab a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+    </script>
+
+{% endblock js %}

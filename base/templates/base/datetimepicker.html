@@ -1,0 +1,11 @@
+<input type="text" class="form-control" name="dateTimePicker">
+
+<script type="text/javascript">
+    $(function () {
+        instance = new dtsel.DTS('input[name="dateTimePicker"]', {
+            showTime: true,
+            dateFormat: "dd/mm/yyyy",
+            timeFormat: "HH:MM"
+        });
+    });
+</script>

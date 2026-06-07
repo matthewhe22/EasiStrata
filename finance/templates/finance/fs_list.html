@@ -1,0 +1,93 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_filters %}
+{% load widget_tweaks %}
+
+
+{% block title_block %}
+    Financial Statment
+
+{% endblock title_block %}
+
+
+{% block body_content %}
+    <div class="row">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Financial Statement</h1>
+        </div>
+    </div>
+
+    <form method="get">
+        <div class="well">
+            <h4 style="margin-top: 0">Filter</h4>
+            <div class="row">
+                <div class="form-group col-sm-4 col-md-3">
+                    <label for="id_oc_ref">Property:</label>
+                    {% render_field filter.form.property_ref class="form-control" %}
+                </div>
+                <div class="form-group col-sm-4 col-md-3">
+                    <label for="id_oc_ref">OC:</label>
+                    {% render_field filter.form.oc_ref class="form-control" %}
+                </div>
+                <div class="form-group col-sm-4 col-md-3">
+                    <label for="id_fin_year">Year:</label>
+                    {% render_field filter.form.fin_year class="form-control" %}
+                </div>
+
+            </div>
+
+
+            <button class="btn btn-secondary" type="submit">Search</button>
+        </div>
+    </form>
+
+
+
+    <div class="text-right">
+        <a class="btn btn-primary" href="{% url 'finance:fs_create' %}" role="button">New</a>
+    </div>
+
+    <hr>
+
+
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Property</th>
+            <th>OC</th>
+            <th>Financial Year</th>
+            <th>To Date</th>
+
+        </tr>
+        </thead>
+
+        {% for item in object_list %}
+
+            <tbody>
+
+            <tr>
+
+                <td scope="row"><a href="/finance/fs/update/{{ item.pk }}">  {{ item.property_ref }}</a></td>
+
+                <td>{{ item.oc_ref }}</td>
+                <td>{{ item.fin_year }}</td>
+                <td>{{ item.to_date }}</td>
+                <td><a name="FS" class="btn btn-secondary" href="/finance/fs/pdf/{{ item.pk }}"
+                       role="button">Download FS</a></td>
+            </tr>
+
+        {% endfor %}
+
+
+        </tbody>
+    </table>
+
+    {% block javascript %}
+        <script src="{% static 'js/get_oc.js' %}"></script>
+    {% endblock javascript %}
+
+
+{% endblock body_content %}
+
+

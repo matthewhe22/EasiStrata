@@ -1,0 +1,17 @@
+{% extends "base/base_css_js.html"  %}
+ 
+{% block title_block %}
+    Logout Page
+{% endblock %}
+ 
+{% block body_content %}
+ 
+    <div class="container">
+        <div class="section-inner clearfix">
+ 
+        <h3>You are logged out. <a href="{% url 'base:login' %}">Click here</a> to login again.</h3>
+ 
+        </div>
+    </div>
+ 
+{% endblock %}

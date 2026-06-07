@@ -1,0 +1,84 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_filters %}
+{% load widget_tweaks %}
+
+{% block title_block %}
+    OC Certificate
+
+{% endblock title_block %}
+
+
+{% block body_content %}
+
+
+    <form method="get">
+        <div class="well">
+            <h4 style="margin-top: 0">Filter</h4>
+            <div class="row">
+
+                <div class="form-group col-sm-4 col-md-3">
+                    <label for="id_oc_ref">Property</label>
+                    {% render_field filter.form.property class="form-control" %}
+                </div>
+
+                <div class="form-group col-sm-4 col-md-2">
+                    {{ filter.form.date_gt.label_tag }}
+                    {% render_field filter.form.date_gt class="form-control" %}
+                </div>
+                <div class="form-group col-sm-4 col-md-2">
+                    {{ filter.form.date_lt.label_tag }}
+                    {% render_field filter.form.date_lt class="form-control" %}
+                </div>
+            </div>
+            <button class="btn btn-secondary" type="submit">Search</button>
+        </div>
+    </form>
+
+    <div class="text-right">
+        <a name="New " class="btn btn-primary" href="{% url 'finance:oc_cert_create' %}" role="button">New</a>
+    </div>
+
+    <hr>
+
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>OC</th>
+            <th>Unit</th>
+            <th>Lot</th>
+            <th>Issue Date</th>
+            <th>Download</th>
+
+
+        </tr>
+        </thead>
+
+        {% for item in object_list %}
+
+            <tbody>
+
+            <tr>
+
+                <td scope="row"><a href="/finance/oc_cert/update/{{ item.pk }}">  {{ item.oc_ref }}</a></td>
+
+                <td>{{ item.lot_ref }}</td>
+                <td>{{ item.lot_ref.lot }}</td>
+                <td>{{ item.issue_date }}</td>
+                <td>{% if item.attachment %}
+
+                    <a href="{{ item.attachment.url }}" download> Preview</a>
+                {% endif %}
+            </tr>
+
+        {% endfor %}
+
+
+        </tbody>
+    </table>
+
+
+
+
+{% endblock body_content %}

@@ -1,0 +1,177 @@
+{% extends "base/base.html" %}
+{% load crispy_forms_filters %}
+{% load widget_tweaks %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Annual General Meeting List
+
+{% endblock title_block %}
+
+
+{% block body_content %}
+
+
+    <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Meeting minutes upload</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="minutesUpload" method="POST" enctype="multipart/form-data" onsubmit="return false"
+                          action="##">
+
+                        {#                        start of file input#}
+                        <div class="custom-file "><input type="file" name="meeting_minutes"
+                                                         class="fileinputcustom form-control custom-file-input"
+                                                         id="id_meeting_minutes">
+
+                            <script>
+                                $(function () {
+                                    $("input[name='meeting_minutes']").change(function (e) {
+                                        var fileName = e.target.files[0].name;
+                                        $("label[for='id_meeting_minutes'][class='custom-file-label']").html(fileName);
+                                    });
+
+                                });
+                            </script>
+                            <label class="custom-file-label" for="id_meeting_minutes">Choose file</label></div>
+
+
+                        {#                        end of file input#}
+
+
+                        <input hidden id="upload-id" name="agmID">
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary" id="btnUpload">Upload</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <form method="get">
+        <div class="well">
+            <h4 style="margin-top: 0">Filter</h4>
+            <div class="row">
+                <div class="form-group col-sm-4 col-md-3">
+                    <label for="id_property_ref">Property</label>
+                    {% render_field filter.form.property_ref class="form-control" %}
+                </div>
+                <div class="form-group col-sm-4 col-md-3">
+                    <label for="id_oc_ref">OC</label>
+                    {% render_field filter.form.oc_ref class="form-control" %}
+                </div>
+                <div class="form-group col-sm-4 col-md-3">
+                    {{ filter.form.fyear.label_tag }}
+                    {% render_field filter.form.fyear class="form-control" %}
+                </div>
+
+            </div>
+
+
+            <button class="btn btn-secondary" type="submit">Search</button>
+        </div>
+    </form>
+
+    <form class="form-check" method="POST">
+        {% csrf_token %}
+
+        <div class="text-right">
+            <a class="btn btn-primary" href="{% url 'strata:agm_new' %}" role="button">New</a>
+        </div>
+
+        <hr>
+
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Property</th>
+                <th>OC</th>
+                <th>Meeting Date</th>
+                <th>Financial Year</th>
+                <th>Meeting Minutes</th>
+                <th>Meeting invite</th>
+                <th>Actions</th>
+
+
+            </tr>
+            </thead>
+
+            {% for item in object_list %}
+
+                <tbody>
+
+                <tr>
+
+                    <td>{{ item.property_ref }}</td>
+
+                    <td>{{ item.oc_ref }}</td>
+                    <td>{{ item.meeting_datetime }}</td>
+                    <td>{{ item.fyear }}</td>
+
+                    <td>{% if item.meeting_minutes %}
+
+                        <a href="{{ item.meeting_minutes.url }}" download> Meeting Minutes</a>
+                    {% else %}
+                        <a href="#" class="btn btn-primary agm-upload" id="load-{{ item.pk }}">Upload</a>
+
+
+                        </td>
+                    {% endif %}
+
+
+                    <td>{% if item.meeting_invite %}
+
+                        <a href="{{ item.meeting_invite.url }}" download> Preview</a>
+
+                    {% endif %}
+                    </td>
+                    <td>
+                        <a href="/strata/agm/update/{{ item.pk }}">Edit</a>
+                        {% if not item.is_agm_sent and item.meeting_invite.name %}
+                            <a href="#" id="send-{{ item.pk }}" class="fa-send"> Send Invite</a>
+
+
+                        {% endif %}
+
+
+                    </td>
+
+                    <td>
+                        <a href="#" class="deletelink" id="del-{{ item.pk }}">Delete</a>
+
+                    </td>
+
+
+                </tr>
+
+            {% endfor %}
+
+
+            </tbody>
+        </table>
+
+    </form>
+
+
+
+{% endblock body_content %}
+{% block js %}
+    <script src="{% static 'js/get_oc.js' %}"></script>
+    <script src="{% static 'js/agm_notify.js' %}"></script>
+{% endblock %}

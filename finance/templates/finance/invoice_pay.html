@@ -1,0 +1,75 @@
+  <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Partial payment amount</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="invoice-num" class="col-form-label">Invoice number:</label>
+            <input type="text" class="form-control" id="invoice-num" disabled value="{{ invoice }}">
+          </div>
+          <div class="form-group">
+            <label for="balance" class="col-form-label">Balance:</label>
+            <input type="number" class="form-control" id="balance" value="{{ bal }}">
+          </div>
+        <div class="form-group">
+            <label for="pay_amt" class="col-form-label">Payment Amount:</label>
+            <input type="number" class="form-control" id="pay_amt">
+          </div>
+            <div class="form-group">
+
+            <input type="number" class="form-control" id="invoice_id" hidden value="{{ invoice_id }}">
+          </div>
+
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save</button>
+      </div>
+
+{#backup of previous version #}
+
+
+      <div class="modal fade bd-example-modal-lg" id="modal" tabindex="-1" role="dialog"
+         aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" id="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Partial payment amount</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="invoice-num" class="col-form-label">Invoice number:</label>
+                            <input type="text" class="form-control" id="invoice-num" disabled value="{{ invoice }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="balance" class="col-form-label">Balance:</label>
+                            <input type="number" class="form-control" id="balance" value="{{ bal }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="pay_amt" class="col-form-label">Payment Amount:</label>
+                            <input type="number" class="form-control" id="pay_amt">
+                        </div>
+                        <div class="form-group">
+
+                            <input type="number" class="form-control" id="invoice_id" hidden disabled>
+                        </div>
+
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="save_pay">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>

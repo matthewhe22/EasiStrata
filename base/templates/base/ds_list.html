@@ -1,0 +1,59 @@
+{% extends "base/base.html" %}
+
+{% block title_block %}
+    Data Source
+    
+{% endblock title_block %}  
+
+
+{% block body_content %}
+
+<div class="text-right" >
+    <a name="New Client"  class="btn btn-primary" href="{% url 'base:ds_create' %}" role="button">New Data Source</a>
+</div>
+
+<hr>
+
+
+    <table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>File Type</th>
+            <th>Sheet Mode</th>
+            <th>Sheet Name</th>
+            <th>Backend Table</th>
+            <th>Client</th>
+
+        </tr>
+    </thead>
+
+    {% for datasource in ds_list %}
+
+            <tbody>
+                
+               <tr>
+                        
+                        <td scope="row"><a href="/base/ds/update/{{datasource.pk}}">  {{datasource.data_src}}</a></td>
+                        
+                        <td>{{datasource.filetype}}</td>
+                        <td>{{datasource.sheet_mode}}</td>
+                        <td>{{datasource.sheet_name}}</td>
+                        <td>{{datasource.db_table}}</td>
+                        <td>{{datasource.client_ref}}</td>
+
+              
+        
+                </tr> 
+               
+    {% endfor %}
+
+
+            </tbody>
+        </table>
+
+
+
+
+
+{% endblock body_content %}

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% extends "base/base.html" %}
+{% load crispy_forms_tags %}
+
+
+    {% block title_block %}
+        User Create View
+    {% endblock title_block %}
+
+
+    {% block body_content %}
+
+            <form method="POST">
+                {% csrf_token %}
+                <!-- {{crispy}} -->
+                {{form|crispy}}
+                <input name="savebutton" class="btn btn-primary" type="submit" value="Save">
+                <a name="cancel"  class="btn btn-primary" href="{% url 'base:user_list' %}" role="button">Cancel</a>
+            </form>
+                 
+            
+
+    {% endblock body_content %}

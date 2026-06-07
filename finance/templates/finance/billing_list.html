@@ -1,0 +1,252 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_filters %}
+{% load widget_tweaks %}
+
+{% block title_block %}
+    Billing List
+
+{% endblock title_block %}
+
+
+{% block body_content %}
+    {#    for modal control #}
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Partial payment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+
+                    <form>
+                        <div class="form-group">
+                            <label for="invoice-num" class="col-form-label">Billing number:</label>
+                            <input type="text" class="form-control" id="invoice-num" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="balance" class="col-form-label">Balance:</label>
+                            <input type="text" class="form-control" id="balance" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="pay_amt" class="col-form-label">Payment Received:</label>
+                            <input type="number" class="form-control" id="pay_amt" value="0.00">
+                        </div>
+
+
+                    </form>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="pay_save">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {#Billing reminder modal#}
+    <div class="modal fade" id="modal_reminder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Billing Reminder</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+
+                    <form>
+                        {#                        <div class="form-group">#}
+                        {#                            <label for="remind_title" class="col-form-label">Title:</label>#}
+                        {#                            <input type="text" class="form-control" id="remind_title">#}
+                        {#                        </div>#}
+                        <div class="form-group">
+                            <label for="remind_body" class="col-form-label">Body:</label>
+                            <textarea type="text" class="form-control" id="remind_body" rows="5">
+Hi owner
+
+Please be informed your Owners Corporation Levy is overdue now. Please proceed your payment to avoid late interest and penalty.
+
+If you have paid your levy, please send through your transaction record for us to allocate your payment.
+
+Regards,</textarea>
+                        </div>
+
+
+                    </form>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="remind_send">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <div class="form-group">
+        <form method="get">
+            <div class="well">
+                <h4 style="margin-top: 0">Filter</h4>
+                <div class="row">
+                    <div class="form-group col-sm-4 col-md-2">
+                        {{ filter.form.property.label_tag }}
+                        {% render_field filter.form.property class="form-control" %}
+                    </div>
+                    <div class="form-group col-sm-4 col-md-2">
+                        {{ filter.form.oc_ref.label_tag }}
+                        {% render_field filter.form.oc_ref class="form-control" %}
+                    </div>
+                    <div class="form-group col-sm-4 col-md-2">
+                        {{ filter.form.billing_num.label_tag }}
+                        {% render_field filter.form.billing_num class="form-control" %}
+                    </div>
+                    <div class="form-group col-sm-4 col-md-2">
+                        {{ filter.form.agent.label_tag }}
+                        {% render_field filter.form.agent class="form-control" %}
+                    </div>
+                    <div class="form-group col-sm-4 col-md-2">
+                        {{ filter.form.unit.label_tag }}
+                        {% render_field filter.form.unit class="form-control" %}
+                    </div>
+                    <div class="form-group col-sm-4 col-md-2">
+                        {{ filter.form.date_gt.label_tag }}
+                        {% render_field filter.form.date_gt class="form-control" %}
+                    </div>
+                    <div class="form-group col-sm-4 col-md-2">
+                        {{ filter.form.date_lt.label_tag }}
+                        {% render_field filter.form.date_lt class="form-control" %}
+                    </div>
+
+                    <div class="form-group col-sm-3 col-md-1">
+                        {{ filter.form.status.label_tag }}
+                        {% render_field filter.form.status class="form-control" %}
+                    </div>
+                    <div class="form-group col-sm-3 col-md-1">
+                        {{ filter.form.special.label_tag }}
+                        {% render_field filter.form.special class="form-control" %}
+                    </div>
+
+                </div>
+
+
+                <button class="btn btn-secondary" type="submit">Search</button>
+            </div>
+        </form>
+    </div>
+
+    <form action="{% url 'finance:billing_delete' %}" class="form-check" method="POST" id="bill_form">
+        {% csrf_token %}
+
+        <div class="text-right">
+            <a name="New " class="btn btn-sm btn-primary" href="{% url 'finance:billing_create' %}">New</a>
+            <input name="resend" class="btn btn-sm btn-primary" width="10px" type="button" value="Resend" id="resend">
+            <input width="15px" id="btn_remind" name="btn_remind" class="btn btn-sm btn-warning" type="button"
+                   value="Remind">
+        </div>
+
+        <hr>
+
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Billing No.</th>
+                <th>Property Name</th>
+                <th>Unit No.</th>
+                <th>Lot No.</th>
+                <th>Billing Amount</th>
+                <th>Collected Amount</th>
+                <th>Period From</th>
+                <th>Period To</th>
+                <th>Due Date</th>
+                <th>Billing Date</th>
+                <th>Payment Status</th>
+                <th>Sent Status</th>
+                <th>Special Levy</th>
+                <th>Agent Name</th>
+                <th>Attachment</th>
+                <th></th>
+
+
+            </tr>
+            </thead>
+
+            {% for item in object_list %}
+
+                <tbody>
+
+
+                <td><input class="form-check-input" name='chkgroup' type="checkbox" value="{{ item.pk }}"></td>
+
+                <td scope="row"><a href="/finance/billing/update/{{ item.pk }}">  {{ item.billing_num }}</a></td>
+                <td>{{ item.get_property_name }}</td>
+                <td>{{ item.lot_ref }}</td>
+                <td>{{ item.lot_ref.lot }}</td>
+                <td>{{ item.billing_amount }}</td>
+                <td>{{ item.collected_amount }}</td>
+                <td>{{ item.billing_from }}</td>
+                <td>{{ item.billing_to }}</td>
+                <td>{{ item.due_date }}</td>
+                <td>{{ item.billing_date }}</td>
+                <td>{{ item.status }}</td>
+                <td>{{ item.mail_status }}</td>
+                <td>{{ item.special_flag }}</td>
+                <td>{{ item.get_agent }}</td>
+                <td>{% if item.attachment %}
+                    <a href="{{ item.attachment.url }}">Download</a></td>
+                {% endif %}
+                <td>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <a href="/finance/billing/pdf/{{ item.pk }}">
+                            <button class="btn-sm btn btn-secondary" type="button"
+
+                            >Billing
+                            </button>
+                        </a>
+                        <a href="/finance/billing/pdflatest/{{ item.pk }}">
+                            <button class="btn-sm btn btn-secondary" type="button"
+
+                            >Latest Billing
+                            </button>
+                        </a>
+                        {% if item.is_valid %}
+                            <button class="btn-sm btn btn-warning cancel" type="button" value="{{ item.pk }}"
+                            >cancel
+                            </button>
+                        {% endif %}
+                    </div>
+                </td>
+
+
+            {% endfor %}
+
+
+            </tbody>
+        </table>
+
+    </form>
+
+    {% block javascript %}
+        <script src="{% static 'js/confirm_pay.js' %}"></script>
+        <script src="{% static 'js/get_oc.js' %}"></script>
+    {% endblock javascript %}
+
+{% endblock body_content %}
+

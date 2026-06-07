@@ -1,0 +1,131 @@
+{% extends "base\base.html" %}
+
+{% load staticfiles %}
+
+{% block body_content %}
+{% comment %} {% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %} {% endcomment %}
+{% include 'partials/_alerts.html' %}
+
+<form method="post" id="submit_form" enctype="multipart/form-data" class="form-horizontal">
+  {% csrf_token %}
+
+    <div class="form-group row">
+    <label for="in_clientCode" class="col-sm-2 col-form-label">Client Code</label>
+    <div class="col-sm-10">
+      <select class="form-control" id="in_clientCode" name="clientcode" required>
+        <option value='0' selected>Choose Client</option>
+        {% for client in clients %}
+        <option value="{{ client.pk }}"> {{ client.client_name }} </option>
+        {% endfor %}
+      </select>
+    </div>
+    </div>
+  
+  <div class="form-group row">
+  <label for="in_fundcode" class="col-sm-2 col-form-label">Fund Code</label>
+  <div class="col-sm-10">
+    <select class="form-control" id="in_fundcode" name="fundCode" required>
+      <option value='0' selected>Choose Fund Code</option>
+      {% for fund in funds %}
+      <option class="fc_{{ fund.client_ref.pk }}" style="display: none;"> {{ fund.fund_name }} </option>
+      {% endfor %}
+    </select>
+  </div>
+  </div>
+  
+  <div class="form-group row">
+  <label for="in_taxyear" class="col-sm-2 col-form-label">Tax Year</label>
+  <div class="col-sm-10">
+    <input type="text" class="col-4 col-sm-3 col-lg-2" id="in_taxyear" name="TaxYear" value="2019">
+    </div>
+  </div>
+
+  <div class="form-group row">
+  <label for="in_cyinfo" class="col-sm-2 col-form-label">CY Info Id</label>
+  <div class="col-sm-10">
+    <input type="text" class="col-4 col-sm-3 col-lg-2" id="in_cyinfo" name="cyInfo" value="1">
+    </div>
+  </div>
+  
+  <div class="form-group row">
+  <label for="in_cyversion" class="col-sm-2 col-form-label">CY Version</label>
+  <div class="col-sm-10">
+    <input type="text" class="col-4 col-sm-3 col-lg-2" id="in_cyversion" name="cyVersion" value="1">
+    </div>
+  </div>
+
+  <div class="form-group row">
+  <label for="in_pyinfo" class="col-sm-2 col-form-label">PY Info Id</label>
+  <div class="col-sm-10">
+    <input type="text" class="col-4 col-sm-3 col-lg-2" id="in_pyinfo" name="pyInfo" value="2">
+    </div>
+  </div>
+  
+  <div class="form-group row">
+  <label for="in_pyversion" class="col-sm-2 col-form-label">PY Version</label>
+  <div class="col-sm-10">
+    <input type="text" class="col-4 col-sm-3 col-lg-2" id="in_pyversion" name="pyVersion" value="1">
+    </div>
+  </div>
+  
+  <!-- <div class="form-group row">
+  <label for="in_fundcode" class="col-sm-2 col-form-label">Fund Code</label>
+  <div class="col-sm-10">
+    <input type="text" class="col-4 col-sm-3 col-lg-2" id="in_fundcode" name="fundCode" value="ISPT No.2">
+    </div>
+  </div> -->
+
+
+  <div class="form-group row">
+  <button id="btn_import" type="submit" class="btn btn-primary col-12">Create Calc Task</button>
+  </div>
+</form>
+
+<hr>
+    <table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Create Time</th>
+            <th>Tax Year</th>
+            <th>CY Info Id</th>
+            <th>CY Version</th>
+            <th>PY Info Id</th>
+            <th>PY Version</th>
+            <th>Fund Code</th>
+            <th>Note</th>
+            <th>Task Version</th>
+            <th>Client Ref</th>
+        </tr>
+    </thead>
+    {% for calc_task in calc_tasks %}
+    <tbody>
+        <tr>
+                <td scope="row">{{calc_task.pk}}</td>
+                <td>{{calc_task.createtime|date}}</td>
+                <td>{{calc_task.tax_year}}</td>
+                <td>{{calc_task.cy_infoid}}</td>
+                <td>{{calc_task.cy_version}}</td>
+                <td>{{calc_task.py_infoid}}</td>
+                <td>{{calc_task.py_version}}</td>
+                <td>{{calc_task.fund_code}}</td>
+                <td>{{calc_task.note}}</td>
+            <td>{{ calc_task.task_version }}</td>
+            <td>{{ calc_task.client_ref }}</td>
+        </tr>
+    {% endfor %}
+        </tbody>
+    </table>
+
+    {% block javascript %}
+        <script src="{% static 'js/calc_task.js' %}"></script>
+    {% endblock %}
+
+{% endblock body_content %}
+

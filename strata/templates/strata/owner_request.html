@@ -1,0 +1,89 @@
+{% extends "base/base.html" %}
+{% load crispy_forms_filters %}
+{% load widget_tweaks %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Owner Request List
+
+{% endblock title_block %}
+
+
+{% block body_content %}
+
+
+    <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">New Request</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <form id="request_form">
+
+                        {{ form|crispy }}
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary" id="btnSubmit">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn btn-primary" id="new_request" style="alignment: right">New request</button>
+
+
+
+    <hr>
+
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Request Date</th>
+            <th>Request Type</th>
+            <th>Title</th>
+            <th>Message</th>
+            <th>Status</th>
+
+
+        </tr>
+        </thead>
+
+        {% for item in requests %}
+
+            <tbody>
+
+            <tr>
+
+                <td>{{ item.createtime }}</td>
+                <td>{{ item.get_category_display }}</td>
+                <td>{{ item.msg_body }}</td>
+                <td>{{ item.msg_subject }}</td>
+                <td>{{ item.mail_status }}</td>
+
+
+            </tr>
+
+        {% endfor %}
+
+
+        </tbody>
+    </table>
+
+
+
+
+
+{% endblock body_content %}
+{% block js %}
+    <script src="{% static 'js/owner_request.js' %}"></script>
+{% endblock %}

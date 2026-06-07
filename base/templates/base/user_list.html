@@ -1,0 +1,64 @@
+{% extends "base/base.html" %}
+
+{% block title_block %}
+    User List
+    
+{% endblock title_block %}  
+
+
+{% block body_content %}
+
+<div class="text-right" >
+    <a name="New User"  class="btn btn-primary" href="{% url 'base:user_create' %}" role="button">New User</a>
+</div>
+
+<hr>
+
+
+    <table class="table">
+    <thead>
+        <tr>
+            <th>User Name</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Create Date</th>
+            <th>Active Status</th>
+            <th>Is staff</th>
+            <th>Is superuser</th>
+            
+            
+            
+        </tr>
+    </thead>
+
+    {% for users in user_list %}
+
+            <tbody>
+                
+               <tr>
+                        
+                        <td scope="row"><a href="/base/user/update/{{users.pk}}">  {{users.username}}</a></td>
+                        
+                        <td>{{users.first_name}}</td>
+                        <td>{{users.last_name}}</td>
+                        <td>{{users.email}}</td>
+                        <td>{{users.date_joined|date}}</td>
+                        <td>{{users.is_active}}</td>
+                        <td>{{users.is_staff}}</td>
+                        <td>{{users.is_superuser}}</td>
+              
+        
+                </tr> 
+               
+    {% endfor %}
+
+
+            </tbody>
+        </table>
+
+
+
+
+
+{% endblock body_content %}

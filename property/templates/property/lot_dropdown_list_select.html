@@ -1,0 +1,7 @@
+{% if select_lot %}
+
+    <option value="{{ select_lot.id }}" selected="selected">{{ select_lot.lot }}</option>
+{% endif %}
+{% for item in lots %}
+    <option value="{{ item.id }}">{{ item.lot }}</option>
+{% endfor %}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% extends "base/base.html" %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+
+{% block title_block %}
+    Generate GL
+{% endblock title_block %}
+
+
+{% block body_content %}
+    {% include 'partials/_alerts.html' %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {{ form|crispy }}
+
+
+        <input name="savebutton" class="btn btn-primary" type="submit" value="Submit">
+    </form>
+    {% block javascript %}
+
+        <script src="{% static 'js/get_oc.js' %}"></script>
+
+    {% endblock javascript %}
+
+
+{% endblock body_content %}

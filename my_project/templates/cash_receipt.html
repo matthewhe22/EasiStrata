@@ -1,0 +1,94 @@
+{% load humanize %}
+{% load mathfilters %}
+{% load staticfiles %}
+<html !DOCTYPE>
+<head>
+    <meta charset="utf-8">
+    <title>Owners Corporation Levy Receipt</title>
+    <meta name="strata_cash_receipt" content="cash receipt">
+</head>
+
+
+<!-- HTML Content -->
+<body>
+
+<tbody>
+<tr>
+    <td style="width: 230px;"><img
+            src="https://secureservercdn.net/166.62.111.84/m7j.1b9.myftpupload.com/wp-content/uploads/2019/02/WechatIMG54.jpeg"
+            alt="logo" width=200px" height="108px"/>
+    </td>
+    <td style="width: 443px;">&nbsp;</td>
+</tr>
+</tbody>
+
+<h3 style="text-align: right;margin-top: 50px;margin-right: 20px">Payment Receipt</h3>
+
+<h2>Owners Corporation Levy Receipt </h2>
+<p class="add">The <i>Owners Corporations Act 2006 (the Act)</i>, Owners Corporations Regulations 2018 (the
+    Regulations)
+    and the owners corporation rules.</p>
+
+<aside>
+    <address id="to">
+        {% if billing_info.billing_name1 %}{{ billing_info.billing_name1 }}{% endif %}
+        {% if billing_info.billing_name2 %}{{ billing_info.billing_name2 }}{% endif %}
+        {{ billing_info.billing_address }}
+
+    </address>
+
+    <address id="from">
+        Address of Owners Corporation:
+        c/o- {{ client.client_name }}
+        {{ client.post_adr }}
+        ABN {{ client.ABN }}
+        Email: {{ client.email }}
+        Phone: {{ client.telephone }}
+    </address>
+</aside>
+
+
+<dl>
+
+    <dt>Receipt number</dt>
+    <dd>{{ item.recpt_no }}{% if not item.is_valid %} (Cancelled) {% endif %}</dd>
+
+    <dt>Date</dt>
+
+    <dd>{{ item.recpt_date }}</dd>
+
+</dl>
+
+
+{#    <p class="warn">Payment is due within 28 days of the date of this notice or by the due date specified below</p>z#}
+
+<p>{{ oc.description }} for Plan No. {{ property.plan_num }} -[ABN: {{ property.ABN }}]</p>
+<p><b>OC Address</b>:{{ property.street }} {{ property.suburb }} ,{{ property.state }} {{ property.post_code }}</p>
+<p><b>Lot No.</b> : {{ lot.lot }} <b>Unit No.</b> : {{ lot.unit_no }}</p>
+
+<table class="dtable">
+
+
+    <tr>
+
+        <th width="25%">Payment Date</th>
+        <th width="45%">Description of fee/charge</th>
+        <th width="30%">Amount Paid</th>
+    </tr>
+
+    <tr>
+
+        <td>{{ item.recpt_date }}</td>
+
+
+        <td>{{ item.get_bank_desc }}</td>
+
+        <td>$ {{ item.amount|floatformat:'2'|intcomma }}</td>
+    </tr>
+
+
+</table>
+</body>
+
+</html>
+

@@ -1,0 +1,147 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+{% load mathfilters %}
+
+
+{% block title_block %}
+    OC Budget Summary
+
+{% endblock title_block %}
+
+
+{% block body_content %}
+    {% include 'partials/_ajax_alters.html' %}
+
+    <div class="form-group">
+        <form method="GET">
+            <div class="row">
+                <div class="col-3">
+                    <label for="in_property">Property: </label>
+
+                    <select class="form-control" id="in_property" name="property_id">
+                        <option value='0'>Choose Property</option>
+                        {% for item in property %}
+                            <option value="{{ item.pk }}"  {% if item.pk == q_property %}
+                                    selected {% endif %}> {{ item.name }} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-3">
+                    <label for="in_fin_year">Financial year: </label>
+
+                    <input class="form-control" class="textinput textInput form-control" id="in_fin_year"
+                           name="fin_year" value="{{ request.GET.fin_year }}">
+                </div>
+            </div>
+            <div class="text-right">
+                <input class="btn btn-secondary" type="submit" value="Search">
+                <button class="btn btn-primary" id="new_budget" type="button">Creat New Budget</button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+
+
+
+
+
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Financial Year</th>
+            <th>Property Name</th>
+            <th>OC Name</th>
+            <th>Total Amount</th>
+            <th></th>
+
+
+        </tr>
+        </thead>
+
+        {% for item in sum_list %}
+
+            <tbody>
+
+            <tr>
+
+                <td>{{ item.fin_year }}</td>
+
+                <td>{{ item.street }}</td>
+                <td>{{ item.title }}</td>
+
+                <td>{{ item.sum_amt|abs }}</td>
+                <td>
+                    <button class="btn btn-secondary detail" id="{{ item.fin_year }}-{{ item.property_ref_id }}">View
+                        Detail
+                    </button>
+                </td>
+
+
+            </tr>
+
+        {% endfor %}
+
+
+        </tbody>
+    </table>
+
+
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Create New OC Budget</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="property_id">Property: </label>
+                            <select class="form-control" id="id_property" name="property_id">
+                                <option value='0' selected>Choose Property</option>
+                                {% for item in property %}
+                                    <option value="{{ item.pk }}"  {% if item.pk == property_id %}
+                                            selected {% endif %}> {{ item.name }} </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="OC" class="col-form-label">OC:</label>
+                            <select type="text" class="form-control" id="id_oc_ref">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="fin_year" class="col-form-label">Financial Year:</label>
+                            <input type="number" name="fin_year" class="form-control" id="fin_year" value="2021">
+                        </div>
+
+
+                    </form>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="budget_save">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {% block javascript %}
+        <script src="{% static 'js/get_detail_budget.js' %}"></script>
+        <script src="{% static 'js/get_oc.js' %}"></script>
+    {% endblock javascript %}
+
+
+{% endblock body_content %}

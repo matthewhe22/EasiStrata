@@ -1,0 +1,93 @@
+{% extends "base/base.html" %}
+
+{% block title_block %}
+    Income and Expense List
+
+{% endblock title_block %}
+
+
+{% block body_content %}
+
+    <div class="form-group">
+        <form method="GET">
+            <div class="row">
+                <div class="col-3">
+                    <label for="inc_name">Name: </label>
+                    <input type="text" name="inc_name" class="textinput textInput form-control"
+                           placeholder="Enter name here" value="{{ request.GET.inc_name }}">
+                </div>
+
+
+                <div class="col-3">
+
+                    <label for="inc_code">Code: </label>
+                    <input type="text" name="inc_code" class="textinput textInput form-control"
+                           placeholder="Enter code here" value="{{ request.GET.inc_code }}">
+                </div>
+            </div>
+            <div class="text-right">
+                <input class="btn btn-secondary" type="submit" value="Search">
+
+            </div>
+        </form>
+
+    </div>
+
+
+
+
+
+    <form action="{% url 'finance:inc_delete' %}" class="form-check" method="POST">
+        {% csrf_token %}
+
+        <div class="text-right">
+            <a name="New " class="btn btn-primary" href="{% url 'finance:inc_create' %}" role="button">New</a>
+            <input name="deletebutton" class="btn btn-primary" type="submit" value="Delete">
+        </div>
+
+        <hr>
+
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Code</th>
+                <th>Category</th>
+                <th>Debit Account</th>
+                <th>Credit Account</th>
+                <th>GST Applicable</th>
+
+
+            </tr>
+            </thead>
+
+            {% for item in inc %}
+
+                <tbody>
+
+                <tr>
+                    <td><input class="form-check-input" name='chkgroup' type="checkbox" value="{{ item.pk }}"></td>
+
+                    <td scope="row"><a href="/finance/inc/update/{{ item.pk }}">  {{ item.name }}</a></td>
+
+                    <td>{{ item.income_expense_code }}</td>
+                    <td>{{ item.category }}</td>
+                    <td>{{ item.debit_acc }}</td>
+                    <td>{{ item.credit_acc }}</td>
+                    <td>{{ item.is_gst_output }}</td>
+
+                </tr>
+
+            {% endfor %}
+
+
+            </tbody>
+        </table>
+
+    </form>
+
+
+
+{% endblock body_content %}

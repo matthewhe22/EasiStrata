@@ -1,0 +1,17 @@
+<input type="date" name="{{ widget.name }}"{% if widget.value != None %}
+       value="{{ widget.value|stringformat:'s' }}"{% endif %}{% include "base/attrs.html" %}>
+
+{#<script>#}
+{#    $(function () {#}
+{#        $("input[name='{{ widget.name }}']").datepicker({#}
+{#            format: 'dd/mm/yyyy',#}
+{#        });#}
+{#        let dateVal = $("input[name='{{ widget.name }}']").val();#}
+{#        if (dateVal.includes('-')) {#}
+{#            $("input[name='{{ widget.name }}']").val(dateVal.substring(8, 10) + "/" + dateVal.substring(5, 7) + "/" + dateVal.substring(0, 4));#}
+{#        }#}
+{##}
+{##}
+{#    });#}
+{#</script>#}
+

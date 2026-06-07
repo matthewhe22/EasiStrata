@@ -1,0 +1,107 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_filters %}
+{% load widget_tweaks %}
+
+{% block title_block %}
+    GL Recon
+
+{% endblock title_block %}
+
+
+{% block body_content %}
+
+    <form method="get">
+        <div class="well">
+            <h4 style="margin-top: 0">Filter</h4>
+            <div class="row">
+                <div class="form-group col-sm-3 col-md-3">
+                    <label for="id_oc_ref">OC</label>
+                    {% render_field filter.form.oc_ref class="form-control" %}
+                </div>
+                <div class="form-group col-sm-2 col-md-2">
+                    {{ filter.form.posting_gt.label_tag }}
+                    {% render_field filter.form.posting_gt class="form-control" %}
+                </div>
+                <div class="form-group col-sm-2 col-md-2">
+                    {{ filter.form.posting_lt.label_tag }}
+                    {% render_field filter.form.posting_lt class="form-control" %}
+                </div>
+                <div class="form-group col-sm-2 col-md-2">
+                    {{ filter.form.doc_num.label_tag }}
+                    {% render_field filter.form.doc_num class="form-control" %}
+                </div>
+                <div class="form-group col-sm-2 col-md-2">
+                    {{ filter.form.unpresent_flag.label_tag }}
+                    {% render_field filter.form.unpresent_flag class="form-control" %}
+                </div>
+
+            </div>
+
+
+            <button class="btn btn-secondary" type="submit">Search</button>
+        </div>
+    </form>
+
+    <div class="text-right">
+        <button id="recon" class="btn btn-secondary">Reconcile</button>
+        <button id="present" class="btn btn-secondary">Unpresent</button>
+
+    </div>
+
+    <hr>
+
+    <div>
+
+        <table class="table">
+            <thead>
+            <tr>
+
+                <th><input id="all" type="checkbox"/>
+                </th>
+                <th>Property</th>
+                <th>OC</th>
+                <th>Document No.</th>
+                <th>Posting Date</th>
+                <th>Debit/Credit</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Recon Amount</th>
+                <th>Present Flag</th>
+
+
+            </tr>
+            </thead>
+
+            {% for item in object_list %}
+
+                <tbody>
+
+                <tr>
+                    <td><input class="form-check-input" name='chkgroup' type="checkbox" value="{{ item.pk }}"></td>
+                    <td>  {{ item.get_property_name }}</td>
+                    <td>  {{ item.get_oc_name }}</td>
+                    <td>{{ item.doc_num }}</td>
+                    <td>{{ item.posting_date }}</td>
+                    <td>{{ item.dc }}</td>
+                    <td>{{ item.description }}</td>
+                    <td>{{ item.amount }}</td>
+                    <td>{{ item.recon_amt }}</td>
+                    <td>{{ item.unpresent_flag }}</td>
+
+                </tr>
+
+            {% endfor %}
+
+
+            </tbody>
+        </table>
+
+    </div>
+    {% block javascript %}
+        <script src="{% static 'js/gl_recon.js' %}"></script>
+    {% endblock javascript %}
+
+
+{% endblock body_content %}
+

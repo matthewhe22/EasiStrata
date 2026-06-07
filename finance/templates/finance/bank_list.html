@@ -1,0 +1,240 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+
+{% block title_block %}
+    Bank Transaction List
+
+{% endblock title_block %}
+
+
+{% block body_content %}
+
+    <div class="form-group">
+        <form method="get">
+            <div class="well">
+                <h4 style="margin-top: 0">Filter</h4>
+                <div class="row">
+                    <div class="form-group col-sm-4 col-md-2">
+                        {{ filter.form.property_ref.label_tag }}
+                        {% render_field filter.form.property_ref class="form-control" %}
+                    </div>
+                    <div class="form-group col-sm-4 col-md-2">
+                        {{ filter.form.oc_ref.label_tag }}
+                        {% render_field filter.form.oc_ref class="form-control" %}
+                    </div>
+                    <div class="form-group col-sm-3 col-md-2">
+                        {{ filter.form.acc_num.label_tag }}
+                        {% render_field filter.form.acc_num class="form-control" %}
+                    </div>
+
+
+                    <div class="form-group col-sm-4 col-md-2">
+                        {{ filter.form.date_gt.label_tag }}
+                        {% render_field filter.form.date_gt class="form-control" %}
+                    </div>
+                    <div class="form-group col-sm-4 col-md-2">
+                        {{ filter.form.date_lt.label_tag }}
+                        {% render_field filter.form.date_lt class="form-control" %}
+                    </div>
+
+
+                    <div class="form-group col-sm-3 col-md-2">
+                        {{ filter.form.narrative.label_tag }}
+                        {% render_field filter.form.narrative class="form-control" %}
+                    </div>
+
+                </div>
+
+
+                <button class="btn btn-secondary" type="submit">Search</button>
+            </div>
+        </form>
+    </div>
+
+
+
+
+
+    <div class="text-right">
+        {#        <button id="recon" class="btn btn-sm btn-secondary">Reconcile</button>#}
+        {#        <button id="present" class="btn btn-sm btn-secondary">Unpresent</button>#}
+        <button id="openBankModal" class="btn btn-sm btn-primary">Import</button>
+
+    </div>
+
+    {#modal for bank transaction upload #}
+    <div class="modal fade" id="modal_import" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Bank Transaction Upload</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+
+                    <form id="bankAttachment" enctype="multipart/form-data">
+                        <div class="form-row form-group custom-file">
+                            <div id="div_id_docfile" class="form-group"><label for="id_docfile">
+                                Attachment
+                            </label>
+                                <div class="custom-file "><input type="file" name="docfile"
+                                                                 class="fileinputcustom form-control custom-file-input"
+                                                                 id="id_docfile">
+
+                                    <script>
+                                        $(function () {
+                                            $("input[name='docfile']").change(function (e) {
+                                                var fileName = e.target.files[0].name;
+                                                $("label[for='id_docfile'][class='custom-file-label']").html(fileName);
+                                            });
+
+                                        });
+                                    </script>
+                                    <label class="custom-file-label" for="id_docfile">Choose file</label></div>
+                            </div>
+                        </div>
+
+
+                    </form>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="bank_upload">Upload</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {#modal for creation cash receipt #}
+    <div class="modal fade" id="modal_cash" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create cash receipt </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+
+                    <form id="cash_form">
+                        <div class="form-group">
+                            <label for="id_lot_ref" class="col-form-label requiredField">Lot No</label>
+
+                            <select name="lot_ref" id="id_lot_ref" required class="select form-control">
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="balance" class="col-form-label">Balance to be assigned:</label>
+                            <input type="text" class="form-control" id="balance" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="amount" class="col-form-label requiredField">Amount:</label>
+                            <input type="number" class="form-control" id="amount" value="0.00">
+                        </div>
+                        <div class="form-group">
+                            <label for="desc" class="col-form-label">Description:</label>
+                            <input type="text" class="form-control" id="desc">
+                        </div>
+                        <div class="form-group">
+                            <label for="ref" class="col-form-label">Reference:</label>
+                            <input type="text" class="form-control" id="ref">
+                        </div>
+                        <input type="text" class="form-control" hidden id="bank_trans_id">
+
+
+                    </form>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="cash_submit">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Property</th>
+            <th>OC</th>
+            <th>Account Code</th>
+            {#            <th>Account Name</th>#}
+            <th>Transaction Date</th>
+            <th>Narrative</th>
+            {#            <th>Ref No.</th>#}
+            <th>Amount</th>
+            <th>Balance</th>
+            {#            <th>Category</th>#}
+            <th>Receipt Amount</th>
+            <th>Status</th>
+            <th>Action</th>
+
+
+        </tr>
+        </thead>
+
+        {% for item in object_list %}
+
+            <tbody>
+
+            <tr>
+                <td><input class="form-check-input" name='chkgroup' type="checkbox" value="{{ item.pk }}">
+                </td>
+                <td>  {{ item.get_property_name }}</td>
+                <td>  {{ item.get_oc_name }}</td>
+                <td>  {{ item.acc_num }}</td>
+                <td>{{ item.trans_date }}</td>
+                <td>{{ item.narrative }}</td>
+                <td>{{ item.amount }}</td>
+                <td>{{ item.balance }}</td>
+                <td>{{ item.recpt_amt }}</td>
+                <td>{{ item.process_result }}</td>
+                {% if item.recpt_amt < item.amount and item.oc_ref_id %}
+                    <td>
+
+                        <button class="btn-sm btn btn-info cash" type="button"
+                                value="{{ item.pk }}-{{ item.oc_ref_id }}"
+                        >Cash Receipt
+                        </button>
+
+
+                    </td>
+                {% endif %}
+            </tr>
+
+        {% endfor %}
+
+
+        </tbody>
+    </table>
+
+    {% block javascript %}
+        <script src="{% static 'js/bank_recon.js' %}"></script>
+        <script src="{% static 'js/get_oc.js' %}"></script>
+    {% endblock javascript %}
+
+
+
+    {% include "partials/_pagination.html" %}
+{% endblock body_content %}
+
+
+
+

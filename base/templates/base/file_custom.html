@@ -1,0 +1,10 @@
+{% include "base/input.html" %}
+<script>
+    $(function () {
+        $("input[name='{{ widget.name }}']").change(function (e) {
+            var fileName = e.target.files[0].name;
+            $("label[for='id_{{widget.name}}'][class='custom-file-label']").html(fileName);
+        });
+
+    });
+</script>

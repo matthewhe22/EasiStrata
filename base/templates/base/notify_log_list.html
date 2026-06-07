@@ -1,0 +1,51 @@
+{% extends "base/base.html" %}
+
+{% block title_block %}
+    Notification log
+
+{% endblock title_block %}
+
+
+{% block body_content %}
+
+
+
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Property</th>
+            <th>Subject</th>
+            <th>Sent by</th>
+            <th>Date</th>
+            <th>Action</th>
+
+        </tr>
+        </thead>
+
+        {% for item in notify_list %}
+
+            <tbody>
+
+            <tr>
+
+
+                <td>{{ item.name }}</td>
+                <td>{{ item.msg_subject }}</td>
+                <td>{{ item.createby }}</td>
+                <td>{{ item.createtime }}</td>
+                <td></td>
+
+            </tr>
+
+        {% endfor %}
+
+
+        </tbody>
+    </table>
+
+
+
+
+
+{% endblock body_content %}

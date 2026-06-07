@@ -1,0 +1,62 @@
+{% extends "base/base.html" %}
+
+{% block title_block %}
+    item List
+    
+{% endblock title_block %}  
+
+
+{% block body_content %}
+
+
+
+<hr>
+
+
+    <table class="table">
+    <thead>
+        <tr>
+            <th>Client</th>
+            <th>Account Code</th>
+            <th>Account Name</th>
+            <th>Category</th>
+            <th>Component</th>
+            <th>is valid</th>
+            <th>COA</th>
+
+        </tr>
+    </thead>
+
+    {% for item in Accounts %}
+
+            <tbody>
+                
+               <tr>
+                        
+                        <td scope="row"><a>  {{item.client_ref}}</a></td>
+                        
+                        <td>{{item.acc_code}}</td>
+                        <td>{{item.acc_desc}}</td>
+                        <td>{{item.category}}</td>
+                        <td>{{item.inc_exp}}</td>
+                        <td>{{item.is_valid}}</td>
+                        <td>{{item.COACd}}</td>
+              
+        
+                </tr> 
+               
+    {% endfor %}
+
+  
+
+
+            </tbody>
+        </table>
+
+
+   
+
+
+{% endblock body_content %}
+
+

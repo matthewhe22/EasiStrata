@@ -1,0 +1,250 @@
+{% load humanize %}
+{% load mathfilters %}
+{% load staticfiles %}
+<html !DOCTYPE>
+<head>
+    <meta charset="utf-8">
+    <title>Owners Corporation Fee Notice</title>
+    <meta name="strata_invoice" content="Invoice">
+</head>
+
+<body>
+
+
+<!-- HTML Content -->
+<div class="break">
+    <tbody>
+    <tr>
+        <td style="width: 230px;"><img
+                src="https://secureservercdn.net/166.62.111.84/m7j.1b9.myftpupload.com/wp-content/uploads/2019/02/WechatIMG54.jpeg"
+                alt="logo" width=200px" height="108px"/>
+        </td>
+        <td style="width: 443px;">&nbsp;</td>
+    </tr>
+    </tbody>
+
+    <h3 style="text-align: right;margin-top: 50px;margin-right: 20px">TAX INVOICE</h3>
+
+    <h2>Owners Corporation {% if bill.special_flag %} Special{% endif %} Levy Notice </h2>
+    <p class="add">The <i>Owners Corporations Act 2006 (the Act)</i>, Owners Corporations Regulations 2018 (the
+        Regulations)
+        and the owners corporation rules.</p>
+
+    <aside>
+        <address id="to">
+            {% if billing_info.billing_name1 %}{{ billing_info.billing_name1 }}{% endif %}
+            {% if billing_info.billing_name2 %}{{ billing_info.billing_name2 }}{% endif %}
+            {{ billing_info.billing_address }}
+
+        </address>
+
+        <address id="from">
+            Address of Owners Corporation:
+            c/o- {{ client.client_name }}
+            {{ client.post_adr }}
+            ABN {{ client.ABN }}
+            Email: {{ client.email }}
+            Phone: {{ client.telephone }}
+        </address>
+    </aside>
+
+
+    <dl>
+        {% if hist %}
+            <dt>Invoice number</dt>
+            <dd>{{ bill.billing_num }}</dd>
+        {% endif %}
+        <dt>Date</dt>
+        {% if hist %}
+            <dd>{{ bill.billing_date }}</dd>
+        {% else %}
+            <dd>{% now "d M Y" %}</dd>
+        {% endif %}
+
+    </dl>
+
+
+    <p class="warn">Payment is due within 28 days of the date of this notice or by the due date specified below</p>
+
+    <p>{{ oc.description }} for Plan No. {{ property.plan_num }} -[ABN: {{ property.ABN }}]</p>
+    <p><b>OC Address</b>:{{ property.street }} {{ property.suburb }} ,{{ property.state }} {{ property.post_code }}</p>
+    <p><b>Lot No.</b> : {{ lot.lot }} <b>Unit No.</b> : {{ lot.unit_no }}</p>
+
+
+    <table class="dtable">
+
+
+        <tr>
+
+            <th width="25%">Due Date</th>
+            <th width="45%">Description of fee/charge</th>
+            <th width="15%">Billing Amount</th>
+            <th width="15%">Amount Payable</th>
+        </tr>
+        {% for item in unpaid_record.unpaid %}
+            <tr>
+
+                <td>{{ item.due_date }}</td>
+
+                {% if item.desc %}
+                    <td>{{ item.desc }}</td>
+                {% else %}
+                    <td>{{ oc.frequency }} Fee from {{ item.billing_from }} to {{ item.billing_to }}</td>
+                {% endif %}
+                <td>$ {{ item.billing_amount|floatformat:'2'|intcomma }}</td>
+                <td>$ {{ item.payable_amount|floatformat:'2'|intcomma }}</td>
+            </tr>
+
+
+        {% endfor %}
+    </table>
+
+
+    <p class="sum">Total of above charges: ${{ unpaid_record.total_billing|floatformat:'2'|intcomma }}</p>
+    {% if property.GST_register %}
+        <p class="gst">(Total amount includes GST:
+            ${{ unpaid_record.total_billing|mul:0.0909|floatformat:'2'|intcomma }})</p>
+    {% endif %}
+    {#    <p class="sum">Balance Brought Forward: ${{ unpaid_record.broughtforward_amt|floatformat:'2'|intcomma }}</p>#}
+    <p class="sum" style="font-size: medium"><b>Net payable amount:
+        ${{ unpaid_record.payable|abs|floatformat:'2'|intcomma }}</b></p>
+
+    <br>
+    <br>
+
+    <p class="add">*Penalty Interest of 10% per annum will apply if not paid by the Due Date </p>
+    <p class="add">The rate of interest has been calculated in accordance with the current rate under the Penalty
+        Interest
+        Rates Act 1983(Vic). This rate is subject to change.</p>
+
+    <hr>
+
+    <table class="dtable">
+        <thead>
+        {% if oc.biller_code %}
+            <th>BPAY</th>
+        {% else %}
+            <th>Payment by EFT</th>
+        {% endif %}
+        <th>Payment by Cheque</th>
+
+
+        </thead>
+
+        <tr>
+
+            {% if oc.biller_code %}
+                <td>
+                    <table class="bpay">
+
+                        <tr>
+                            <td>
+                                <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxzdmcgd2lkdGg9IjgxcHgiIGhlaWdodD0iMTE5cHgiIHZpZXdCb3g9IjAgMCA4MSAxMTkiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+DQogICAgPGcgaWQ9IkFsbCIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+DQogICAgICAgIDxnIGlkPSJIb21lLS0tU2VhcmNoLWJhci0tLWFjdGl2YXRlZCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTYxLjAwMDAwMCwgLTE1LjAwMDAwMCkiIGZpbGwtcnVsZT0ibm9uemVybyI+DQogICAgICAgICAgICA8ZyBpZD0iQlBBWV9Mb2dvIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg2MS4wMDAwMDAsIDE1LjAwMDAwMCkiPg0KICAgICAgICAgICAgICAgIDxnIGlkPSJCUEFZX0dST1VQXzIwMTZfUE9SVF9CTFVFX1JHQiI+DQogICAgICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik04MSwxMTUuMTk5MTUzIEM4MSwxMTcuMzQ3NDU4IDc5LjM2MDk5NTksMTE5IDc3LjIzMDI5MDUsMTE5IEw1Ljc2OTcwOTU0LDExOSBDMy42MzkwMDQxNSwxMTkgMiwxMTcuMTgyMjAzIDIsMTE1LjE5OTE1MyBMMiw1LjgwMDg0NzQ2IEMyLDMuNjUyNTQyMzcgMy42MzkwMDQxNSwyIDUuNzY5NzA5NTQsMiBMNzcuMjMwMjkwNSwyIEM3OS4zNjA5OTU5LDIgODEsMy42NTI1NDIzNyA4MSw1LjgwMDg0NzQ2IEw4MSwxMTUuMTk5MTUzIFoiIGlkPSJQYXRoIiBmaWxsPSIjMTgzMTY4Ij48L3BhdGg+DQogICAgICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik02Mi4yNjk3NzY5LDg1Ljk0NDQ0NDQgQzYxLjI4Mzk3NTcsODUuOTQ0NDQ0NCA2MC43OTEwNzUxLDg1Ljk0NDQ0NDQgNjAuNDYyNDc0Niw4NS45NDQ0NDQ0IEM1OS45Njk1NzQsODUuOTQ0NDQ0NCA1OS40NzY2NzM0LDg2LjEwOTcyMjIgNTkuMzEyMzczMiw4Ni43NzA4MzMzIEw1OC40OTA4NzIyLDg4LjQyMzYxMTEgTDU0Ljg3NjI2NzcsOTQuODY5NDQ0NCBMNTEuMjYxNjYzMyw4OC40MjM2MTExIEw1MC40NDAxNjIzLDg2Ljc3MDgzMzMgQzUwLjI3NTg2MjEsODYuMTA5NzIyMiA0OS42MTg2NjEzLDg1Ljk0NDQ0NDQgNDkuMjkwMDYwOSw4NS45NDQ0NDQ0IEM0OC43OTcxNjAyLDg1Ljk0NDQ0NDQgNDguNDY4NTU5OCw4NS45NDQ0NDQ0IDQ3LjQ4Mjc1ODYsODUuOTQ0NDQ0NCBDNDYuNDk2OTU3NCw4NS45NDQ0NDQ0IDQ2LjgyNTU1NzgsODYuNzcwODMzMyA0Ni44MjU1NTc4LDg2Ljc3MDgzMzMgQzQ2LjgyNTU1NzgsODYuNzcwODMzMyA1MC40NDAxNjIzLDkzLjIxNjY2NjcgNTMuMzk3NTY1OSw5OC41MDU1NTU2IEM1My4zOTc1NjU5LDk4LjUwNTU1NTYgNTMuMzk3NTY1OSwxMDQuNzg2MTExIDUzLjM5NzU2NTksMTA1LjExNjY2NyBDNTMuMzk3NTY1OSwxMDUuNDQ3MjIyIDUzLjU2MTg2NjEsMTA1Ljc3Nzc3OCA1NC4wNTQ3NjY3LDEwNS43Nzc3NzggTDU1LjY5Nzc2ODgsMTA1Ljc3Nzc3OCBDNTYuMDI2MzY5MiwxMDUuNzc3Nzc4IDU2LjUxOTI2OTgsMTA1Ljc3Nzc3OCA1Ni41MTkyNjk4LDEwNS4xMTY2NjcgTDU2LjUxOTI2OTgsOTguMzQwMjc3OCBDNTkuNDc2NjczNCw5My4wNTEzODg5IDYzLjA5MTI3NzksODYuNjA1NTU1NiA2My4wOTEyNzc5LDg2LjYwNTU1NTYgQzYzLjA5MTI3NzksODYuNjA1NTU1NiA2My4yNTU1NzgxLDg1Ljk0NDQ0NDQgNjIuMjY5Nzc2OSw4NS45NDQ0NDQ0IFogTTI1LjMwMjIzMTIsODUuOTQ0NDQ0NCBMMTguMDczMDIyMyw4NS45NDQ0NDQ0IEMxNy40MTU4MjE1LDg1Ljk0NDQ0NDQgMTcuNDE1ODIxNSw4Ni40NDAyNzc4IDE3LjQxNTgyMTUsODYuNzcwODMzMyBDMTcuNDE1ODIxNSw4Ny4xMDEzODg5IDE3LjQxNTgyMTUsMTA1LjExNjY2NyAxNy40MTU4MjE1LDEwNS4xMTY2NjcgQzE3LjQxNTgyMTUsMTA1Ljk0MzA1NiAxOC4wNzMwMjIzLDEwNS43Nzc3NzggMTguMjM3MzIyNSwxMDUuNzc3Nzc4IEwyMC4wNDQ2MjQ3LDEwNS43Nzc3NzggQzIwLjM3MzIyNTIsMTA1Ljc3Nzc3OCAyMC43MDE4MjU2LDEwNS42MTI1IDIwLjcwMTgyNTYsMTA1LjExNjY2NyBMMjAuNzAxODI1Niw5OC41MDU1NTU2IEwyNS4zMDIyMzEyLDk4LjUwNTU1NTYgQzI4Ljc1MjUzNTUsOTguNTA1NTU1NiAzMS43MDk5MzkxLDk1LjY5NTgzMzMgMzEuNzA5OTM5MSw5Mi4wNTk3MjIyIEMzMS43MDk5MzkxLDg4LjkxOTQ0NDQgMjguOTE2ODM1Nyw4NS45NDQ0NDQ0IDI1LjMwMjIzMTIsODUuOTQ0NDQ0NCBaIE0yNS4zMDIyMzEyLDk1LjUzMDU1NTYgTDIwLjcwMTgyNTYsOTUuNTMwNTU1NiBMMjAuNzAxODI1Niw4OS4yNSBMMjUuMzAyMjMxMiw4OS4yNSBDMjcuMTA5NTMzNSw4OS4yNSAyOC40MjM5MzUxLDkwLjczNzUgMjguNDIzOTM1MSw5Mi4zOTAyNzc4IEMyOC40MjM5MzUxLDk0LjIwODMzMzMgMjcuMTA5NTMzNSw5NS41MzA1NTU2IDI1LjMwMjIzMTIsOTUuNTMwNTU1NiBaIE00Mi4zODk0NTIzLDg2Ljc3MDgzMzMgQzQyLjA2MDg1MTksODYuMjc1IDQxLjg5NjU1MTcsODUuOTQ0NDQ0NCA0MS4wNzUwNTA3LDg1Ljk0NDQ0NDQgTDM4Ljc3NDg0NzksODUuOTQ0NDQ0NCBDMzcuOTUzMzQ2OSw4NS45NDQ0NDQ0IDM3Ljc4OTA0NjcsODYuMjc1IDM3LjQ2MDQ0NjIsODYuNzcwODMzMyBDMzcuMjk2MTQ2LDg3LjI2NjY2NjcgMzAuNzI0MTM3OSwxMDUuMTE2NjY3IDMwLjcyNDEzNzksMTA1LjExNjY2NyBDMzAuNzI0MTM3OSwxMDUuMTE2NjY3IDMwLjM5NTUzNzUsMTA1Ljk0MzA1NiAzMS4zODEzMzg3LDEwNS45NDMwNTYgQzMyLjM2NzE0LDEwNS45NDMwNTYgMzIuNTMxNDQwMiwxMDUuOTQzMDU2IDMzLjAyNDM0MDgsMTA1Ljk0MzA1NiBDMzMuNTE3MjQxNCwxMDUuOTQzMDU2IDM0LjAxMDE0MiwxMDUuNzc3Nzc4IDM0LjE3NDQ0MjIsMTA1LjExNjY2NyBDMzQuMzM4NzQyNCwxMDQuNDU1NTU2IDM1LjMyNDU0MzYsMTAxLjgxMTExMSAzNS4zMjQ1NDM2LDEwMS44MTExMTEgTDQ0LjUyNTM1NSwxMDEuODExMTExIEM0NC41MjUzNTUsMTAxLjgxMTExMSA0NS41MTExNTYyLDEwNC42MjA4MzMgNDUuNjc1NDU2NCwxMDUuMTE2NjY3IEM0NS44Mzk3NTY2LDEwNS43Nzc3NzggNDYuNDk2OTU3NCwxMDUuOTQzMDU2IDQ2LjgyNTU1NzgsMTA1Ljk0MzA1NiBDNDcuMzE4NDU4NCwxMDUuOTQzMDU2IDQ3LjQ4Mjc1ODYsMTA1Ljk0MzA1NiA0OC40Njg1NTk4LDEwNS45NDMwNTYgQzQ5LjQ1NDM2MTEsMTA1Ljk0MzA1NiA0OS4xMjU3NjA2LDEwNS4xMTY2NjcgNDkuMTI1NzYwNiwxMDUuMTE2NjY3IEM0OS4xMjU3NjA2LDEwNS4xMTY2NjcgNDIuNTUzNzUyNSw4Ny4yNjY2NjY3IDQyLjM4OTQ1MjMsODYuNzcwODMzMyBaIE0zNi42Mzg5NDUyLDk4LjUwNTU1NTYgTDM5LjkyNDk0OTMsODkuMjUgTDQzLjM3NTI1MzUsOTguNTA1NTU1NiBMMzYuNjM4OTQ1Miw5OC41MDU1NTU2IFogTTc3LjIyMTA5NTMsMCBMMy43Nzg5MDQ2NywwIEMxLjY0MzAwMjAzLDAgMCwxLjY1Mjc3Nzc4IDAsMy44MDEzODg4OSBMMCwxMTUuMTk4NjExIEMwLDExNy4zNDcyMjIgMS42NDMwMDIwMywxMTkgMy43Nzg5MDQ2NywxMTkgTDc3LjIyMTA5NTMsMTE5IEM3OS4zNTY5OTgsMTE5IDgxLDExNy4xODE5NDQgODEsMTE1LjE5ODYxMSBMODEsMy45NjY2NjY2NyBDODEsMS44MTgwNTU1NiA3OS4zNTY5OTgsMCA3Ny4yMjEwOTUzLDAgWiBNMjkuMjQ1NDM2MSwyOS41ODQ3MjIyIEw0Mi4zODk0NTIzLDI5LjU4NDcyMjIgQzQ1LjgzOTc1NjYsMjkuNTg0NzIyMiA0OC42MzI4NiwzMi41NTk3MjIyIDQ4LjYzMjg2LDM2LjAzMDU1NTYgQzQ4LjYzMjg2LDM5LjUwMTM4ODkgNDUuODM5NzU2Niw0Mi4zMTExMTExIDQyLjM4OTQ1MjMsNDIuMzExMTExMSBMNDAuMDg5MjQ5NSw0Mi40NzYzODg5IEMzOC45MzkxNDgxLDQyLjQ3NjM4ODkgMzguMjgxOTQ3Myw0My4zMDI3Nzc4IDM4LjExNzY0NzEsNDQuMjk0NDQ0NCBMMzguMTE3NjQ3MSw1Mi4wNjI1IEMzOC4yODE5NDczLDUzLjIxOTQ0NDQgMzguOTM5MTQ4MSw1My44ODA1NTU2IDQwLjA4OTI0OTUsNTMuODgwNTU1NiBMNDUuNjc1NDU2NCw1My44ODA1NTU2IEM0OS40NTQzNjExLDUzLjg4MDU1NTYgNTIuNDExNzY0Nyw1Ni44NTU1NTU2IDUyLjQxMTc2NDcsNjAuNjU2OTQ0NCBDNTIuNDExNzY0Nyw2NC4xMjc3Nzc4IDQ5LjYxODY2MTMsNjcuMTAyNzc3OCA0Ni4xNjgzNTcsNjcuNDMzMzMzMyBMMzAuODg4NDM4MSw2Ny40MzMzMzMzIEMyOS43MzgzMzY3LDY3LjQzMzMzMzMgMjkuMDgxMTM1OSw2Ni43NzIyMjIyIDI4LjkxNjgzNTcsNjUuNDUgTDI4LjkxNjgzNTcsMjkuNTg0NzIyMiBMMjkuMjQ1NDM2MSwyOS41ODQ3MjIyIFogTTUuNDIxOTA2NjksNy40Mzc1IEw1LjQyMTkwNjY5LDcuNDM3NSBDNS40MjE5MDY2OSw2LjQ0NTgzMzMzIDYuMjQzNDA3NzEsNS42MTk0NDQ0NCA3LjA2NDkwODcyLDUuNjE5NDQ0NDQgQzcuMDY0OTA4NzIsNS42MTk0NDQ0NCAxMS4xNzI0MTM4LDUuNjE5NDQ0NDQgMTcuNDE1ODIxNSw1LjYxOTQ0NDQ0IEwxNy40MTU4MjE1LDE3LjY4NDcyMjIgTDUuNDIxOTA2NjksMTcuNjg0NzIyMiBDNS40MjE5MDY2OSwxMS40MDQxNjY3IDUuNDIxOTA2NjksNy40Mzc1IDUuNDIxOTA2NjksNy40Mzc1IFogTTc1LjU3ODA5MzMsMTExLjcyNzc3OCBDNzUuNTc4MDkzMywxMTIuNzE5NDQ0IDc1LjA4NTE5MjcsMTEzLjcxMTExMSA3My42MDY0OTA5LDExMy43MTExMTEgTDcuMjI5MjA4OTIsMTEzLjcxMTExMSBDNy4yMjkyMDg5MiwxMTMuNzExMTExIDcuMDY0OTA4NzIsMTEzLjcxMTExMSA3LjA2NDkwODcyLDExMy43MTExMTEgQzYuMDc5MTA3NTEsMTEzLjcxMTExMSA1LjQyMTkwNjY5LDExMi44ODQ3MjIgNS40MjE5MDY2OSwxMTEuODkzMDU2IEM1LjQyMTkwNjY5LDExMS44OTMwNTYgNS40MjE5MDY2OSw2MC42NTY5NDQ0IDUuNDIxOTA2NjksMjkuOTE1Mjc3OCBMMjUuNjMwODMxNiwyOS45MTUyNzc4IEwxNy40MTU4MjE1LDMyLjg5MDI3NzggTDE3LjQxNTgyMTUsNzcuODQ1ODMzMyBDMTcuNDE1ODIxNSw3OS4xNjgwNTU2IDE4LjA3MzAyMjMsNzkuODI5MTY2NyAxOS4yMjMxMjM3LDc5LjgyOTE2NjcgTDQ2LjY2MTI1NzYsNzkuODI5MTY2NyBDNTYuMDI2MzY5Miw3OS40OTg2MTExIDYzLjU4NDE3ODUsNzEuNzMwNTU1NiA2My41ODQxNzg1LDYyLjMwOTcyMjIgQzYzLjU4NDE3ODUsNTYuMDI5MTY2NyA2MC4yOTgxNzQ0LDUwLjU3NSA1NS41MzM0Njg2LDQ3LjQzNDcyMjIgQzU4LjQ5MDg3MjIsNDQuNzkwMjc3OCA2MC43OTEwNzUxLDQwLjMyNzc3NzggNjAuNzkxMDc1MSwzNS44NjUyNzc4IEM2MC43OTEwNzUxLDI0LjI5NTgzMzMgNTIuNTc2MDY0OSwxNy42ODQ3MjIyIDQwLjkxMDc1MDUsMTcuNjg0NzIyMiBMMjkuNTc0MDM2NSwxNy42ODQ3MjIyIEwyOS41NzQwMzY1LDUuNjE5NDQ0NDQgQzQ4Ljk2MTQ2MDQsNS42MTk0NDQ0NCA3My42MDY0OTA5LDUuNjE5NDQ0NDQgNzMuNjA2NDkwOSw1LjYxOTQ0NDQ0IEM3NS4wODUxOTI3LDUuNjE5NDQ0NDQgNzUuNTc4MDkzMyw2LjYxMTExMTExIDc1LjU3ODA5MzMsNy42MDI3Nzc3OCBMNzUuNTc4MDkzMywxMTEuNzI3Nzc4IEw3NS41NzgwOTMzLDExMS43Mjc3NzggWiIgaWQ9IlNoYXBlIiBmaWxsPSIjRkZGRkZGIj48L3BhdGg+DQogICAgICAgICAgICAgICAgPC9nPg0KICAgICAgICAgICAgPC9nPg0KICAgICAgICA8L2c+DQogICAgPC9nPg0KPC9zdmc+"
+                                     alt="BPAY">
+                            </td>
+                            <td>
+                                <strong>Biller Code:{{ oc.biller_code }}</strong><br>
+                                <strong>Ref: {{ CRN }}</strong><br>
+
+
+                            </td>
+
+
+                        </tr>
+
+
+                    </table>
+
+                    <span><strong>Telephone & Internet Banking -BPAY</strong></span><br>
+                    <span>Contact you bank or financial insitution to make this<br></span>
+                    <span>payment from your cheque, savings, debit, credit card<br></span>
+                    <span>or transaction account. More info:www.bpay.com.au<br></span>
+
+                </td>
+
+            {% else %}
+                <td>
+                    Reference Number: {{ bill.billing_num }}<br>
+                    Account Name:{{ oc.Account_name }}<br>
+                    BSB:{{ oc.BSB }}<br>
+                    Account No. :{{ oc.Account }}<br>
+                    <span>Please add "Reference Number" in payment description for identification</span>
+
+                </td>
+            {% endif %}
+
+
+            <td>
+                Reference Number:{{ bill.billing_num }}<br>
+                Postal Address: {{ client.post_adr }}<br>
+                (Reference no. at back of the cheque)
+            </td>
+        </tr>
+
+
+    </table>
+
+</div>
+
+
+<h3>Important information on fees and charges</h3>
+<table class="warntable">
+    <thead>
+    <th>
+        <b>This section is part of the fee notice</b>
+    </th>
+    </thead>
+</table>
+
+<h3>Enquiries</h3>
+<p class="normal">If you have enquiries on the fees listed in this notice you can contact the owners corporation on the
+    telephone number or at the address listed on the first page of this form.</p>
+
+<h3>Disputes</h3>
+<p class="normal">The <i>Owners Corporations Act 2006 (the Act)</i>, Owners Corporations Regulations 2018 (the
+    Regulations) and the owners
+    corporation rules (the rules) provide a number of options in dealing with disputes regarding owners corporations,
+    managers, lot owners and occupiers. These are:
+</p>
+<ul>
+    <li>the owners corporation internal dispute resolution process</li>
+    <li>conciliation through Consumer Affairs Victoria</li>
+    <li>applications to the Victorian Civil and Administrative Tribunal (VCAT).</li>
+</ul>
+
+<h3>Internal dispute resolution process</h3>
+<p class="normal">If you believe the manager, a lot owner or occupier has breached their obligations under the Rules,
+    Act, or Regulations, you can try to resolve the problem through the owners corporation internal dispute resolution
+    process.</p>
+<p class="normal">The internal dispute resolution process is set out in the Rules. Unless the Rules state differently,
+    the following summary applies:</p>
+<ul>
+    <li>You can lodge a complaint by completing an ‘Owners corporation complaint’ form (available from the owners
+        corporation).
+    </li>
+    <li>A meeting will be held to discuss the matter with all persons involved in the dispute and representatives of the
+        owners corporation. The meeting must be held within 14 days of all persons being notified of the dispute.
+    </li>
+    <li>Persons involved in the dispute will be notified of decisions by the owners corporation.</li>
+    <li>If you are not satisfied with the outcome you can contact Consumer Affairs Victoria or VCAT (see
+        below).
+    </li>
+</ul>
+
+<h3>Conciliation through Consumer Affairs Victoria</h3>
+<p class="normal">You can contact Consumers Affairs Victoria regarding disputes. There may be times when Consumer
+    Affairs Victoria will advise you to use the internal dispute resolution process if you have not already done so. For
+    more information on complaints or general enquiries call 1300 55 81 81 or visit the <a
+            href="consumer.vic.gov.au/contact"> Affairs Victoria
+        website</a>(consumer.vic.gov.au/contact).</p>
+<h3>Applications to the Victorian Civil and Administrative Tribunal (VCAT)</h3>
+<p class="normal">For all disputes that affect the owners corporation you can apply directly to the Victorian Civil and
+    Administrative Tribunal (VCAT) to hear your case and make an order. For more information on VCAT applications call
+    1300 01 8228 (1300 01 VCAT) or visit the <a href="vcat.vic.gov.auVictorian">Civil and Administrative Tribunal
+        website</a> (vcat.vic.gov.au).
+    Calling this number costs the same as a local call. Additional charges may apply if you call from overseas, on a
+    mobile or payphone.</p>
+
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+{% extends "base/base.html" %}
+{% load crispy_forms_tags %}
+
+
+{% block title_block %}
+    file upload test
+{% endblock title_block %}
+
+
+{% block body_content %}
+
+    <form method="POST" id="input_file" enctype="multipart/form-data" ds-list-url="{% url 'base:ajax_get_ds' %}">
+        {% csrf_token %}
+        <!-- {{crispy}} -->
+        {{ form|crispy }}
+        <input name="savebutton" class="btn btn-primary" type="submit" value="Submit">
+
+    </form>
+
+    {% block javascript %}
+        <script>
+            $("#id_client_code").change(function () {
+                console.log("change function start")
+                var url = $("#input_file").attr("ds-list-url");  // get the url of the `load_cities` view
+                var clientId = $(this).val();  // get the selected country ID from the HTML input
+
+                $.ajax({                       // initialize an AJAX request
+                    url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                    data: {
+                        'client_code': clientId       // add the country id to the GET parameters
+                    },
+                    success: function (data) {   // `data` is the return of the `load_cities` view function
+                        $("#id_data_source").html(data);  // replace the contents of the city input with the data that came from the server
+                    }
+                });
+
+            });
+        </script>
+    {% endblock javascript %}
+
+
+
+
+
+{% endblock body_content %}
+

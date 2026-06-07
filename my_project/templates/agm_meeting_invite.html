@@ -1,0 +1,137 @@
+{% load humanize %}
+{% load mathfilters %}
+{% load staticfiles %}
+<html !DOCTYPE xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <title>Annual General Meeting Notice</title>
+    <meta name="strata_agm" content="AGM">
+</head>
+
+<body>
+
+
+<!-- HTML Content -->
+<table>
+    <tbody>
+    <tr>
+        <td style="width: 20%;"><img
+                src="https://secureservercdn.net/166.62.111.84/m7j.1b9.myftpupload.com/wp-content/uploads/2019/02/WechatIMG54.jpeg"
+                alt="logo" width=200px" height="108px"/>
+        </td>
+        <td style="width: 40%;text-align: left">{{ client.client_name }}<br>
+            Suit 2 935 Station Street<br>
+            Box Hill North VIC 3129 Australia
+        </td>
+        <td style="width: 30%;">Tel: {{ client.telephone }}<br>
+            {{ client.email }}<br>
+            www.topocs.com.au
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<h2 style="text-align: center;margin-top: 50px;margin-right: 20px">{{ property.street }}
+    , {{ property.suburb }}</h2>
+<h3 style="text-align: center;margin-top: 20px;margin-right: 20px; text-decoration: underline">{{ oc.title }} {{ property.plan_num }}</h3>
+<h2 style="text-align: center;margin-top: 20px;margin-right: 20px">NOTICE OF ANNUAL GENERAL MEETING</h2>
+
+
+<p style="font-weight: normal">Notice is hereby given that the Annual General Meeting of Members will be held
+    on<span> <b> {{ agm.get_date }} at
+    {{ agm.get_time }} {% if agm.location == "ZOOM" %}
+            by Zoom teleconference {% else %} at {{ agm.location }} {% endif %}</b></span></p>
+
+
+<p>Notice is provided by delegation through<br>
+    {{ oc.manager_first_name }} {{ oc.manager_last_name }}<br>
+    Owners Corporation Manager <br> <span style="text-align: right"> {{ agm.createtime }}</span></p>
+<br>
+<table>
+    <tbody>
+    <tr>
+        <td style="vertical-align: top"><b>PROXIES</b></td>
+        <td style="text-align: left">A Lot owner may appoint a proxy to represent them at the meeting. A proxy form is
+            attached to this notice.
+        </td>
+
+    </tr>
+    <tr>
+        <td style="vertical-align: top"><b>ARREARS</b></td>
+        <td style="text-align: left">A Lot owner (or their proxy) is not entitled to vote or stand for election to the
+            committee if fees or other
+            amounts owing to the Owners Corporation are in arrears. (s. 94 and s.103(7) Owners Corporation Act 2006)
+            Except in the case of a payment in cash, an amount is only taken to be paid in full if it is paid not less
+            than four business days before the vote. (s.94(3) Owners Corporation Act 2006)
+        </td>
+
+    </tr>
+    <tr>
+        <td style="vertical-align: top"><b>APOLOGIES</b></td>
+        <td style="text-align: left">May be forwarded to {{ client.email }} or to {{ client.post_adr }}.
+        </td>
+
+    </tr>
+
+
+    </tbody>
+</table>
+
+<p style="page-break-before: always"></p>
+
+<h2 style="text-align: center;margin-top: 20px;margin-right: 20px">AGENDA</h2>
+<ol>
+    {% for item in agendas %}
+        <li><b>{{ item.title }}</b></li>
+        <p> {{ item.content|safe }}</p>
+        {% if item.is_insurance %}
+            <table class="itable">
+                <tr>
+                    <td>Insurer:</td>
+                    <td>{{ insurance.company_name }}</td>
+                </tr>
+                <tr>
+                    <td>Policy Wording:</td>
+                    <td>{{ insurance.policy_kind }}</td>
+                </tr>
+                <tr>
+                    <td>Policy No.</td>
+                    <td>{{ insurance.policy_num }}</td>
+                </tr>
+                <tr>
+                    <td>Expiry</td>
+                    <td>{{ insurance.date_to }}</td>
+                </tr>
+                <tr>
+                    <td>Building:</td>
+                    <td>${{ insurance.building_amt|floatformat:'2'|intcomma }}</td>
+                </tr>
+                <tr>
+                    <td>Common Area Contents:</td>
+                    <td>${{ insurance.common_contents|floatformat:'2'|intcomma }}</td>
+
+                </tr>
+                <tr>
+                    <td>Public Liability:</td>
+                    <td>${{ insurance.public_amt|floatformat:'2'|intcomma }}</td>
+
+                </tr>
+                <tr>
+                    <td>Excess:</td>
+                    <td>${{ insurance.excess|floatformat:'2'|intcomma }}</td>
+
+                </tr>
+
+            </table>
+
+
+
+        {% endif %}
+    {% endfor %}
+
+
+</ol>
+
+
+</body>
+</html>

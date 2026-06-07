@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+{% extends "base/base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+
+{% block title_block %}
+    OC Maintain
+{% endblock title_block %}
+
+
+{% block body_content %}
+
+
+
+    <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% crispy form %}
+
+
+        </form>
+
+
+
+    {#    <div class="container">#}
+    <div class="container">
+
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+
+
+        <p>
+            <a class="btn btn-info" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
+               aria-controls="collapseExample">
+                Attachments Preview
+            </a>
+
+        </p>
+        <div class="collapse" id="collapseExample">
+            <ul class="list-unstyled">
+                <li class="media">
+                    <img src="{{ seal_pic }}" class="mr-3" alt="No oc seal available" height="84px" width="84px">
+                    <div class="media-body">
+                        <h5 class="mt-0 mb-1">OC Seal Sample</h5>
+
+                    </div>
+                </li>
+                <li class="media my-4">
+                    <img src="{{ manager_pic }}" class="mr-3" alt="No manager sign" height="42px" width="84px">
+                    <div class="media-body">
+                        <h5 class="mt-0 mb-1">Manager signature</h5>
+                    </div>
+                </li>
+                {% if obj.meeting_mins %}
+                    <li class="media">
+                        <p><a href="{{ obj.meeting_mins.url }}" download> Annual general Meeting Minutes Download</a>
+                        </p>
+                    </li>
+                {% endif %}
+                {% if obj.oc_rule %}
+                    <li class="media">
+                        <p><a href="{{ obj.oc_rule.url }}" download> OC Rule Download</a></p>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+
+    </div>
+
+
+{% endblock body_content %}
+

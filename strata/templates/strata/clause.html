@@ -1,0 +1,55 @@
+{% load staticfiles %}
+<table class="table table-bordered dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info"
+       style="width: 100%;">
+    <thead>
+    <tr>
+        <th width="5%">
+            Sequence
+        </th>
+        <th width="15%">
+            Title
+        </th>
+        <th width="70%">
+            Content
+        </th>
+        <th width="10%">
+            Action
+        </th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+
+    {% for item in agendas %}
+        <tr>
+            <td>{{ item.seq_no }}</td>
+            <td>{{ item.title }}</td>
+            <td>{{ item.content }}</td>
+            <td>
+                <div class="btn-group">
+                    <button type="button" class="edit btn-sm btn-primary" name="{{ item.id }}">Edit</button>
+                    <button type="button" class="del-pri btn-sm btn-warning" name="del-{{ item.id }}">Delete</button>
+                    {% if not item.is_first %}
+                        <button type="button" class="del-pri btn-sm btn-info" name="up-{{ item.id }}">Up</button>
+                    {% endif %}
+                    {% if not item.is_last %}
+                        <button type="button" class="del-pri btn-sm btn-info" name="down-{{ item.id }}">Down</button>
+                    {% endif %}
+                </div>
+
+
+            </td>
+
+
+        </tr>
+
+
+
+    {% endfor %}
+
+
+    </tbody>
+
+</table>
+<script src="{% static 'js/agenda.js' %}"></script>

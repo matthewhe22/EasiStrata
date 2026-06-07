@@ -1,0 +1,175 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_filters %}
+{% load widget_tweaks %}
+
+{% block title_block %}
+    Invoice List
+
+{% endblock title_block %}
+
+
+{% block body_content %}
+
+    <div class="form-group">
+        <form method="get">
+            <div class="well">
+                <h4 style="margin-top: 0">Filter</h4>
+                <div class="row">
+                    <div class="form-group col-sm-4 col-md-2">
+                        {{ filter.form.property.label_tag }}
+                        {% render_field filter.form.property class="form-control" %}
+                    </div>
+                    <div class="form-group col-sm-4 col-md-2">
+                        {{ filter.form.inv_num.label_tag }}
+                        {% render_field filter.form.inv_num class="form-control" %}
+                    </div>
+                    <div class="form-group col-sm-4 col-md-2">
+                        {{ filter.form.date_gt.label_tag }}
+                        {% render_field filter.form.date_gt class="form-control" %}
+                    </div>
+                    <div class="form-group col-sm-4 col-md-2">
+                        {{ filter.form.date_lt.label_tag }}
+                        {% render_field filter.form.date_lt class="form-control" %}
+                    </div>
+                    <div class="form-group col-sm-4 col-md-2">
+                        <label for="supplier_ref_id">Supplier</label>
+                        {% render_field filter.form.supplier_ref class="form-control" %}
+                    </div>
+                    <div class="form-group col-sm-4 col-md-2">
+                        {{ filter.form.payment_status.label_tag }}
+                        {% render_field filter.form.payment_status class="form-control" %}
+                    </div>
+
+                </div>
+
+
+                <button class="btn btn-secondary" type="submit">Search</button>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Partial payment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="invoice-num" class="col-form-label">Invoice number:</label>
+                            <input type="text" class="form-control" id="invoice-num" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="balance" class="col-form-label">Balance:</label>
+                            <input type="text" class="form-control" id="balance" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="pay_amt" class="col-form-label">Payment Amount:</label>
+                            <input type="number" class="form-control" id="pay_amt" value="0.00">
+                        </div>
+
+
+                    </form>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="pay_save">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="text-right">
+        <a name="New " class="btn btn-primary" href="{% url 'finance:invoice_create' %}" role="button">New</a>
+        <input width="15px" id="btn_pay" name="paybutton" class="btn btn-success" type="button"
+               value="Full payment">
+        <input width="15px" id="btn_cancel" name="cancelbutton" class="btn btn-warning" type="button"
+               value="Cancel Invoice">
+
+    </div>
+
+    <hr>
+
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Invoice Date</th>
+            <th>Invoice No.</th>
+            <th>Property Name</th>
+
+            <th>Supplier</th>
+            <th>Due Date</th>
+            <th>Total Amount</th>
+            <th>Amount Paid</th>
+
+            <th>Expense Type</th>
+
+            <th>Payment Status</th>
+            <th>Invoice Status</th>
+            <th>Invoice Attachment</th>
+            <th></th>
+
+
+        </tr>
+        </thead>
+
+        {% for item in object_list %}
+
+            <tbody>
+
+            <tr>
+                <td><input class="form-check-input" name='chkgroup' type="checkbox" value="{{ item.pk }}"></td>
+
+                <td scope="row"><a href="/finance/invoice/update/{{ item.pk }}">  {{ item.inv_date }}</a></td>
+
+
+                <td>{{ item.inv_num }}</td>
+                <td>{{ item.get_property_name }}</td>
+                <td>{{ item.supplier_ref }}</td>
+                <td>{{ item.due_date }}</td>
+                <td>{{ item.get_total }}</td>
+                <td>{{ item.amount_paid }}</td>
+                <td>{{ item.exp_ref }}</td>
+                <td>{{ item.payment_status }}</td>
+                <td>{{ item.get_status_display }}</td>
+                <td>{% if item.attachment %}
+
+                    <a href="{{ item.attachment.url }}" download> Download</a></td>
+                {% endif %}
+                <td>
+                    {% if item.payment_status == "unpaid" and item.status != "00" %}
+                        <button class="btn btn-info" value="{{ item.pk }}" href="{% url 'finance:invoice_part_pay' %}">
+                            Partial payment
+                        </button>
+                    {% endif %}
+                </td>
+            </tr>
+
+        {% endfor %}
+
+
+        </tbody>
+    </table>
+
+    {% block javascript %}
+        <script src="{% static 'js/default_search.js' %}"></script>
+        <script src="{% static 'js/confirm_pay_vendor.js' %}"></script>
+    {% endblock javascript %}
+
+
+
+{% endblock body_content %}
+

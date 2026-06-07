@@ -1,0 +1,4 @@
+<option value="">---------</option>
+{% for ds in ds_list %}
+<option value="{{ ds.pk }}">{{ ds.data_src }}</option>
+{% endfor %}

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+{% extends "base/base.html" %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+{% block title_block %}
+    Special Levy
+{% endblock title_block %}
+
+
+
+{% block body_content %}
+    {% include 'partials/_alerts.html' %}
+    {% crispy form %}
+
+    {% block javascript %}
+        <script src="{% static 'js/get_oc.js' %}"></script>
+    {% endblock %}
+
+{% endblock body_content %}
+
+

@@ -1,0 +1,69 @@
+{% extends "base/base.html" %}
+
+{% block title_block %}
+    Data Source Rule
+
+{% endblock title_block %}
+
+
+{% block body_content %}
+    <form action="{% url 'base:ds_rule_delete' %}" class="form-check" method="POST">
+        {% csrf_token %}
+
+
+        <div class="text-right">
+            <a name="New Rule" class="btn btn-primary" href="{% url 'base:ds_rule_create' %}" role="button">New Data
+                Source
+                Rule</a>
+            <input name="deletebutton" class="btn btn-danger" type="submit" value="Delete">
+        </div>
+
+        <hr>
+
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Data Source</th>
+                <th>Source Header Name</th>
+                <th>Map Field</th>
+                <th>Data type</th>
+                <th>Is Transpose</th>
+                <th>Calculation Expression</th>
+                <th>Regular Expression</th>
+
+            </tr>
+            </thead>
+
+            {% for dr_rule in ds_rule_list %}
+
+                <tbody>
+
+                <tr>
+                    <td><input class="form-check-input" name='chkgroup' type="checkbox" value="{{ dr_rule.pk }}">
+                    </td>
+
+                    <td scope="row"><a href="/base/ds_rule/update/{{ dr_rule.pk }}">  {{ dr_rule.src_ref }}</a></td>
+
+                    <td>{{ dr_rule.src_header }}</td>
+                    <td>{{ dr_rule.map_field }}</td>
+                    <td>{{ dr_rule.ftype }}</td>
+                    <td>{{ dr_rule.is_trans }}</td>
+                    <td>{{ dr_rule.cal_exp }}</td>
+                    <td>{{ dr_rule.reg_exp }}</td>
+
+
+                </tr>
+
+            {% endfor %}
+
+
+            </tbody>
+        </table>
+
+
+    </form>
+
+
+{% endblock body_content %}

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+{% extends "base/base.html" %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+
+{% block title_block %}
+    Lot OC Maintain
+{% endblock title_block %}
+
+
+{% block body_content %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {% crispy form %}
+
+
+    </form>
+    {% block javascript %}
+        <script src="{% static 'js/get_oc.js' %}"></script>
+        <script src="{% static 'js/set_property.js' %}"></script>
+        <script src="{% static 'js/get_liability.js' %}"></script>
+    {% endblock javascript %}
+
+
+{% endblock body_content %}

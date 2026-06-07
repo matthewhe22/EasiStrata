@@ -1,0 +1,84 @@
+{% extends "base/base.html" %}
+
+{% block title_block %}
+    Lot List
+
+{% endblock title_block %}
+
+
+{% block body_content %}
+
+    <div class="form-group">
+        <form method="GET">
+            <div class="row">
+                <div class="col-3">
+                    <label for="acc_num">Account Code: </label>
+                    <input type="text" name="acc_num" placeholder="Enter account code here"
+                           class="textinput textInput form-control" value="{{ request.GET.acc_num }}">
+                </div>
+                <div class="col-3">
+
+                    <label for="acc_name">Account Name: </label>
+                    <input type="text" name="acc_name" placeholder="Enter account name here"
+                           class="textinput textInput form-control" value="{{ request.GET.acc_name }}">
+                </div>
+            </div>
+            <div class="text-right">
+                <input class="btn btn-secondary" type="submit" value="Search">
+            </div>
+
+        </form>
+    </div>
+
+    <form action="{% url 'finance:coa_delete' %}" class="form-check" method="POST">
+        {% csrf_token %}
+
+        <div class="text-right">
+            <a name="New " class="btn btn-primary" href="{% url 'finance:coa_create' %}" role="button">New</a>
+            <input name="deletebutton" class="btn btn-primary" type="submit" value="Delete">
+        </div>
+
+        <hr>
+
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Account Code</th>
+                <th>Account Name</th>
+                <th>Category</th>
+                <th>Account Level1</th>
+                <th>Account Level2</th>
+
+
+            </tr>
+            </thead>
+
+            {% for item in coa %}
+
+                <tbody>
+
+                <tr>
+                    <td><input class="form-check-input" name='chkgroup' type="checkbox" value="{{ item.pk }}">
+                    </td>
+
+                    <td scope="row"><a href="/finace/coa/update/{{ item.pk }}">  {{ item.acc_code }}</a></td>
+
+                    <td>{{ item.acc_name }}</td>
+                    <td>{{ item.category }}</td>
+                    <td>{{ item.account_level1 }}</td>
+                    <td>{{ item.account_level2 }}</td>
+                </tr>
+
+            {% endfor %}
+
+
+            </tbody>
+        </table>
+
+    </form>
+
+
+
+{% endblock body_content %}

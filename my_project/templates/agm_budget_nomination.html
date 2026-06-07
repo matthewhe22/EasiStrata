@@ -1,0 +1,193 @@
+{% load humanize %}
+{% load mathfilters %}
+{% load staticfiles %}
+<html !DOCTYPE>
+<head>
+    <meta charset="utf-8">
+    <title>AGM budget and nominator</title>
+    <meta name="strata_agm" content="AGM">
+</head>
+
+<body>
+
+
+<!-- HTML Content -->
+
+
+<h2 style="text-align: center;margin-top: 50px;margin-right: 20px">{{ property.street }}
+    , {{ property.suburb }}</h2>
+<h2>Owner Coporation Budget {{ fyear }}</h2>
+<h3><i>{{ property.plan_num }}</i></h3>
+
+<table>
+
+    <tbody>
+    <tr>
+        <td>
+            <b>EXPENDITURE</b>
+        </td>
+        <td style="text-align: right">
+            <b>Including GST</b>
+        </td>
+
+
+    </tr>
+    <tr>
+        <td>
+            <b>{{ oc.description }}</b>
+        </td>
+        <td style="text-align: right">
+            <b>${{ budget_total|intcomma }}</b>
+        </td>
+
+
+    </tr>
+
+
+    </tbody>
+</table>
+
+<br>
+
+<table class="dtable">
+
+    <thead>
+    <tr>
+        <th style="text-align: left">
+            EXPENDITURE
+        </th>
+        <th>
+            Totals Inc. GST
+        </th>
+    </tr>
+
+    </thead>
+    <tbody>
+
+    {% for key,value in exp_items.items %}
+
+        <tr>
+            <td><b>{{ key }}</b></td>
+            <td></td>
+        </tr>
+        {% for key,value in value.items %}
+
+            <tr>
+                <td>{{ key }}</td>
+                <td>${{ value|intcomma }}</td>
+            </tr>
+        {% endfor %}
+
+
+        <tr>
+            <td><br></td>
+            <td></td>
+        </tr>
+
+    {% endfor %}
+    <tr>
+        <td><b>TOTAL</b></td>
+        <td><b>${{ budget_total|intcomma }}</b></td>
+    </tr>
+    </tbody>
+</table>
+
+
+<p style="page-break-before: always"></p>
+
+<h2 style="text-align: center;margin-top: 50px;margin-right: 20px">{{ property.street }}
+    , {{ property.suburb }}</h2>
+<h2>Owner Coporation Fee Schedule {{ fyear }}</h2>
+<h3><i>{{ property.plan_num }}</i></h3>
+
+<table>
+
+    <tbody>
+    <tr>
+        <td>
+            <b>INCOME</b>
+        </td>
+        <td style="text-align: right">
+            <b>Including GST</b>
+        </td>
+
+
+    </tr>
+    <tr>
+        <td>
+            <b>{{ oc.description }}</b>
+        </td>
+        <td style="text-align: right">
+            <b>${{ budget_total|intcomma }}</b>
+        </td>
+
+
+    </tr>
+
+
+    </tbody>
+</table>
+
+<table class="dtable">
+
+    <thead>
+    <tr>
+        <th style="text-align: left">
+            LOT
+        </th>
+        <th>
+            LIABILITIES
+        </th>
+        <th>
+            FEES PA TOTAL
+        </th>
+    </tr>
+
+    </thead>
+    <tbody>
+
+    {% for key,value in budget_items.items %}
+
+        <tr>
+            <td>{{ key }}</td>
+            <td>{{ value.liability }}</td>
+            <td>${{ value.fee|intcomma }}</td>
+        </tr>
+
+    {% endfor %}
+
+    <tr>
+        <td><b>TOTAL</b></td>
+        <td><b>{{ total_liability }}</b></td>
+        <td><b>${{ budget_total|intcomma }}</b></td>
+    </tr>
+    </tbody>
+</table>
+
+
+<p style="page-break-before: always"></p>
+<h2 style="text-align: center;margin-top: 50px;margin-right: 20px">{{ property.street }}
+    , {{ property.suburb }}</h2>
+
+<h3 style="text-align: center;margin-top: 10px;margin-right: 20px"><b>{{ oc.description }} {{ property.plan_num }}</b>
+</h3>
+<h3 style="text-align: center;margin-top: 10px;margin-right: 20px"> COMMITTEE NOMINATION FORM </h3>
+<br>
+<br>
+<br>
+<br>
+<p>
+    I________________________________________________being the Owner (or Legal Representative for the Owner) of
+    Apartment No. _________,
+    hereby nominate myself to be a Member of the Owners Corporation Committee.
+</p>
+<br>
+<p>Signature of Owner ________________________________ Date _____________________</p>
+
+<p>Email Address_______________________________________________________________</p>
+
+<p>Contact Phone Number ________________________________</p>
+
+
+</body>
+</html>

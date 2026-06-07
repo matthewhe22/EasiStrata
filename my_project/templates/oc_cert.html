@@ -1,0 +1,227 @@
+{% load humanize %}
+{% load staticfiles %}
+<!-- HTML Content -->
+<html !DOCTYPE>
+
+<head>
+
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'js/render_seal.js' %}"></script>
+
+
+</head>
+
+<body>
+
+
+<p>
+    <br>
+</p>
+<h2 class="middle">OWNERS CORPORATION CERTIFICATE</h2>
+<p class="middle"><em>s 151 Owners Corporations Act 2006</em></p>
+<p class="middle"><em>Owners Corporations Regulations 2018</em></p>
+<p>
+    <br>
+</p>
+<p>{{ oc.description }} {{ property.plan_num }}</p>
+<p><strong>Property: Unit {{ lot.unit_no }}, {{ property.street }}
+    ,{{ property.suburb }} {{ property.state }} {{ property.post_code }} </strong></p>
+<p><strong>Applicant:</strong> {{ cert.applicant }}</p>
+<hr>
+<p>This certificate is issued for Lot {{ lot.lot }} known as Unit No. {{ lot.unit_no }} on Plan of Subdivision
+    No.{{ oc.get_last_num }} - {{ property.plan_num }}, the postal address of which is {% if lot.owner_adr %}
+        {{ lot.owner_adr }}. {% else %}{{ lot.unit_no }}
+        / {{ property.street }}, {{ property.suburb }} {{ property.state }} {{ property.post_code }}.{% endif %}</p>
+<p>
+    <br>
+</p>
+<p>1. &nbsp;The current fees for the above Lot are ${{ billing.levy|floatformat:'2'|intcomma }} per annum
+    payable {{ oc.frequency|lower }} in
+    advance;</p>
+<p>and due on the {{ billing.start_day|ordinal }} day of {{ billing.start_billing_month }} {{ billing.billing_month }}
+    of each year.&nbsp;</p>
+<p>2. &nbsp;The fees are paid up to {{ billing.paid_until }}</p>
+<p>3. &nbsp;The total of unpaid fees or charges for the Lot is:
+    $<strong>{{ billing.unpaid|floatformat:'2'|intcomma }}</strong></p>
+<p>4. &nbsp;No special fees or levies have been struck except: &nbsp; <strong>{{ cert.special_fee }}</strong></p>
+<p>5. &nbsp;Repairs, maintenance or other work which has been or is about to be performed, and which may incur
+    additional charges not included in annual fees, maintenance fund or special fees as set out above:
+    <b>{{ cert.additional_charge }}</b></p>
+
+<p>6. &nbsp;The Owners Corporation has the following insurance cover:</p>
+<table class="ntable">
+    <tbody>
+    <tr>
+        <td>Name of Company:
+        </td>
+        <td>{{ insurance.company_name }}
+        </td>
+    </tr>
+    <tr>
+        <td>No. of Policy:</td>
+        <td>{{ insurance.policy_num }}</td>
+    </tr>
+    <tr>
+        <td>Kind of Policy:</td>
+        <td>{{ insurance.policy_kind }}
+        </td>
+    </tr>
+    <tr>
+        <td>Buildings Amount:
+        </td>
+        <td>${{ insurance.building_amt|intcomma }}
+        </td>
+    </tr>
+    <tr>
+        <td>Public Liability Amount:</td>
+        <td>${{ insurance.public_amt|floatformat:'2'|intcomma }}
+        </td>
+    </tr>
+    <tr>
+        <td>Buildings Covered:
+        </td>
+        <td>{{ insurance.building_covered }}
+        </td>
+    </tr>
+    <tr>
+        <td>Common Content:
+        </td>
+        <td>${{ insurance.common_contents|floatformat:'2'|intcomma }}</td>
+    </tr>
+    <tr>
+        <td>Renewal Date:
+        </td>
+        <td>{{ insurance.date_to }}</td>
+    </tr>
+    </tbody>
+</table>
+<p>7. &nbsp;The Owners Corporation has not resolved that the members may arrange their own insurance under section 63 of
+    the Act.</p>
+<p>8. &nbsp;The total funds held by the Owners Corporation are made up of: </p>
+<p>&nbsp;Administration Funds <strong>$ {% if before_oc_flag %}0 {% else %}
+    {{ billing.equity|floatformat:'2'|intcomma }}{% endif %}</strong></p>
+{% if not before_oc_flag %}
+    <p>(See attached interim financial report)</p>
+{% endif %}
+<p>9. &nbsp;The Owners Corporation has no liabilities in addition to any liabilities shown above&nbsp;except the
+    following: <strong>{{ cert.additional_liability }}</strong></p>
+<p>10. &nbsp;The Owners Corporation has no current contracts, leases, licenses or agreements affecting the common
+    property except the following: <strong>{{ cert.affect_common_property }}.</strong></p>
+<p>11. &nbsp;The Owners Corporation has no current agreements to provide services to lot owners, occupiers or the public
+    except the following: &nbsp;<strong>{{ cert.cur_agreement }}.</strong></p>
+<p>12. &nbsp;There have been no notices or orders served on the Owners Corporation in the last 12 months that have not
+    been satisfied except the following: &nbsp;<strong>{{ cert.non_statisfy_order }}.</strong></p>
+<p>13. &nbsp;The Owners Corporation is not a party to any legal proceedings or aware of any circumstances that are
+    likely to give rise to proceedings except the following:</p>
+<p><strong>{{ cert.legal_proceeding }}.</strong></p>
+<p>14. &nbsp;The Owners Corporation has appointed a manager as following:</p>
+<table class="ntable">
+    <tbody>
+    <tr>
+        <td><strong>Name</strong>
+        </td>
+        <td><strong>{{ client.client_name }}</strong></td>
+    </tr>
+    <tr>
+        <td><strong>Address</strong>
+        </td>
+        <td>
+            <div><strong>{{ client.post_adr }}</strong></div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>15. &nbsp;No administrator has been appointed and there has not been a proposal for the appointment of an
+    administrator.</p>
+<p>
+    <br>
+</p>
+<p>The common seal of Owners Corporation No (1) Plan of Subdivision Plan No. {{ property.plan_num }} was affixed and
+    witnessed by
+    and in the presence of the delegate in accordance with Section 20(1) and Section 21(2A) of the Owners Corporations
+    Act 2006.</p>
+<p>
+    <br>
+</p>
+<p>Dated this {{ cert.issue_date }}</p>
+<p>
+    <br>
+</p>
+<table class="ntable">
+    <tbody>
+    <tr>
+        <td>
+            {% if oc.manager_sign %}
+
+                <img class="sign" src="{{ oc.manager_sign.url }}" alt="mgr_sign"/>
+
+
+            {% endif %}
+        </td>
+        <td>
+
+
+        </td>
+        <td>
+            {% if oc.seal %}
+
+                <img class="seal" src="{{ oc.seal.url }}" alt="seal"/>
+
+
+            {% endif %}
+        </td>
+    </tr>
+
+
+    </tbody>
+</table>
+
+
+<p>{{ oc.manager_first_name }} {{ oc.manager_last_name }}, Manager of the Owners Corporation</p>
+<p>For and on behalf of {{ client.client_name }}</p>
+<p>{{ client.post_adr }}</p>
+<p>{{ client.email }}</p>
+<p>
+    <br>
+</p>
+<table class="btable">
+    <tbody>
+    <tr>
+        <td width: 22.457%;>NOTE:</td>
+        <td width: 77.3712%;><em>Further information on prescribed matters can be obtained by inspection of the
+            Owners&nbsp;</em><em>Corporation Register. Please make your request in writing to the Owners Corporation
+            Manager
+            noted above.</em></td>
+    </tr>
+    </tbody>
+</table>
+<p>Please find attached</p>
+<p>(I) a copy of the Rules of the Owners Corporation</p>
+<p>(II) a statement in the prescribed form providing advice and information to prospective purchasers and lot
+    owners.</p>
+<p>(III) a copy of the Minutes of the last Annual General Meeting</p>
+<p>(IV) a copy of Certificate of Currency</p>
+{% if not before_oc_flag %}
+    <p>(V) a copy of the annual financial report as of {{ billing.finance_date }}</p>
+{% endif %}
+<p style="text-align: center;"><u>THIS CERTIFICATE IS ISSUED ON THE FOLLOWING BASIS</u></p>
+<p>1. &nbsp;The information contained in this certificate is correct to the best of the Delegate's knowledge at the date
+    it is given.</p>
+<p>2. &nbsp;The information is subject to change without notice.</p>
+<p>3. &nbsp;You are advised that this Certificate has been sealed electronically. Your consent to the affixing of the
+    seal electronically will be assumed unless otherwise notified to our office upon receipt. If you do not consent to
+    the affixing of the seal electronically as required under section 9(1)(c) of the Electronic Transactions (Vic) Act
+    2000 please advise the &nbsp;manager in writing and the actual seal will be affixed.</p>
+<br>
+
+<p style="text-align: center;"><u>OWNERS CORPORATION TRUST ACCOUNT DETAILS</u></p>
+<p>Account Name: {{ oc.Account_name }}</p>
+<p>BSB: {{ oc.BSB }}</p>
+<p>Account Number: {{ oc.Account }}</p>
+
+</body>
+
+
+</html>
+

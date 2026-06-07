@@ -1,0 +1,99 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Lot List
+
+{% endblock title_block %}
+
+
+{% block body_content %}
+
+
+    <div class="form-group">
+        <form method="GET">
+        <div class="col-3">
+            <label for="property">Property: </label>
+            <select class="form-control" id="in_property" name="property_id">
+                <option value="0">Choose Property</option>
+                {% for item in property %}
+                    <option value="{{ item.pk }}"
+                            {% if item.pk == property_id %} selected {% endif %}  >  {{ item.name }} </option>
+                {% endfor %}
+            </select>
+        </div>
+
+            <div class="text-right">
+                <input class="btn btn-secondary" type="submit" value="Search">
+                <a name="New " class="btn btn-secondary" href="{% url 'property:lot_list' %}" role="button">Clear</a>
+            </div>
+
+        </form>
+    </div>
+
+
+
+
+
+    <form action="{% url 'property:lot_delete' %}" class="form-check" method="POST">
+        {% csrf_token %}
+
+        <div class="text-right">
+            <a name="New " class="btn btn-primary" href="{% url 'property:lot_create' %}" role="button">New</a>
+            <input name="deletebutton" class="btn btn-primary" type="submit" value="Delete">
+        </div>
+
+        <hr>
+
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Property</th>
+                <th>Lot No.</th>
+                <th>Unit No.</th>
+                <th>Module Type</th>
+                <th>Billing Address</th>
+                <th>Owner mail1</th>
+                <th>Owner mail2</th>
+                <th>Agent Mail</th>
+
+
+            </tr>
+            </thead>
+
+            {% for item in lot %}
+
+                <tbody>
+
+                <tr>
+                    <td><input class="form-check-input" name='chkgroup' type="checkbox" value="{{ item.pk }}"></td>
+
+                    <td scope="row"><a href="/property/lot/update/{{ item.pk }}">  {{ item.property_ref }}</a></td>
+
+                    <td>{{ item.lot }}</td>
+                    <td>{{ item.unit_no }}</td>
+                    <td>{{ item.module_type }}</td>
+                    <td>{{ item.billing_adr }}</td>
+                    <td>{{ item.email1 }}</td>
+                    <td>{{ item.email2 }}</td>
+                    <td>{{ item.agent_email }}</td>
+
+
+                </tr>
+
+            {% endfor %}
+
+
+            </tbody>
+        </table>
+
+    </form>
+
+    {% block javascript %}
+        <script src="{% static 'js/clear.js' %}"></script>
+    {% endblock %}
+
+{% endblock body_content %}
+
