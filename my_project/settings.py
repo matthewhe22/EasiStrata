@@ -104,16 +104,31 @@ def _env(name, default=''):
     return os.environ.get(name, default).strip()
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': _env('DB_NAME', 'strata'),
-        'USER': _env('DB_USER', 'capconnex_db_user'),
-        'PASSWORD': _env('DB_PASSWORD', ''),
-        'HOST': _env('DB_HOST', 'rm-j0b9z69u968t7av0yuo.mysql.australia.rds.aliyuncs.com'),
-        'PORT': _env('DB_PORT', '3306'),
+# Prefer a single DATABASE_URL when provided (the format Railway / PlanetScale /
+# most managed MySQL hosts hand you, e.g.
+# mysql://user:pass@host:3306/dbname). Fall back to the discrete DB_* vars.
+DATABASE_URL = _env('DATABASE_URL')
+if DATABASE_URL:
+    import dj_database_url
+    DATABASES = {
+        'default': dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=0,
+            ssl_require=_env('DB_SSL_REQUIRE', 'False') == 'True',
+        ),
     }
-}
+    DATABASES['default']['ENGINE'] = 'django.db.backends.mysql'
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': _env('DB_NAME', 'strata'),
+            'USER': _env('DB_USER', 'capconnex_db_user'),
+            'PASSWORD': _env('DB_PASSWORD', ''),
+            'HOST': _env('DB_HOST', 'rm-j0b9z69u968t7av0yuo.mysql.australia.rds.aliyuncs.com'),
+            'PORT': _env('DB_PORT', '3306'),
+        }
+    }
 
 MAIL_CONFIG = {
     'USER': os.environ.get('MAIL_USER', 'info@topocs.com.au'),
