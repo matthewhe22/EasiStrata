@@ -1060,7 +1060,7 @@ function Portal({ step, setStep, goToStep, plan, selPlan, setSelPlan, lotNumber,
                         {filtered.map(l => (
                           <div
                             key={l.id}
-                            onMouseDown={() => selectLot(l.number)}
+                            onMouseDown={e => { e.preventDefault(); selectLot(l.number); }}
                             style={{ padding: "9px 14px", cursor: "pointer", fontSize: "0.86rem", borderBottom: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center", background: lotNumber === l.number ? "var(--sage-tint)" : "white" }}
                             onMouseEnter={e => e.currentTarget.style.background = "var(--sage-tint)"}
                             onMouseLeave={e => e.currentTarget.style.background = lotNumber === l.number ? "var(--sage-tint)" : "white"}
@@ -1128,6 +1128,12 @@ function Portal({ step, setStep, goToStep, plan, selPlan, setSelPlan, lotNumber,
                     </div>
                   );
                 })()}
+              </div>
+            )}
+
+            {orderCategory === "oc" && plan.lots?.length > 0 && !lotNumber && (
+              <div style={{ marginTop: "1rem", fontSize: "0.78rem", color: "var(--muted)", display: "flex", alignItems: "center", gap: "6px" }}>
+                <Ic n="info" s={13}/> Select a lot above to see which Owner Corporations apply.
               </div>
             )}
 
