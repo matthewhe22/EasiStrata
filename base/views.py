@@ -1,5 +1,6 @@
 # IMPORT
 # IMPORT
+import os
 from threading import Thread
 
 from django.contrib import auth
@@ -627,7 +628,11 @@ def oc_billing_init(request):
 
 
 # start the job scheduling manager
-init_schedule()
+# The APScheduler background scheduler needs a long-lived process and a
+# reachable DB jobstore. It cannot run on stateless serverless platforms
+# (e.g. Vercel), so allow it to be disabled via the DISABLE_SCHEDULER env var.
+if os.environ.get('DISABLE_SCHEDULER', 'False') != 'True':
+    init_schedule()
 
 
 # billing_batch_service()

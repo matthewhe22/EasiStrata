@@ -97,14 +97,21 @@ WSGI_APPLICATION = 'my_project.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 
+def _env(name, default=''):
+    """Read an env var and strip stray whitespace/newlines that can sneak in
+    when values are pasted into a dashboard (a leading tab in DB_HOST, for
+    example, breaks DNS resolution)."""
+    return os.environ.get(name, default).strip()
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DB_NAME', 'strata'),
-        'USER': os.environ.get('DB_USER', 'capconnex_db_user'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
-        'HOST': os.environ.get('DB_HOST', 'rm-j0b9z69u968t7av0yuo.mysql.australia.rds.aliyuncs.com'),
-        'PORT': os.environ.get('DB_PORT', '3306'),
+        'NAME': _env('DB_NAME', 'strata'),
+        'USER': _env('DB_USER', 'capconnex_db_user'),
+        'PASSWORD': _env('DB_PASSWORD', ''),
+        'HOST': _env('DB_HOST', 'rm-j0b9z69u968t7av0yuo.mysql.australia.rds.aliyuncs.com'),
+        'PORT': _env('DB_PORT', '3306'),
     }
 }
 
