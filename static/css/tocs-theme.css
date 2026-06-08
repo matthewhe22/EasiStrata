@@ -988,7 +988,7 @@ fieldset legend {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: rgba(10, 10, 10, 0.5);
+  color: var(--color-brand-clay);
 }
 
 .easi-nav-link {
