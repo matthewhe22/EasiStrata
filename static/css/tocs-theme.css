@@ -374,7 +374,7 @@ h1, h2, h3, h4, h5, h6,
 .breadcrumb {
   background-color: transparent !important;
   font-family: var(--font-family);
-  font-size: 0.85rem;
+  font-size: 0.78rem;
 }
 
 .breadcrumb-item.active {
@@ -689,7 +689,7 @@ label,
   font-family: var(--font-family);
   font-weight: 600;
   color: var(--color-ink);
-  font-size: 0.85rem;
+  font-size: 0.78rem !important;      /* ~12.5px — matches Task App label density */
 }
 
 .form-text,
@@ -951,9 +951,10 @@ fieldset legend {
 }
 
 .easi-brand-mark {
-  height: 30px;
+  height: 32px;
   width: auto;
   object-fit: contain;
+  flex-shrink: 0;
 }
 
 .easi-brand-word {
@@ -1190,7 +1191,7 @@ fieldset legend {
 
 .easi-sub {
   margin: 0.4rem 0 0;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--color-muted);
 }
 
@@ -1256,7 +1257,7 @@ fieldset legend {
 
 /* --- 16.1 Type scale --------------------------------------------------- */
 body {
-  font-size: 0.875rem !important;     /* Task `text-sm` (14px) */
+  font-size: 0.8125rem !important;    /* 13px — matches Task App compact density */
   line-height: 1.5;
   font-family: var(--font-family) !important;
   color: var(--color-ink) !important;
@@ -1271,17 +1272,17 @@ h1, h2, h3, h4, h5, h6,
   line-height: 1.2;
 }
 
-.btn { font-size: 0.85rem !important; }
-.btn-sm, .btn-xs { font-size: 0.78rem !important; }
+.btn { font-size: 0.8rem !important; }
+.btn-sm, .btn-xs { font-size: 0.75rem !important; }
 
 .form-control,
 .custom-select,
 select.form-control,
 textarea.form-control {
-  font-size: 0.875rem !important;
+  font-size: 0.8125rem !important;    /* 13px */
 }
 
-small, .small { font-size: 0.8rem; }
+small, .small { font-size: 0.75rem; }
 
 /* Colour helpers — fold SB-Admin-2's grey scale onto the Task ink/muted
    palette so secondary text reads the same everywhere. */
@@ -1300,7 +1301,7 @@ a:hover { color: var(--color-cobalt-hover); }
 /* --- 16.2 Tables — match Task App data tables -------------------------- */
 .table {
   width: 100%;
-  font-size: 0.875rem !important;
+  font-size: 0.8125rem !important;    /* 13px — body-text density */
   font-family: var(--font-family);
   background-color: var(--color-surface) !important;
   border: 1px solid var(--color-border) !important;
