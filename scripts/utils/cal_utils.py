@@ -125,7 +125,9 @@ def transform_lotid_to_lot(input_dict):
     :return:
     dictionary with the values of original dict but the key is the lot name
     """
+    # Fetch all Lot rows in a single query instead of one query per key (N+1)
+    lots = {lot.id: lot for lot in Lot.objects.filter(id__in=[int(item) for item in input_dict])}
     output_dict = {}
     for item in input_dict:
-        output_dict [Lot.objects.get(id=int(item))] = input_dict [item]
+        output_dict [lots [int(item)]] = input_dict [item]
     return output_dict
