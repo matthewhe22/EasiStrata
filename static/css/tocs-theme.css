@@ -955,6 +955,9 @@ fieldset legend {
   width: auto;
   object-fit: contain;
   flex-shrink: 0;
+  /* Logo PNG is white-on-transparent (designed for dark backgrounds).
+     Invert to black then shift hue toward cobalt so it reads on white sidebar. */
+  filter: invert(1) sepia(1) saturate(1.8) hue-rotate(190deg) brightness(0.55);
 }
 
 .easi-brand-word {
