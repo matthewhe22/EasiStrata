@@ -66,39 +66,29 @@
 
 
         <table class="table">
-    <thead>
-        <tr>
-            <th>    </th>
-            <th>Property Address</th>
-            <th>Lots Number</th>
-            <th>Total Liability</th>
-            <th>Total Entitlement</th>
-            <th>Plan No.</th>
-
-        </tr>
-    </thead>
-
-            {% for item in object_list %}
-
+            <thead>
+                <tr>
+                    <th style="width:2.5rem;"></th>
+                    <th>Property Address</th>
+                    <th>Lots Number</th>
+                    <th>Total Liability</th>
+                    <th>Total Entitlement</th>
+                    <th>Plan No.</th>
+                </tr>
+            </thead>
             <tbody>
-                
-               <tr>
-                        <td> <input class="form-check-input" name='chkgroup' type="checkbox" value="{{item.pk}}">   </td>
-
-                   <td scope="row"><a href="/property/prop/update/{{item.pk}}">  {{item.street}}</a></td>
-
-                        <td>{{item.lots_num}}</td>
-                        <td>{{item.total_lot_liability}}</td>
-                        <td>{{item.total_lot_entitle}}</td>
-                        <td>{{item.plan_num}}</td>
-
-
-
-                </tr> 
-
-    {% endfor %}
-
-
+                {% for item in object_list %}
+                <tr>
+                    <td><input class="form-check-input" name='chkgroup' type="checkbox" value="{{item.pk}}"></td>
+                    <td scope="row"><a href="/property/prop/update/{{item.pk}}">{{item.street}}</a></td>
+                    <td>{{item.lots_num}}</td>
+                    <td>{{item.total_lot_liability}}</td>
+                    <td>{{item.total_lot_entitle}}</td>
+                    <td>{{item.plan_num}}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6" class="text-center text-muted" style="padding:2rem;">No properties found.</td></tr>
+                {% endfor %}
             </tbody>
         </table>
 
