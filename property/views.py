@@ -129,7 +129,7 @@ class LotListView(LoginRequiredMixin, ListView):
         if q_property:
             result = result.filter(Q(property_ref_id=q_property))
 
-        return result
+        return result.select_related('property_ref')
 
     def get_context_data(self, *args, **kwargs):
         context = super(LotListView, self).get_context_data(*args, **kwargs)
@@ -230,7 +230,7 @@ class OcListView(LoginRequiredMixin, ListView):
         if q_property:
             result = result.filter(Q(property_ref_id=q_property))
 
-        return result
+        return result.select_related('property_ref')
 
     def get_context_data(self, *args, **kwargs):
         context = super(OcListView, self).get_context_data(*args, **kwargs)
@@ -309,18 +309,15 @@ class LotOcListView(LoginRequiredMixin, ListView):
 
         q_property = self.request.GET.get('property_id')
         q_crn = self.request.GET.get('crn')
-        query_list = list(Lot.objects.filter(property_ref_id=q_property).values('id'))
-        lot_list = []
-        for item in query_list:
-            lot_list.append(item ['id'])
 
         if q_property and q_property != '0':
+            lot_list = Lot.objects.filter(property_ref_id=q_property).values_list('id', flat=True)
             result = result.filter(lot_ref_id__in=lot_list)
 
         if q_crn:
             result = result.filter(CRN__icontains=q_crn)
 
-        return result
+        return result.select_related('oc_ref', 'lot_ref')
 
     def get_context_data(self, *args, **kwargs):
         context = super(LotOcListView, self).get_context_data(*args, **kwargs)
@@ -391,10 +388,7 @@ class OcBudListView(LoginRequiredMixin, ListView):
         q_property = self.request.GET.get('property_id')
         q_finyear = self.request.GET.get('fin_year')
 
-        query_list = list(OCMaster.objects.filter(property_ref_id=q_property).values('id'))
-        oc_list = []
-        for item in query_list:
-            oc_list.append(item ['id'])
+        oc_list = OCMaster.objects.filter(property_ref_id=q_property).values_list('id', flat=True)
 
         if q_property != '0' and q_finyear and q_property:
             result = result.filter(Q(oc_ref_id__in=oc_list), Q(fin_year=q_finyear))
@@ -403,7 +397,7 @@ class OcBudListView(LoginRequiredMixin, ListView):
         elif q_finyear:
             result = result.filter(Q(fin_year=q_finyear))
 
-        return result
+        return result.select_related('oc_ref')
 
     def get_context_data(self, *args, **kwargs):
         context = super(OcBudListView, self).get_context_data(*args, **kwargs)
@@ -553,10 +547,9 @@ def get_property(request):
     try:
         oc_id = request.GET.get('ocId')
         if request.method == 'GET' and oc_id != '':
-            liability = OCMaster.objects.get(pk=oc_id).liability
-            property = OCMaster.objects.get(pk=oc_id).property_ref_id
-            data = {'property': property,
-                    'liability': liability}
+            oc = OCMaster.objects.get(pk=oc_id)
+            data = {'property': oc.property_ref_id,
+                    'liability': oc.liability}
             return JsonResponse(data)
 
         else:
@@ -615,14 +608,15 @@ def notify_list(request):
     """
 
     template_name = 'base/notify_log_list.html'
-    log_list = Notification.objects.filter(category="email-note").values("property_id", "msg_subject", "createby",
-                                                                         "createtime").distinct().order_by(
-        '-createtime')
+    log_list = list(Notification.objects.filter(category="email-note").values("property_id", "msg_subject", "createby",
+                                                                              "createtime").distinct().order_by(
+        '-createtime'))
+
+    # Batch-load all referenced properties in a single query to avoid an N+1 lookup per row
+    property_ids = {item ['property_id'] for item in log_list if type(item ['property_id']).__name__ == 'int'}
+    properties = {p.id: p for p in Property.objects.filter(pk__in=property_ids)}
     for item in log_list:
-        if type(item ['property_id']).__name__ == 'int':
-            item ['name'] = Property.objects.filter(pk=item ['property_id']).first()
-        else:
-            item ['name'] = ''
+        item ['name'] = properties.get(item ['property_id'], '')
 
     context = {'notify_list': log_list}
 

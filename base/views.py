@@ -49,16 +49,19 @@ class IndexView(LoginRequiredMixin, TemplateView):
         try:
             total_property = Property.objects.count()
 
-            # function change to get summary amount of oc budget
-            revenue = OcBudget.objects.filter(Q(acc_code="IS701034") | Q(acc_code="IS701035")).values(
-                'oc_ref_id').annotate(max_year=Max('fin_year'))
+            # Total the latest-year revenue budget across all OCs using two grouped
+            # queries instead of one aggregate query per OC (previously an N+1 loop).
+            rev_budget = OcBudget.objects.filter(Q(acc_code="IS701034") | Q(acc_code="IS701035"))
 
-            # iterate the max fin year and oc id list (dict)
-            rev = 0
-            for item in revenue:
-                oc_id = item ['oc_ref_id']
-                fin_year = item ['max_year']
-                rev = rev + get_oc_budget_total(oc_id, fin_year)
+            # max financial year per OC
+            max_year = {row ['oc_ref_id']: row ['max_year'] for row in
+                        rev_budget.values('oc_ref_id').annotate(max_year=Max('fin_year'))}
+
+            # summed amount per (OC, financial year)
+            totals = {(row ['oc_ref_id'], row ['fin_year']): row ['total'] for row in
+                      rev_budget.values('oc_ref_id', 'fin_year').annotate(total=Sum('amount'))}
+
+            rev = sum((totals.get((oc_id, fin_year)) or 0) for oc_id, fin_year in max_year.items())
 
             unbill = Billing.objects.filter(status="unpaid", is_valid=True).count()
 
@@ -583,9 +586,9 @@ def insurance_overdue():
 @require_GET
 def get_user_notification(request):
     username = request.user.username
-    if Notification.objects.filter(user_name=username, read_status="unread").exists():
-        notification = Notification.objects.filter(user_name=username, read_status="unread").order_by("-createtime") [
-                       :5]
+    notification = list(Notification.objects.filter(user_name=username, read_status="unread").order_by("-createtime") [
+                        :5])
+    if notification:
         notification_num = len(notification)
         if notification_num > 4:
             notification_num = "5+"
@@ -667,24 +670,23 @@ class OwnerView(LoginRequiredMixin, TemplateView):
         # get lot info
         if lot:
 
-            total_billing_amt = Billing.objects.filter(lot_ref_id=lot.id, is_valid=1, status="unpaid",
-                                                       due_date__lt=get_today()).aggregate(Sum('billing_amount'))
-            total_collected = Billing.objects.filter(lot_ref_id=lot.id, is_valid=1, status="unpaid",
-                                                     due_date__lt=get_today()).aggregate(Sum('collected_amount'))
-            if total_billing_amt ['billing_amount__sum'] is None:
-                total_billing_amt ['billing_amount__sum'] = 0.00
+            # Single aggregate query for both sums instead of two identical scans
+            arrear_totals = Billing.objects.filter(lot_ref_id=lot.id, is_valid=1, status="unpaid",
+                                                   due_date__lt=get_today()).aggregate(
+                Sum('billing_amount'), Sum('collected_amount'))
+            billing_sum = arrear_totals ['billing_amount__sum'] or 0.00
+            collected_sum = arrear_totals ['collected_amount__sum'] or 0.00
 
-            if total_collected ['collected_amount__sum'] is None:
-                total_collected ['collected_amount__sum'] = 0.00
-
-            overdue = float(total_billing_amt ['billing_amount__sum']) - float(
-                total_collected ['collected_amount__sum'])
-            billings = Billing.objects.filter(lot_ref_id=lot.id, special_flag=0, is_valid=1, is_show=1).order_by('-id')
-            ledgers = ClientLedger.objects.filter(lot_ref_id=lot.id).order_by('oc_ref_id', '-trans_date', '-id')
+            overdue = float(billing_sum) - float(collected_sum)
+            billings = Billing.objects.filter(lot_ref_id=lot.id, special_flag=0, is_valid=1, is_show=1).select_related(
+                'oc_ref__property_ref', 'lot_ref').order_by('-id')
+            ledgers = ClientLedger.objects.filter(lot_ref_id=lot.id).select_related('oc_ref', 'lot_ref').order_by(
+                'oc_ref_id', '-trans_date', '-id')
             agms = AGM.objects.filter(property_ref_id=lot.property_ref_id).order_by('-fyear')
             insurances = Insurance.objects.filter(property_ref_id=lot.property_ref_id).order_by('-id')
 
-            invoices = Invoice.objects.filter(oc_ref__property_ref_id=lot.property_ref_id).exclude(status='00')
+            invoices = Invoice.objects.filter(oc_ref__property_ref_id=lot.property_ref_id).exclude(
+                status='00').select_related('oc_ref__property_ref', 'supplier_ref')
 
             total_amount_arrear = Billing.objects.filter(oc_ref__property_ref_id=lot.property_ref_id, is_valid=1,
                                                          status="unpaid", due_date__lt=get_today()).aggregate(
@@ -699,14 +701,15 @@ class OwnerView(LoginRequiredMixin, TemplateView):
             property = lot.property_ref
             oc_list = OCMaster.objects.filter(property_ref=property)
 
-            fs = FS.objects.filter(createby=self.request.user.username)
+            fs = FS.objects.filter(createby=self.request.user.username).select_related('property_ref', 'oc_ref')
 
             if len(result) > 0:
                 total_lot_arrear = result [0]
             else:
                 total_lot_arrear = 0
             arrear_billings = Billing.objects.filter(oc_ref__property_ref_id=lot.property_ref_id, is_valid=1,
-                                                     status="unpaid", due_date__lt=get_today())
+                                                     status="unpaid", due_date__lt=get_today()).select_related(
+                'oc_ref__property_ref', 'lot_ref')
 
             if get_today().month > 6:
                 fyear = get_today().year + 1

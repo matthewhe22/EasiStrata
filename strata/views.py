@@ -60,6 +60,8 @@ class InsuranceListView(LoginRequiredMixin, FilterView):
               'currency_cert')
     template_name = 'strata/insurance_list.html'
     filterset_class = InsureFilter
+    paginate_by = 30
+    queryset = Insurance.objects.select_related('property_ref')
 
 
 class AgmCreateView(LoginRequiredMixin, CreateView):
@@ -97,6 +99,8 @@ class AGMListView(LoginRequiredMixin, FilterView):
     fields = ('property_ref', 'oc_ref', 'meeting_datetime', 'fyear', 'meeting_minutes', 'meeting_invite', 'is_sent')
     template_name = 'strata/agm_list.html'
     filterset_class = AgmFilter
+    paginate_by = 30
+    queryset = AGM.objects.select_related('property_ref', 'oc_ref')
 
 
 @csrf_exempt

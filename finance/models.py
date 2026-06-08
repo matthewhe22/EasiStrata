@@ -100,9 +100,7 @@ class Invoice(DateModel):
     attachment = models.FileField(null=True, blank=True)
 
     def get_property_name(self):
-        prop_id = OCMaster.objects.get(pk=self.oc_ref_id).property_ref_id
-        property_name = Property.objects.get(pk=prop_id).name
-        return property_name
+        return self.oc_ref.property_ref.name
 
     def get_total(self):
         return self.amount + self.input_gst
@@ -132,18 +130,16 @@ class Billing(DateModel):
     is_show = models.BooleanField(default=True)
 
     def get_property_name(self):
-        prop_id = OCMaster.objects.get(pk=self.oc_ref_id).property_ref_id
-        property_name = Property.objects.get(pk=prop_id).name
-        return property_name
+        return self.oc_ref.property_ref.name
 
     def get_property_id(self):
-        return OCMaster.objects.get(pk=self.oc_ref_id).property_ref_id
+        return self.oc_ref.property_ref_id
 
     def get_unit(self):
-        return Lot.objects.get(pk=self.lot_ref_id).unit_no
+        return self.lot_ref.unit_no
 
     def get_agent(self):
-        return Lot.objects.get(pk=self.lot_ref_id).agent_name
+        return self.lot_ref.agent_name
 
     def get_payable(self):
         return self.billing_amount - self.collected_amount
@@ -170,9 +166,7 @@ class GL(DateModel):
         return get_oc_name(self.oc_ref_id)
 
     def get_property_name(self):
-        prop_id = OCMaster.objects.get(pk=self.oc_ref_id).property_ref_id
-        property_name = Property.objects.get(pk=prop_id).name
-        return property_name
+        return self.oc_ref.property_ref.name
 
 
 class Occertificate(DateModel):
@@ -222,9 +216,9 @@ class BankTrans(DateModel):
         return get_oc_name(self.oc_ref_id)
 
     def get_property_name(self):
-        prop_id = OCMaster.objects.get(pk=self.oc_ref_id).property_ref_id
-        property_name = Property.objects.get(pk=prop_id).name
-        return property_name
+        if not self.oc_ref_id:
+            return ''
+        return self.oc_ref.property_ref.name
 
 
 class CashReceipt(DateModel):
