@@ -109,13 +109,19 @@ def _env(name, default=''):
 #   postgres://...  -> django.db.backends.postgresql  (Vercel Postgres / Neon)
 #   mysql://...     -> django.db.backends.mysql
 # Fall back to the discrete DB_* vars (MySQL) when DATABASE_URL is not set.
+# Reuse DB connections across requests to avoid the per-request connection
+# setup cost. Configurable via DB_CONN_MAX_AGE (seconds). Defaults to 0 (close
+# after each request) to stay safe on serverless platforms without a pooler;
+# set e.g. 600 on a long-lived host (or behind PgBouncer/ProxySQL) for pooling.
+DB_CONN_MAX_AGE = int(_env('DB_CONN_MAX_AGE', '0'))
+
 DATABASE_URL = _env('DATABASE_URL')
 if DATABASE_URL:
     import dj_database_url
     DATABASES = {
         'default': dj_database_url.parse(
             DATABASE_URL,
-            conn_max_age=0,
+            conn_max_age=DB_CONN_MAX_AGE,
             ssl_require=_env('DB_SSL_REQUIRE', 'False') == 'True',
         ),
     }
@@ -128,6 +134,7 @@ else:
             'PASSWORD': _env('DB_PASSWORD', ''),
             'HOST': _env('DB_HOST', 'rm-j0b9z69u968t7av0yuo.mysql.australia.rds.aliyuncs.com'),
             'PORT': _env('DB_PORT', '3306'),
+            'CONN_MAX_AGE': DB_CONN_MAX_AGE,
         }
     }
 

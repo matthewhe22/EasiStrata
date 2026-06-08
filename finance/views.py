@@ -293,6 +293,7 @@ class InvoiceListView(LoginRequiredMixin, FilterView):
     fields = ('inv_date', 'inv_num', 'supplier_ref', 'due_date', "amount", 'status', 'last_approved')
     template_name = 'finance/invoice_list.html'
     paginate_by = 30
+    queryset = Invoice.objects.select_related('oc_ref__property_ref', 'supplier_ref')
 
 
 class CashRecpListView(LoginRequiredMixin, FilterView):
@@ -307,6 +308,7 @@ class ClientLedgerListView(LoginRequiredMixin, FilterView):
     fields = ('trans_date', 'debit_amt', 'credit_amt', 'balance', 'reference', 'description')
     template_name = 'finance/client_ledger_list.html'
     paginate_by = 30
+    queryset = ClientLedger.objects.select_related('lot_ref', 'oc_ref')
 
 
 # sample delete view
@@ -400,6 +402,7 @@ class BillingListView(LoginRequiredMixin, FilterView):
     paginate_by = 30
     filterset_class = BillFilter
     ordering_fields = ['-billing_num', ]
+    queryset = Billing.objects.select_related('oc_ref__property_ref', 'lot_ref')
 
 
 # sample delete view
@@ -927,6 +930,7 @@ class OcCertListView(LoginRequiredMixin, FilterView):
     template_name = 'finance/oc_cert_list.html'
     paginate_by = 30
     filterset_class = OcCertFilter
+    queryset = Occertificate.objects.select_related('oc_ref', 'lot_ref')
 
 
 class GLsListView(LoginRequiredMixin, FilterView):
@@ -935,6 +939,7 @@ class GLsListView(LoginRequiredMixin, FilterView):
               'amount', 'oc_ref')
     template_name = 'finance/gl_list.html'
     filterset_class = GLFilter
+    queryset = GL.objects.select_related('oc_ref')
 
 
 class GLsReconListView(LoginRequiredMixin, FilterView):
@@ -993,6 +998,7 @@ class FSListView(LoginRequiredMixin, FilterView):
     template_name = 'finance/fs_list.html'
     paginate_by = 30
     filterset_class = FsFilter
+    queryset = FS.objects.select_related('property_ref', 'oc_ref')
 
 
 # gl related functions
@@ -1130,6 +1136,7 @@ class BankListView(LoginRequiredMixin, FilterView):
               'unpresent_flag')
     template_name = 'finance/bank_list.html'
     paginate_by = 30
+    queryset = BankTrans.objects.select_related('oc_ref__property_ref')
 
 
 def special_levy(request):
@@ -1260,15 +1267,19 @@ def gl_export(request):
     # Sheet body, remaining rows
     font_style = xlwt.XFStyle()
 
-    rows = GL.objects.filter(**kwargs).values_list('oc_ref', 'acc_code', 'posting_date', 'document_date', 'dc',
-                                                   'period',
-                                                   'description', 'amount')
+    rows = list(GL.objects.filter(**kwargs).values_list('oc_ref', 'acc_code', 'posting_date', 'document_date', 'dc',
+                                                        'period',
+                                                        'description', 'amount'))
 
     # rows = GL.objects.all()
 
+    # Pre-fetch all OCMaster titles in a single query to avoid an N+1 lookup per row
+    oc_titles = dict(OCMaster.objects.filter(
+        pk__in={int(item [0]) for item in rows}).values_list('id', 'title'))
+
     for item in rows:
         row = list(item)
-        row [0] = OCMaster.objects.get(pk=int(row [0])).title
+        row [0] = oc_titles.get(int(row [0]))
         row [2] = date_to_str(row [2])
         row [3] = date_to_str(row [3])
         row_num += 1
