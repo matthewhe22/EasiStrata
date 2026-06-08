@@ -1,0 +1,10 @@
+{
+  "name": "easistrata-frontend",
+  "private": true,
+  "description": "Tailwind CSS build for EasiStrata (Task App design language).",
+  "scripts": {
+    "build:css": "tailwindcss -c tailwind.config.js -i static/css/src/tailwind.css -o static/css/tailwind.build.css --minify",
+    "watch:css": "tailwindcss -c tailwind.config.js -i static/css/src/tailwind.css -o static/css/tailwind.build.css --watch"
+  },
+  "devDependencies": { "tailwindcss": "^3.4.13" }
+}

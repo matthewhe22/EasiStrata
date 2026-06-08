@@ -4,9 +4,25 @@
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   1. Google Fonts – Montserrat
+   1. Montserrat — self-hosted static weights (matches Task App's next/font
+      load of 400/500/600/700; no Google Fonts CDN dependency at runtime)
    -------------------------------------------------------------------------- */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+@font-face {
+  font-family: 'Montserrat'; font-style: normal; font-weight: 400; font-display: swap;
+  src: url('../fonts/montserrat/montserrat-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Montserrat'; font-style: normal; font-weight: 500; font-display: swap;
+  src: url('../fonts/montserrat/montserrat-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Montserrat'; font-style: normal; font-weight: 600; font-display: swap;
+  src: url('../fonts/montserrat/montserrat-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Montserrat'; font-style: normal; font-weight: 700; font-display: swap;
+  src: url('../fonts/montserrat/montserrat-700.woff2') format('woff2');
+}
 
 /* --------------------------------------------------------------------------
    2. Design tokens (CSS custom properties)
@@ -26,6 +42,10 @@
 
   /* Cream surface variants */
   --color-cream-soft:    hsl(42, 24%, 95%);
+
+  /* Muted warm-grey surfaces (mirror Task App `muted` / bg-muted) */
+  --color-muted-surface: hsl(42, 18%, 95%);   /* table headers, soft panels */
+  --color-muted-zebra:   hsl(42, 18%, 97%);   /* subtle zebra striping */
 
   /* Brand */
   --color-brand-navy:    hsl(213, 44%, 22%);
@@ -354,7 +374,7 @@ h1, h2, h3, h4, h5, h6,
 .breadcrumb {
   background-color: transparent !important;
   font-family: var(--font-family);
-  font-size: 0.85rem;
+  font-size: 0.78rem;
 }
 
 .breadcrumb-item.active {
@@ -669,7 +689,7 @@ label,
   font-family: var(--font-family);
   font-weight: 600;
   color: var(--color-ink);
-  font-size: 0.85rem;
+  font-size: 0.78rem !important;      /* ~12.5px — matches Task App label density */
 }
 
 .form-text,
@@ -931,9 +951,13 @@ fieldset legend {
 }
 
 .easi-brand-mark {
-  height: 30px;
+  height: 32px;
   width: auto;
   object-fit: contain;
+  flex-shrink: 0;
+  /* Logo PNG is white-on-transparent (designed for dark backgrounds).
+     Invert to black then shift hue toward cobalt so it reads on white sidebar. */
+  filter: invert(1) sepia(1) saturate(1.8) hue-rotate(190deg) brightness(0.55);
 }
 
 .easi-brand-word {
@@ -1170,7 +1194,7 @@ fieldset legend {
 
 .easi-sub {
   margin: 0.4rem 0 0;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--color-muted);
 }
 
@@ -1223,4 +1247,167 @@ fieldset legend {
   font-weight: 600;
   letter-spacing: 0.03em;
   border-radius: var(--radius) var(--radius) 0 0;
+}
+
+/* ==========================================================================
+   16. TYPOGRAPHY + TABLES — Task App parity
+   --------------------------------------------------------------------------
+   Final-word overrides (loaded last) that align font size / family / colour
+   and the data-table styling with Task App. Task uses a compact 14px (text-sm)
+   body on Montserrat, muted warm-grey table headers (not cobalt), hairline
+   row separators, subtle zebra striping and a bordered (not shadowed) table.
+   ========================================================================== */
+
+/* --- 16.1 Type scale --------------------------------------------------- */
+body {
+  font-size: 0.8125rem !important;    /* 13px — matches Task App compact density */
+  line-height: 1.5;
+  font-family: var(--font-family) !important;
+  color: var(--color-ink) !important;
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--font-family) !important;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  line-height: 1.2;
+}
+
+.btn { font-size: 0.8rem !important; }
+.btn-sm, .btn-xs { font-size: 0.75rem !important; }
+
+.form-control,
+.custom-select,
+select.form-control,
+textarea.form-control {
+  font-size: 0.8125rem !important;    /* 13px */
+}
+
+small, .small { font-size: 0.75rem; }
+
+/* Colour helpers — fold SB-Admin-2's grey scale onto the Task ink/muted
+   palette so secondary text reads the same everywhere. */
+.text-muted,
+.text-gray-500,
+.text-gray-600,
+.text-gray-700 { color: var(--color-muted) !important; }
+
+.text-gray-800,
+.text-gray-900,
+.text-dark { color: var(--color-ink) !important; }
+
+a { color: var(--color-cobalt); }
+a:hover { color: var(--color-cobalt-hover); }
+
+/* --- 16.2 Tables — match Task App data tables -------------------------- */
+.table {
+  width: 100%;
+  font-size: 0.8125rem !important;    /* 13px — body-text density */
+  font-family: var(--font-family);
+  background-color: var(--color-surface) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: none !important;
+  overflow: hidden;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 1.5rem;
+}
+
+/* Tables already inside a .card don't need their own border/radius. */
+.card .table {
+  border: 0 !important;
+  border-radius: 0 !important;
+  margin-bottom: 0;
+}
+
+.table thead th {
+  background-color: var(--color-muted-surface) !important;
+  color: var(--color-muted) !important;
+  font-weight: 600 !important;
+  font-size: 0.72rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: left;
+  white-space: nowrap;
+  border: none !important;
+  border-bottom: 1px solid var(--color-border) !important;
+  padding: 0.55rem 0.75rem !important;
+}
+
+.table tbody td,
+.table tbody th {
+  padding: 0.55rem 0.75rem !important;
+  vertical-align: middle;
+  color: var(--color-ink);
+  border: none !important;
+  border-top: 1px solid var(--color-border) !important;
+}
+
+/* Subtle zebra striping (Task `even:bg-muted/20`). */
+.table tbody tr:nth-of-type(even) {
+  background-color: var(--color-muted-zebra);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: var(--color-muted-zebra);
+}
+.table-striped tbody tr:nth-of-type(even) {
+  background-color: transparent;
+}
+
+.table tbody tr {
+  transition: background-color 0.12s ease;
+}
+
+.table tbody tr:hover {
+  background-color: var(--color-cobalt-tint) !important;
+}
+
+/* `.table-bordered` grids: keep them borderless like Task rather than the
+   heavy Bootstrap cell grid. */
+.table-bordered,
+.table-bordered td,
+.table-bordered th {
+  border: none !important;
+}
+.table-bordered tbody td,
+.table-bordered tbody th {
+  border-top: 1px solid var(--color-border) !important;
+}
+
+/* Row links read as primary text (ink), underline on hover — not cobalt
+   links, matching Task's table title cells. */
+.table a {
+  color: var(--color-ink) !important;
+  font-weight: 500;
+  text-decoration: none;
+}
+.table a:hover {
+  color: var(--color-cobalt) !important;
+  text-decoration: underline;
+}
+
+/* --- 16.3 Table checkboxes ---------------------------------------------
+   Bootstrap's .form-check-input is `position:absolute; margin-left:-1.25rem`
+   which only lays out correctly inside a .form-check label. In a bare table
+   cell that floats it left of the table and breaks vertical alignment with
+   the row text. Reset to normal in-flow, centred in the cell. */
+.table .form-check-input,
+.table td input[type="checkbox"],
+.table th input[type="checkbox"],
+td > input[type="checkbox"][name="chkgroup"] {
+  position: static;
+  margin: 0;
+  vertical-align: middle;
+  width: 1rem;
+  height: 1rem;
+}
+
+.table td:first-child:has(input[type="checkbox"]),
+.table th:first-child:empty {
+  text-align: center;
+  width: 2.75rem;
 }

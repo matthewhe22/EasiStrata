@@ -21,7 +21,6 @@
 
 
     <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Custom styles for this template-->
 
@@ -30,38 +29,14 @@
 
     <link href="{% static 'css/sb-admin-2.css' %}" rel="stylesheet">
 
-    <!-- Tailwind CSS (Play CDN) — the same frontend framework Task App uses.
-         Preflight is disabled so Tailwind's utilities are available to the
-         Django templates without resetting Bootstrap 4 / SB-Admin-2 base
-         styles. The theme below mirrors Task App's "Cobalt" design tokens
-         (cream surface, cobalt accent, Montserrat) so utility classes such
-         as `text-cobalt`, `bg-cream`, `rounded-lg` line up with the look. -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        corePlugins: { preflight: false },
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['Montserrat', 'Segoe UI', 'system-ui', 'sans-serif'],
-            },
-            colors: {
-              cream:   { DEFAULT: 'hsl(42 30% 92%)', soft: 'hsl(42 24% 95%)' },
-              ink:     { DEFAULT: 'hsl(0 0% 4%)', muted: 'hsl(0 0% 36%)' },
-              cobalt:  {
-                DEFAULT: 'hsl(222 60% 32%)',
-                hover:   'hsl(222 60% 42%)',
-                tint:    'hsl(222 50% 94%)',
-              },
-              brand:   { navy: 'hsl(213 44% 22%)', clay: 'hsl(21 80% 53%)' },
-            },
-            borderRadius: { lg: '0.5rem' },
-            boxShadow: { card: '0 2px 8px rgba(0,0,0,0.06)' },
-          },
-        },
-      };
-    </script>
+    <!-- Tailwind CSS — the same frontend framework Task App uses, compiled
+         to a self-hosted static file (no runtime CDN). Built from
+         static/css/src/tailwind.css via `npm run build:css`; the theme in
+         tailwind.config.js mirrors Task App's "Cobalt" tokens. Utilities
+         only (no preflight) so it coexists with Bootstrap / SB-Admin-2. -->
+    <link href="{% static 'css/tailwind.build.css' %}" rel="stylesheet">
 
+    <!-- EasiStrata design system (self-hosts Montserrat, Task-app theme). -->
     <link href="{% static 'css/tocs-theme.css' %}" rel="stylesheet">
     <link href="{% static 'css/dtsel.css' %}" rel="stylesheet">
     {#    <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css"#}
@@ -99,7 +74,7 @@
 
         <!-- Brand lockup -->
         <a class="easi-brand" href="{% url 'base:base_index' %}">
-            <img class="easi-brand-mark" src="/static/img/TOCS.png" alt="EaziStrata">
+            <img class="easi-brand-mark" src="{% static 'img/TOCS.png' %}" alt="TOCS">
             <span class="easi-brand-word">EaziStrata</span>
         </a>
 
