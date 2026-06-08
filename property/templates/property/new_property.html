@@ -9,12 +9,17 @@
 {% endblock title_block %}
 
 
-{% block body_content %}
-
-    <div class="mb-3">
-        <h1 class="h3 mb-0 text-gray-800" style="font-weight:700;">New Property</h1>
-        <p class="text-muted mb-0" style="font-size:.85rem;">Create a new strata property record.</p>
+{% block page_header %}
+    <div class="easi-page-header">
+        <div>
+            <div class="easi-eyebrow">Property</div>
+            <h1 class="easi-title">New Property</h1>
+            <p class="easi-sub">Create a new strata property record.</p>
+        </div>
     </div>
+{% endblock page_header %}
+
+{% block body_content %}
 
     <form method="POST">
         {% csrf_token %}

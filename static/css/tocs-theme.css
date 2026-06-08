@@ -886,3 +886,341 @@ fieldset legend {
 .scroll-to-top:hover {
   background-color: var(--color-cobalt-hover) !important;
 }
+
+/* ==========================================================================
+   15. APP SHELL — light Task-App layout (sidebar + topbar + page header)
+   --------------------------------------------------------------------------
+   Replaces SB-Admin-2's dark gradient sidebar chrome with Task App's light
+   bordered sidebar, thin top bar and cream workspace. Scoped to `.easi-*`
+   classes so it doesn't fight the remaining Bootstrap component styles.
+   ========================================================================== */
+
+.easi-shell {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-family);
+}
+
+/* --- Sidebar ----------------------------------------------------------- */
+.easi-sidebar {
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  width: 240px;
+  height: 100vh;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: width 0.2s ease;
+  z-index: 30;
+}
+
+.easi-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1.1rem 1.25rem;
+  border-bottom: 1px solid var(--color-border);
+  text-decoration: none !important;
+}
+
+.easi-brand-mark {
+  height: 30px;
+  width: auto;
+  object-fit: contain;
+}
+
+.easi-brand-word {
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  white-space: nowrap;
+}
+
+.easi-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 0.75rem;
+}
+
+.easi-nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.easi-nav-label {
+  padding: 0.25rem 0.65rem 0.2rem;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(10, 10, 10, 0.5);
+}
+
+.easi-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--radius);
+  font-size: 12.75px;
+  font-weight: 500;
+  color: rgba(10, 10, 10, 0.72);
+  text-decoration: none !important;
+  transition: background-color 0.12s ease, color 0.12s ease;
+  white-space: nowrap;
+}
+
+.easi-nav-link i {
+  font-size: 0.85rem;
+  width: 1.1rem;
+  text-align: center;
+  color: rgba(10, 10, 10, 0.45);
+  transition: color 0.12s ease;
+}
+
+.easi-nav-link:hover {
+  background-color: var(--color-cobalt-tint);
+  color: var(--color-cobalt);
+}
+
+.easi-nav-link:hover i {
+  color: var(--color-cobalt);
+}
+
+.easi-nav-link.active {
+  background-color: var(--color-cobalt-tint);
+  color: var(--color-cobalt);
+  font-weight: 600;
+}
+
+.easi-nav-link.active i {
+  color: var(--color-cobalt);
+}
+
+/* --- Content column ---------------------------------------------------- */
+.easi-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  min-width: 0;
+}
+
+.easi-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 48px;
+  padding: 0 0.85rem;
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.easi-topbar-spacer { flex: 1 1 0%; }
+
+.easi-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  width: 34px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius);
+  color: var(--color-muted);
+  cursor: pointer;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.easi-icon-btn:hover {
+  background-color: var(--color-cobalt-tint);
+  color: var(--color-cobalt);
+}
+
+.easi-user {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.easi-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  width: 30px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--color-ink), rgba(10, 10, 10, 0.6));
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.easi-user-name {
+  font-size: 12.75px;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.easi-logout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  width: 32px;
+  border-radius: var(--radius);
+  color: var(--color-muted);
+  text-decoration: none !important;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.easi-logout:hover {
+  background-color: var(--color-cobalt-tint);
+  color: var(--color-cobalt);
+}
+
+.easi-main {
+  flex: 1 1 0%;
+  padding: 1.5rem 1.5rem 2rem;
+}
+
+@media (min-width: 768px) {
+  .easi-main { padding: 1.75rem 1.75rem 2.5rem; }
+}
+
+.easi-main > .container-fluid {
+  padding-left: 0;
+  padding-right: 0;
+  max-width: 1400px;
+}
+
+/* --- Sidebar collapse (desktop) + off-canvas (mobile) ------------------ */
+.sidebar-collapsed .easi-sidebar {
+  width: 0;
+  border-right-width: 0;
+}
+
+.easi-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease;
+  z-index: 25;
+}
+
+@media (max-width: 767px) {
+  .easi-sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+    box-shadow: var(--shadow-card-hover);
+  }
+  .sidebar-open .easi-sidebar { transform: translateX(0); }
+  .sidebar-open .easi-backdrop { opacity: 1; visibility: visible; }
+}
+
+/* --- Page header (mirrors Task App TopBar) ----------------------------- */
+.easi-page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.easi-eyebrow {
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--color-muted);
+  margin-bottom: 0.35rem;
+}
+
+.easi-title {
+  font-family: var(--font-family);
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  margin: 0;
+}
+
+.easi-sub {
+  margin: 0.4rem 0 0;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.easi-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* --- Topbar notification bell (injected into #mx-1 by notify.js) -------- */
+.easi-notify .nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  width: 34px;
+  border-radius: var(--radius);
+  color: var(--color-muted) !important;
+  text-decoration: none;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.easi-notify .nav-link:hover {
+  background-color: var(--color-cobalt-tint);
+  color: var(--color-cobalt) !important;
+}
+
+.easi-notify .nav-link::after { display: none; }  /* drop BS caret */
+
+.easi-notify .badge-counter {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  font-size: 0.6rem;
+  padding: 0.2em 0.4em;
+  transform: translate(35%, -35%);
+}
+
+.easi-notify .dropdown-list {
+  width: 20rem;
+  max-width: 90vw;
+}
+
+.easi-notify .dropdown-header {
+  background-color: var(--color-cobalt) !important;
+  color: #fff !important;
+  font-family: var(--font-family);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  border-radius: var(--radius) var(--radius) 0 0;
+}

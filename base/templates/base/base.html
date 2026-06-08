@@ -91,253 +91,132 @@
 
 <body id="page-top">
 
-<!-- Page Wrapper -->
-<div id="wrapper">
+<!-- Page Wrapper — Task-App style light shell -->
+<div id="wrapper" class="easi-shell">
 
-    <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <!-- Sidebar (light, bordered, grouped nav · mirrors Task App) -->
+    <aside class="easi-sidebar" id="accordionSidebar">
 
-        <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
-            <div class="sidebar-brand-icon">
-                <img width="80px" height="48px" src="/static/img/TOCS.png" style="filter:invert(1) brightness(2);">
-            </div>
-            <div class="sidebar-brand-text mx-auto">EaziStrata</div>
+        <!-- Brand lockup -->
+        <a class="easi-brand" href="{% url 'base:base_index' %}">
+            <img class="easi-brand-mark" src="/static/img/TOCS.png" alt="EaziStrata">
+            <span class="easi-brand-word">EaziStrata</span>
         </a>
 
-        <!-- Divider -->
-        <hr class="sidebar-divider my-0">
+        <nav class="easi-nav">
 
-        {% if request.user.is_staff %}
-
-            <!-- Nav Item - Dashboard -->
-            <div class="sidebar-heading">
-                BASE CONFIG
+            <!-- Overview -->
+            <div class="easi-nav-group">
+                {% url 'base:base_index' as u_home %}
+                <a class="easi-nav-link {% if request.path == u_home %}active{% endif %}" href="{{ u_home }}">
+                    <i class="fas fa-home fa-fw"></i><span>Dashboard</span>
+                </a>
             </div>
 
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseClient"
-                   aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Client and Data</span>
-                </a>
-                <div id="collapseClient" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+            {% if request.user.is_staff %}
 
-                        <a class="collapse-item" id="item1" href="{% url 'base:client_list' %}">Client Management</a>
-                        <a class="collapse-item" id="item2" href="{% url 'base:ds_list' %}">Data source</a>
-                        <a class="collapse-item" id="item3" href="{% url 'base:ds_rule' %}">Data source Rule</a>
-                        <a class="collapse-item" id="item4" href="{% url 'base:import' %}">Data Import</a>
-
-                    </div>
-                </div>
-            </li>
-
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                ADMIN
+            <!-- Base Config -->
+            <div class="easi-nav-group">
+                <div class="easi-nav-label">Base Config</div>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'client_list' %}active{% endif %}" href="{% url 'base:client_list' %}"><i class="fas fa-users-cog fa-fw"></i><span>Client Management</span></a>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'ds_list' %}active{% endif %}" href="{% url 'base:ds_list' %}"><i class="fas fa-database fa-fw"></i><span>Data Source</span></a>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'ds_rule' %}active{% endif %}" href="{% url 'base:ds_rule' %}"><i class="fas fa-sliders-h fa-fw"></i><span>Data Source Rule</span></a>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'import' %}active{% endif %}" href="{% url 'base:import' %}"><i class="fas fa-file-import fa-fw"></i><span>Data Import</span></a>
             </div>
 
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUser"
-                   aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>User Management</span>
-                </a>
-                <div id="collapseUser" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">USER Functions:</h6>
-                        <a class="collapse-item" id="item5" href="{% url 'base:user_list' %}">User account</a>
-                        <a class="collapse-item" id="item6" href="{% url 'admin:index' %}">Roles and Permission</a>
-                    </div>
-                </div>
-            </li>
-
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseJob"
-                   aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Scheduling Job</span>
-                </a>
-                <div id="collapseJob" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" id="item7" href="{% url 'base:job_list' %}">Scheduling Job</a>
-                    </div>
-                </div>
-            </li>
-
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Module
+            <!-- Admin -->
+            <div class="easi-nav-group">
+                <div class="easi-nav-label">Admin</div>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'user_list' %}active{% endif %}" href="{% url 'base:user_list' %}"><i class="fas fa-user-shield fa-fw"></i><span>User Account</span></a>
+                <a class="easi-nav-link" href="{% url 'admin:index' %}"><i class="fas fa-key fa-fw"></i><span>Roles &amp; Permission</span></a>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'job_list' %}active{% endif %}" href="{% url 'base:job_list' %}"><i class="fas fa-clock fa-fw"></i><span>Scheduling Job</span></a>
             </div>
 
-
-            <!-- Nav Item - Property Management -->
-            <li class="nav-item active">
-                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTrust" aria-expanded="true"
-                   aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Property Management</span>
-                </a>
-                <div id="collapseTrust" class="collapse show" aria-labelledby="headingPages"
-                     data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" id="item8"  href="{% url 'property:property_list' %}">Property Profile</a>
-                        <a class="collapse-item" id="item9"  href="{% url 'property:oc_list' %}">OC Profile</a>
-                        <a class="collapse-item" id="item10" href="{% url 'property:lot_list' %}">Lot Management</a>
-                        <a class="collapse-item" id="item11" href="{% url 'property:lotoc_list' %}">Lot OC Mapping</a>
-                        <a class="collapse-item" id="item12" href="{% url 'finance:supply_list' %}">Vendor Management</a>
-                        <a class="collapse-item" id="item13" href="{% url 'property:oc_budget_sum' %}">OC Budget</a>
-                        <a class="collapse-item" id="item22" href="{% url 'base:owner_notify' %}">Owner Notification</a>
-                        <a class="collapse-item" id="item24" href="{% url 'base:vendor_notify' %}">Working Order</a>
-                        <a class="collapse-item" id="item27" href="{% url 'property:notify_log' %}">Notification Log</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Nav Item - Finance Management -->
-            <li class="nav-item active">
-                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseFa" aria-expanded="true"
-                   aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Finance Management</span>
-                </a>
-                <div id="collapseFa" class="collapse show" aria-labelledby="headingPages"
-                     data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" id="item14" href="{% url 'finance:invoice_list' %}">Invoice Entry</a>
-                        <a class="collapse-item" id="item15" href="{% url 'finance:coa_list' %}">Chart of Accounts</a>
-                        <a class="collapse-item" id="item16" href="{% url 'finance:billing_list' %}">Levy Billing</a>
-                        <a class="collapse-item" id="item26" href="{% url 'finance:billing_special_levy' %}">Special Levy</a>
-                        <a class="collapse-item" id="item17" href="{% url 'finance:gl_list' %}">Journal Entry</a>
-                        <a class="collapse-item" id="item18" href="{% url 'finance:inc_list' %}">Expense Management</a>
-                        <a class="collapse-item" id="item23" href="{% url 'finance:bank_list' %}">Bank Transaction</a>
-                        <a class="collapse-item" id="item25" href="{% url 'finance:gl_recon_list' %}">GL Reconciliation</a>
-                        <a class="collapse-item" id="item28" href="{% url 'finance:cash_list' %}">Cash Receipt</a>
-                        <a class="collapse-item" id="item29" href="{% url 'finance:client_ledger_list' %}">Client Ledger</a>
-                        <a class="collapse-item" id="item31" href="{% url 'strata:agm_list' %}">AGM</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Nav Item - Report -->
-            <li class="nav-item active">
-                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseReport" aria-expanded="true"
-                   aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Report</span>
-                </a>
-                <div id="collapseReport" class="collapse show" aria-labelledby="headingPages"
-                     data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" id="item19" href="{% url 'finance:oc_cert_list' %}">OC Certificate</a>
-                        <a class="collapse-item" id="item20" href="{% url 'finance:fs_list' %}">Financial Report</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Nav Item - Insurance -->
-            <li class="nav-item active">
-                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseInsurance"
-                   aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Insurance Management</span>
-                </a>
-                <div id="collapseInsurance" class="collapse show" aria-labelledby="headingPages"
-                     data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" id="item21" href="{% url 'strata:insurance_list' %}">Insurance Management</a>
-                    </div>
-                </div>
-            </li>
-        {% endif %}
-
-        <li class="nav-item active">
-            <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseOwner" aria-expanded="true"
-               aria-controls="collapsePages">
-                <i class="fas fa-fw fa-user"></i>
-                <span>Owner Self Service</span>
-            </a>
-            <div id="collapseOwner" class="collapse show" aria-labelledby="headingPages"
-                 data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" id="item32" href="{% url 'base:owner_info' %}">Owner Information</a>
-                    <a class="collapse-item" id="item33" href="{% url 'strata:owner_request' %}">Owner Request</a>
-                </div>
+            <!-- Property -->
+            <div class="easi-nav-group">
+                <div class="easi-nav-label">Property</div>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'property_list' %}active{% endif %}" href="{% url 'property:property_list' %}"><i class="fas fa-building fa-fw"></i><span>Property Profile</span></a>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'oc_list' %}active{% endif %}" href="{% url 'property:oc_list' %}"><i class="fas fa-sitemap fa-fw"></i><span>OC Profile</span></a>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'lot_list' %}active{% endif %}" href="{% url 'property:lot_list' %}"><i class="fas fa-th-large fa-fw"></i><span>Lot Management</span></a>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'lotoc_list' %}active{% endif %}" href="{% url 'property:lotoc_list' %}"><i class="fas fa-link fa-fw"></i><span>Lot OC Mapping</span></a>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'supply_list' %}active{% endif %}" href="{% url 'finance:supply_list' %}"><i class="fas fa-truck fa-fw"></i><span>Vendor Management</span></a>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'oc_budget_sum' %}active{% endif %}" href="{% url 'property:oc_budget_sum' %}"><i class="fas fa-wallet fa-fw"></i><span>OC Budget</span></a>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'owner_notify' %}active{% endif %}" href="{% url 'base:owner_notify' %}"><i class="fas fa-bell fa-fw"></i><span>Owner Notification</span></a>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'vendor_notify' %}active{% endif %}" href="{% url 'base:vendor_notify' %}"><i class="fas fa-tools fa-fw"></i><span>Working Order</span></a>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'notify_log' %}active{% endif %}" href="{% url 'property:notify_log' %}"><i class="fas fa-history fa-fw"></i><span>Notification Log</span></a>
             </div>
-        </li>
 
-        <!-- Divider -->
-        <hr class="sidebar-divider d-none d-md-block">
+            <!-- Finance -->
+            <div class="easi-nav-group">
+                <div class="easi-nav-label">Finance</div>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'invoice_list' %}active{% endif %}" href="{% url 'finance:invoice_list' %}"><i class="fas fa-file-invoice fa-fw"></i><span>Invoice Entry</span></a>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'coa_list' %}active{% endif %}" href="{% url 'finance:coa_list' %}"><i class="fas fa-list-ol fa-fw"></i><span>Chart of Accounts</span></a>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'billing_list' %}active{% endif %}" href="{% url 'finance:billing_list' %}"><i class="fas fa-file-invoice-dollar fa-fw"></i><span>Levy Billing</span></a>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'billing_special_levy' %}active{% endif %}" href="{% url 'finance:billing_special_levy' %}"><i class="fas fa-coins fa-fw"></i><span>Special Levy</span></a>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'gl_list' %}active{% endif %}" href="{% url 'finance:gl_list' %}"><i class="fas fa-book fa-fw"></i><span>Journal Entry</span></a>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'inc_list' %}active{% endif %}" href="{% url 'finance:inc_list' %}"><i class="fas fa-money-bill-wave fa-fw"></i><span>Expense Management</span></a>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'bank_list' %}active{% endif %}" href="{% url 'finance:bank_list' %}"><i class="fas fa-university fa-fw"></i><span>Bank Transaction</span></a>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'gl_recon_list' %}active{% endif %}" href="{% url 'finance:gl_recon_list' %}"><i class="fas fa-balance-scale fa-fw"></i><span>GL Reconciliation</span></a>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'cash_list' %}active{% endif %}" href="{% url 'finance:cash_list' %}"><i class="fas fa-receipt fa-fw"></i><span>Cash Receipt</span></a>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'client_ledger_list' %}active{% endif %}" href="{% url 'finance:client_ledger_list' %}"><i class="fas fa-folder-open fa-fw"></i><span>Client Ledger</span></a>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'agm_list' %}active{% endif %}" href="{% url 'strata:agm_list' %}"><i class="fas fa-users fa-fw"></i><span>AGM</span></a>
+            </div>
 
-        <!-- Sidebar Toggler -->
-        <div class="text-center d-none d-md-inline">
-            <button class="rounded-circle border-0" id="sidebarToggle"></button>
-        </div>
+            <!-- Reports -->
+            <div class="easi-nav-group">
+                <div class="easi-nav-label">Reports</div>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'oc_cert_list' %}active{% endif %}" href="{% url 'finance:oc_cert_list' %}"><i class="fas fa-certificate fa-fw"></i><span>OC Certificate</span></a>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'fs_list' %}active{% endif %}" href="{% url 'finance:fs_list' %}"><i class="fas fa-chart-line fa-fw"></i><span>Financial Report</span></a>
+            </div>
 
-    </ul>
+            <!-- Insurance -->
+            <div class="easi-nav-group">
+                <div class="easi-nav-label">Insurance</div>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'insurance_list' %}active{% endif %}" href="{% url 'strata:insurance_list' %}"><i class="fas fa-shield-alt fa-fw"></i><span>Insurance Management</span></a>
+            </div>
+
+            {% endif %}
+
+            <!-- Owner Self Service -->
+            <div class="easi-nav-group">
+                <div class="easi-nav-label">Owner Self Service</div>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'owner_info' %}active{% endif %}" href="{% url 'base:owner_info' %}"><i class="fas fa-id-card fa-fw"></i><span>Owner Information</span></a>
+                <a class="easi-nav-link {% if request.resolver_match.url_name == 'owner_request' %}active{% endif %}" href="{% url 'strata:owner_request' %}"><i class="fas fa-paper-plane fa-fw"></i><span>Owner Request</span></a>
+            </div>
+
+        </nav>
+    </aside>
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
+    <div id="content-wrapper" class="easi-content">
 
-        <!-- Main Content -->
-        <div id="content">
+        <!-- Thin top bar -->
+        <div class="easi-topbar">
+            <button id="sidebarToggleTop" class="easi-icon-btn" type="button" aria-label="Toggle sidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="easi-topbar-spacer"></div>
+            <div id="mx-1" class="dropdown no-arrow easi-notify"></div>
+            {% if request.user.is_authenticated %}
+            <div class="easi-user">
+                <div class="easi-avatar">{{ request.user.username|slice:":2"|upper }}</div>
+                <span class="easi-user-name d-none d-sm-inline">{{ request.user.username }}</span>
+                <a class="easi-logout" href="{% url 'base:logout' %}" title="Logout">
+                    <i class="fas fa-sign-out-alt fa-fw"></i>
+                </a>
+            </div>
+            {% endif %}
+        </div>
+        <!-- End of Topbar -->
 
-            <!-- Topbar -->
-            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-                <!-- Sidebar Toggle (Topbar) -->
-                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                    <i class="fa fa-bars"></i>
-                </button>
-
-                <!-- Topbar Navbar -->
-                <ul class="navbar-nav ml-auto">
-
-                    <li class="nav-item dropdown no-arrow mx-1" id="mx-1"></li>
-
-                    <div class="topbar-divider d-none d-sm-block"></div>
-
-                    <!-- User Info -->
-                    <li class="nav-item dropdown no-arrow">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ request.user.username }}</span>
-                        </a>
-                    </li>
-
-                    <div class="topbar-divider d-none d-sm-block"></div>
-
-                    <!-- Logout -->
-                    <li class="nav-item dropdown no-arrow">
-                        {% if request.user.is_authenticated %}
-                            <a class="nav-link dropdown-toggle" href="{% url 'base:logout' %}">
-                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                Logout
-                            </a>
-                        {% endif %}
-                    </li>
-
-                </ul>
-
-            </nav>
-            <!-- End of Topbar -->
-
-            <!-- Begin Page Content -->
+        <!-- Begin Page Content -->
+        <main class="easi-main">
             <div class="container-fluid">
                 {% include 'partials/_alerts.html' %}
+
+                {% block page_header %}{% endblock page_header %}
+
                 {% block body_content %}
                 {% endblock body_content %}
 
@@ -352,15 +231,12 @@
                         </ul>
                     </nav>
                 {% endif %}
-
             </div>
-            <!-- /.container-fluid -->
-
-        </div>
+        </main>
         <!-- End of Main Content -->
 
         <!-- Footer -->
-        <footer class="sticky-footer bg-white">
+        <footer class="sticky-footer">
             <div class="container my-auto">
                 <div class="copyright text-center my-auto">
                     <span>Copyright &copy; EaziStrata v1.0</span>
@@ -374,6 +250,28 @@
 
 </div>
 <!-- End of Page Wrapper -->
+
+<!-- Sidebar backdrop (mobile) -->
+<div class="easi-backdrop" id="easiBackdrop"></div>
+<script>
+  // Lightweight sidebar toggle — collapses on desktop, slides over on mobile.
+  (function () {
+    var shell = document.getElementById('wrapper');
+    var toggle = document.getElementById('sidebarToggleTop');
+    var backdrop = document.getElementById('easiBackdrop');
+    function close() { shell && shell.classList.remove('sidebar-open', 'sidebar-collapsed'); }
+    if (toggle && shell) {
+      toggle.addEventListener('click', function () {
+        if (window.matchMedia('(max-width: 767px)').matches) {
+          shell.classList.toggle('sidebar-open');
+        } else {
+          shell.classList.toggle('sidebar-collapsed');
+        }
+      });
+    }
+    backdrop && backdrop.addEventListener('click', close);
+  })();
+</script>
 
 <!-- Scroll to Top Button -->
 <a class="scroll-to-top rounded" href="#page-top">

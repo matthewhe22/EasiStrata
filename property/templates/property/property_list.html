@@ -9,14 +9,20 @@
 
 
 
-{% block body_content %}
-
-    <div class="d-flex align-items-center justify-content-between mb-3" style="flex-wrap:wrap;gap:.5rem;">
+{% block page_header %}
+    <div class="easi-page-header">
         <div>
-            <h1 class="h3 mb-0 text-gray-800" style="font-weight:700;">Property Profile</h1>
-            <p class="text-muted mb-0" style="font-size:.85rem;">Manage strata property records, lots and entitlements.</p>
+            <div class="easi-eyebrow">Property</div>
+            <h1 class="easi-title">Property Profile</h1>
+            <p class="easi-sub">Manage strata property records, lots and entitlements.</p>
+        </div>
+        <div class="easi-actions">
+            <a class="btn btn-primary" href="{% url 'property:property_create' %}" role="button"><i class="fas fa-plus fa-sm mr-1"></i>New Property</a>
         </div>
     </div>
+{% endblock page_header %}
+
+{% block body_content %}
 
     <div class="form-group">
         <form method="get">
@@ -55,8 +61,7 @@
         {% csrf_token %}
 
         <div class="text-right mb-2">
-            <a name="New " class="btn btn-primary" href="{% url 'property:property_create' %}" role="button"><i class="fas fa-plus fa-sm mr-1"></i>New</a>
-            <input name="deletebutton" class="btn btn-danger" type="submit" value="Delete">
+            <input name="deletebutton" class="btn btn-danger btn-sm" type="submit" value="Delete selected">
         </div>
 
 
