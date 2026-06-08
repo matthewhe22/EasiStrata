@@ -5,6 +5,16 @@
 
 {% endblock title_block %}
 
+{% block page_header %}
+    <div class="easi-page-header">
+        <div>
+            <div class="easi-eyebrow">Base Config</div>
+            <h1 class="easi-title">Data Source Rules</h1>
+            <p class="easi-sub">Mapping rules applied to imported data.</p>
+        </div>
+    </div>
+{% endblock page_header %}
+
 
 {% block body_content %}
     <form action="{% url 'base:ds_rule_delete' %}" class="form-check" method="POST">
